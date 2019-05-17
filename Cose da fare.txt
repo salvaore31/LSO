@@ -12,3 +12,24 @@
   .2 inviare richiesta di giocare una partita
   .3 mostrare la matrice
   .4 mostrare lo stato corrente della partita
+
+
+Idea rappresentazione matrice:
+
+16bit  0 0 0 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 0 in ogni casella Grid [x][y]
+
+bit 15/16 meno significativi:
+  00 = casella libera;
+  01 = ostacolo;
+  10 = posizione corrente giocatore i;
+  11 = win condition giocatore i.
+   
+bit 11/12/13/14:
+  0000 = identificativo giocatore i-esimo.
+
+bit 1/2/3/4:
+  0000 = identificativo giocatore i-esimo che ha scoperto la casella [x][y].
+
+bit 5/6/7/8/9/10:
+  liberi (potrebbero essere usati per vari flag che verranno in mente quando sappiamo
+  cosa stiamo effettivamente facendo).
