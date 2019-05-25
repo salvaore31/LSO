@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-int main(){
+nt main(){
 return 0;
 }
