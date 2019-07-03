@@ -1,11 +1,11 @@
-#include "costanti.h"
-typedef short int[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H] GameGrid;
+#include "../costanti.h"
+typedef short int GameGrid[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H];
 
-int registerUser(char* newuser, char* newpassw, int fdUserFile);//Prende un nome utente, una password e file descriptor del file degli utenti e se non presente lo aggiunge
+int registerUser(char* newuser, char* newpassw);//Prende un nome utente, una password e file descriptor del file degli utenti e se non presente lo aggiunge
 
-int checkUsername(char* username, int fdUserFile); // Controlla che all' interno del file sia presente l'username passato
+int checkUsername(char* username); // Ritorna la posizione delll'offset dello username all'interno del file se presente, -1 altrimenti
 
-int logInUser(char* user, char* passw, int fdUserFile);//Effettua il login del utente passato
+int logInUser(char* user, char* passw);//Effettua il login del utente passato
 
 int createNewGame(GameGrid grid);//Crea un nuovo processo che inzializza una partita
 
