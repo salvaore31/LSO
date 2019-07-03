@@ -2,7 +2,7 @@
 #define CONSTANT_H_
 
 //TODO CAPIRE COME SI DEFINISCE UN VALORE INTERO POSITIVO A 16 bit e metterli dove ha senso
-
+#define MAX_SIZE_USERNAME 15
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
  * di gioco per ottenere informazioni sullo stato della casella.

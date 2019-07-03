@@ -1,5 +1,5 @@
 #include "costanti.h"
-typedef short int[][]
+typedef short int[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H] GameGrid;
 
 int registerUser(char* newuser, char* newpassw, int fdUserFile);//Prende un nome utente, una password e file descriptor del file degli utenti e se non presente lo aggiunge
 
@@ -14,3 +14,5 @@ int addPlayer(char *user, char** CurrentPlayer);//aggiunge un giocatore alla par
 void endgame();
 
 void readPlayerMovement();
+
+int countdown();
