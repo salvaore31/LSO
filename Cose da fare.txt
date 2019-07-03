@@ -16,20 +16,19 @@
 
 Idea rappresentazione matrice:
 
-16bit  0 0 0 0 | 0 0 0 0 0 0 | 0 0 0 0 | 0 0 in ogni casella Grid [x][y]
+16bit  0 0 0 |0 0 0 0 0 0 0 0 |  0 0 0 | 0 0 in ogni casella Grid [x][y]
 
 bit 15/16 meno significativi:
   00 = casella libera;
   01 = ostacolo;
   10 = posizione corrente giocatore i;
-  11 = win condition giocatore i.
+  11 = win condition giocatore j.
    
-bit 11/12/13/14:
-  0000 = identificativo giocatore i-esimo.
+bit 12/13/14:
+   000 = dato valido e identificativo giocatore j-esimo.
 
-bit 1/2/3/4:
-  0000 = identificativo giocatore i-esimo che ha scoperto la casella [x][y].
+bit 1/2/3:
+   000 = identificativo giocatore i-esimo che si trova nella casella [x][y].
 
-bit 5/6/7/8/9/10:
-  liberi (potrebbero essere usati per vari flag che verranno in mente quando sappiamo
-  cosa stiamo effettivamente facendo).
+bit 4/5/6/7/8/9/10/11:
+  Codifica one hot per verificare se il giocatore k-esimo(identificato dalla posizione da sinistra a destra nella codifica) vede la casella identificata.
