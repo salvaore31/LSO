@@ -3,6 +3,7 @@
 
 //TODO CAPIRE COME SI DEFINISCE UN VALORE INTERO POSITIVO A 16 bit e metterli dove ha senso
 #define MAX_SIZE_USERNAME 15
+#define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
