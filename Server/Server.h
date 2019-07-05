@@ -1,4 +1,16 @@
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/un.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
 #include "../costanti.h"
+
 typedef short int GameGrid[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H];
 
 int registerUser(char* newuser, char* newpassw);//Prende un nome utente, una password e,se non presente, lo aggiunge al file degli utenti; Ritorna 0 in caso di successo

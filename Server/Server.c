@@ -1,16 +1,41 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
-#include "../costanti.h"
 #include "Server.h"
+#include <time.h>
 
+void oraEsatta(char s[]){
+  char buffer[26];
+  time_t ora;
+  time(&ora);
+  strcpy(s,ctime_r(&ora, buffer));
+}
 
 int main(){
 
+  int sock,sockfd,n_b_w=0;
+  struct sockaddr_un mio_indirizzo;
+  if((sock=socket(PF_LOCAL,SOCK_STREAM,0))<0){
+    printf("Errore apertura socket\n");
+  }else{
+    mio_indirizzo.sun_family=AF_LOCAL;
+    strcpy(mio_indirizzo.sun_path,"/tmp/mio_socket5");
+    if(bind(sock,(struct sockaddr *)&mio_indirizzo,sizeof(mio_indirizzo))<0){
+      printf("Errore bind\n");
+    }else{
+      if(listen(sock,3)<0){
+        printf("Errore listen\n");
+      }else{
+        if((sockfd=accept(sock,NULL,NULL))<0){
+          printf("Errore accept\n");
+        }else{
+          char str[25];
+          oraEsatta(str);
+          write(sockfd,str,sizeof(str));
+        }
+      }
+    }
+  }
+  close(sock);
+  close(sockfd);
+  unlink("/tmp/mio_socket5");
   return 1;
 }
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA

@@ -1,6 +1,5 @@
 #ifndef CONSTANT_H_
 #define CONSTANT_H_
-
 //TODO CAPIRE COME SI DEFINISCE UN VALORE INTERO POSITIVO A 16 bit e metterli dove ha senso
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
@@ -38,4 +37,5 @@
 #define MAX_OBSTACLES_N 50 //po se vere
 #define MAX_GRID_SIZE_L 64
 #define MAX_GRID_SIZE_H 48
+typedef short int GameGrid[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H];
 #endif

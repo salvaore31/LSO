@@ -4,7 +4,7 @@
 
 int main(){
 
-  int inputInt;
+  /*int inputInt;
   char[MAX_SIZE_USERNAME] inputUser;
 
   printf("Benvenuto in questo gioco di merda.\nCosa vuoi fare:\n1)Registrati.\n2)Accedi.\n3)Esci.\n");
@@ -33,10 +33,29 @@ int main(){
     scanf("%d",&inputInt);
   }
   //Da questo punto in poi il Client si trova in gioco
-  while(/*Partita ancora in corso*/){
+  while(/*Partita ancora in corso){
     printGameGrid();
     movementRequest();
-  }
+  }*/
+  int sockfd;
+  char c;
+  struct sockaddr_un server_addr;
+  if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
+    printf("Errore apertura socket");
+  }else{
 
-  return 0:
+    char add[]="/tmp/mio_socket5";
+    server_addr.sun_family=AF_LOCAL;
+    strcpy(server_addr.sun_path,add);
+
+    if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
+      printf("Errore connessione socket\n");
+    }else{
+      while(read(sockfd,&c,1)>0){
+        write(1,&c,1);
+      }
+    }
+  }
+  close(sockfd);
+  return 0;
 }
