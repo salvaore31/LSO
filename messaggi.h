@@ -60,5 +60,13 @@
 #define LOG_END_GAME          ": finita partita con ID "
 #define LOG_NEW_PLAYER_JOIN1  ": l'utente "
 #define LOG_NEW_PLAYER_JOIN2  " si è unito alla partita con ID "
+#define LOG_PLAYER_MOVES1     ": in partita con ID "
+#define LOG_PLAYER_MOVES2     " è andato da "
+#define LOG_PLAYER_WINS1      ": l'utente "
+#define LOG_PLAYER_WINS2      " ha vinto la partita con ID "
+#define LOG_NEW_USER          " si è unito al Server.\n"
+#define LOG_SIGN_IN           " si è connesso al Server.\n"
+#define LOG_SIGN_OUT          " si è disconesso dal Server.\n"
+#define LOG_ERROR             ": ERRORE( "
 
 #endif

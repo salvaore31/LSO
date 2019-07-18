@@ -116,7 +116,7 @@ void LogPlayerJoin(int* fdLog, int gameId, char[] player){
   if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
       /*Gesire mancata scrittura su LOG*/
   } else {
-    if((n_b_w= write(*fdLog,LOG_NEW_PLAYER_JOIN1,sizeof(LOG_NEW_PLAYER_JOIN1)-1)) < sizeof(LOG_NEW_PLAYER_JOIN1)){
+    if((n_b_w= write(*fdLog,LOG_NEW_PLAYER_JOIN1,sizeof(LOG_NEW_PLAYER_JOIN1)-1)) < sizeof(LOG_NEW_PLAYER_JOIN1)-1){
       /*Già sai*/
     } else {
       if((n_b_w = write(*fdLog,player,strlen(player))) < strlen(player)){
@@ -135,4 +135,150 @@ void LogPlayerJoin(int* fdLog, int gameId, char[] player){
   return;
 }
 
-void LogPlayerMoves(int* fdLog, int gameId, char[] player, char[] )
+void LogPlayerMoves(int* fdLog, int gameId, char[] player, char[] mov ){
+  char ora[26];
+  int n_b_w;
+  char buf[10];
+
+  oraEsatta(ora);
+  sprintf(buf, "%d", gameId);
+  strcat(mov,".\n");
+  if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w= write(*fdLog,LOG_PLAYER_MOVES1 ,sizeof(LOG_PLAYER_MOVES1)-1)) < sizeof(LOG_PLAYER_MOVES1)-1){
+      /*Già sai*/
+    } else {
+      if((n_b_w = write(*fdLog, buf ,strlen(buf))) < strlen(buf)){
+        /*Già sai*/
+      } else {
+        if((n_b_w = write(*fdLog,player,strlen(player))) < strlen(player)){
+          /*Gesire mancata scrittura su LOG*/
+        } else{
+          if((n_b_w = write(*fdLog,LOG_PLAYER_MOVES2,sizeof(LOG_PLAYER_MOVES2)-1)) < sizeof(LOG_PLAYER_MOVES2)-1){
+          /*Già sai*/
+            } else{
+              if((n_b_w = write(*fdLog, mov, strlen(mov))) < strlen(mov)){
+                /*Sai bene*/
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return;
+}
+
+void LogPlayerWin(int*, int, char[]){
+  char ora[26];
+  int n_b_w;
+  char buf[10];
+
+  oraEsatta(ora);
+  sprintf(buf, "%d", gameId);
+  strcat(buf,".\n");
+  if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w= write(*fdLog,LOG_PLAYER_WINS1,sizeof(LOG_PLAYER_WINS1)-1)) < sizeof(LOG_PLAYER_WINS1)-1){
+      /*Già sai*/
+    } else {
+      if((n_b_w = write(*fdLog,player,strlen(player))) < strlen(player)){
+        /*Già sai*/
+      } else {
+        if((n_b_w = write(*fdLog,LOG_PLAYER_WINS2,sizeof(LOG_PLAYER_WINS2)-1)) < sizeof(LOG_PLAYER_WINS2)-1){
+          /*Gesire mancata scrittura su LOG*/
+        } else{
+          if((n_b_w = write(*fdLog,buf,strlen(buf))) < strlen(buf)){
+            /*Già sai*/
+          }
+        }
+      }
+    }
+  }
+
+  return;
+}
+
+void LogNewUser(int* fdLog, char[] player){
+  char ora[26];
+  int n_b_w;
+  char buf[10];
+
+  oraEsatta(ora);
+
+  if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w= write(*fdLog,player ,strlen(player)) < strlen(player)){
+      /*Già sai*/
+    } else {
+      if((n_b_w = write(*fdLog, LOG_NEW_USER ,sizeof(LOG_NEW_USER)-1 )) < sizeof(LOG_NEW_USER) -1){
+        /*Già sai*/
+      }else{
+        //errore di log
+      }
+  return;
+}
+
+void LogUserSignIn(int* fdLog, char[] player){
+  char ora[26];
+  int n_b_w;
+  char buf[10];
+
+  oraEsatta(ora);
+
+  if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w= write(*fdLog,player ,strlen(player)) < strlen(player)){
+      /*Già sai*/
+    } else {
+      if((n_b_w = write(*fdLog, LOG_SIGN_IN ,sizeof(LOG_SIGN_IN)-1 )) < sizeof(LOG_SIGN_IN) -1){
+        /*Già sai*/
+      }
+  return;
+}
+
+void LogUserSignOut(int* fdLog, char[] player){
+  char ora[26];
+  int n_b_w;
+  char buf[10];
+
+  oraEsatta(ora);
+
+  if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w= write(*fdLog,player ,strlen(player)) < strlen(player)){
+      /*Già sai*/
+    } else {
+      if((n_b_w = write(*fdLog, LOG_SIGN_OUT ,sizeof(LOG_SIGN_OUT)-1 )) < sizeof(LOG_SIGN_OUT) -1){
+        /*Già sai*/
+      }
+  return;
+}
+
+void LogErrorMessage(int* fdLog, char[] err){
+  char ora[26];
+  int n_b_w;
+  char buf[1000];
+  strcpy(buf, err);
+  strcat(buf, ")\n");
+
+  oraEsatta(ora);
+
+  if((n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w= write(*fdLog,LOG_ERROR ,sizeof(LOG_ERROR)-1) < sizeof(LOG_ERROR)-1){
+      /*Già sai*/
+    }else{
+      if((n_b_w= write(*fdLog, buf ,strlen(buf)) < strlen(buf)){
+        /*che fare che fare*/
+      }
+    }
+
+  return;
+}
