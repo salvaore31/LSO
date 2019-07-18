@@ -57,5 +57,8 @@
 #define LOG_START_SERVER      ": iniziata nuova sessione Server.\n"
 #define LOG_CLOSE_SERVER      ": finita sessione Server.\n"
 #define LOG_NEW_GAME          ": iniziata nuova partita con ID "
+#define LOG_END_GAME          ": finita partita con ID "
+#define LOG_NEW_PLAYER_JOIN1  ": l'utente "
+#define LOG_NEW_PLAYER_JOIN2  " si è unito alla partita con ID "
 
 #endif
