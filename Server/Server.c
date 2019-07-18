@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
         if((sockfd=accept(sock,NULL,NULL))<0){
           printf("Errore accept\n");
         }else{
-          LogNewGame(&fdLog,27);
+          LogPlayerJoin(&fdLog,27,"saverio");
           write(sockfd,"HAHAHAHHAHA",25);
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
