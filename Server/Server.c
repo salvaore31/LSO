@@ -10,7 +10,7 @@ int main(int argc, char* argv[]){
     printf("Errore apertura socket\n");
   }else{
     mio_indirizzo.sun_family=AF_LOCAL;
-    strcpy(mio_indirizzo.sun_path,"/tmp/mio_socket1");
+    strcpy(mio_indirizzo.sun_path,MIO_SOCK);
     if(bind(sock,(struct sockaddr *)&mio_indirizzo,sizeof(mio_indirizzo))<0){
       printf("Errore bind\n");
     }else{
@@ -20,6 +20,7 @@ int main(int argc, char* argv[]){
         if((sockfd=accept(sock,NULL,NULL))<0){
           printf("Errore accept\n");
         }else{
+          LogNewGame(&fdLog,27);
           write(sockfd,"HAHAHAHHAHA",25);
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
@@ -43,7 +44,7 @@ int main(int argc, char* argv[]){
   }
   close(sock);
   close(sockfd);
-  unlink("/tmp/mio_socket1");
+  unlink(MIO_SOCK);
   LogServerClose(&fdLog);
   return 1;
 }

@@ -44,9 +44,8 @@ int main(int argc, char* argv[]){
     printf("Errore apertura socket");
   }else{
 
-    char add[]="/tmp/mio_socket1";
     server_addr.sun_family=AF_LOCAL;
-    strcpy(server_addr.sun_path,add);
+    strcpy(server_addr.sun_path,MIO_SOCK);
 
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");

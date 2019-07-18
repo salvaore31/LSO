@@ -1,5 +1,4 @@
 #include "log.h"
-
 void substituteChar(char st[],char a, char b){
   int i=0;
   while(st[i]!='\0'){
@@ -59,4 +58,27 @@ void LogServerClose(int*fdLog){
     }
   }
   return ;
+}
+
+void LogNewGame(int* fdLog, int gameId){
+
+  char ora[26];
+  int n_b_w;
+  char buf[10];
+
+  oraEsatta(ora);
+  sprintf(buf, "%d", gameId);
+  strcat(buf,".\n");
+  if((n_b_w = write(*fdLog,ora,sizeof(ora))< sizeof(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w = write(*fdLog,LOG_NEW_GAME,sizeof(LOG_NEW_GAME)-1)) < sizeof(LOG_NEW_GAME)-1){
+      /*Gesire mancata scrittura su LOG*/
+    } else{
+      if((n_b_w = write(*fdLog,buf,strlen(buf))) < strlen(buf)){
+        /*Già sai*/
+      }
+    }
+  }
+  return;
 }

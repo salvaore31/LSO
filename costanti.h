@@ -4,6 +4,7 @@
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
+#define MIO_SOCK  "/tmp/mio_socket3"
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
  * di gioco per ottenere informazioni sullo stato della casella.
