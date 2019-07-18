@@ -51,6 +51,10 @@
  * Messaggi di errore relativi ai thread.
  */
 #define ERR_THREAD_CREATION   "Impossibile creare un nuovo thread.\n"
-
+/*
+ *Messaggi di LOG
+ */
+#define LOG_START_SERVER      ": iniziata nuova sessione Server.\n"
+#define LOG_CLOSE_SERVER      ": finita sessione Server.\n"
 
 #endif

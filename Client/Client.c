@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Client.h"
 
-int main(){
+int main(int argc, char* argv[]){
 
   /*int inputInt;
   char[MAX_SIZE_USERNAME] inputUser;
@@ -44,7 +44,7 @@ int main(){
     printf("Errore apertura socket");
   }else{
 
-    char add[]="/tmp/mio_socket5";
+    char add[]="/tmp/mio_socket1";
     server_addr.sun_family=AF_LOCAL;
     strcpy(server_addr.sun_path,add);
 

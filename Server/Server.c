@@ -1,22 +1,16 @@
 #include "Server.h"
 #include <time.h>
 
-void oraEsatta(char s[]){
-  char buffer[26];
-  time_t ora;
-  time(&ora);
-  strcpy(s,ctime_r(&ora, buffer));
-}
+int main(int argc, char* argv[]){
 
-int main(){
-
-  int sock,sockfd,n_b_w=0;
+  int fdLog,sock,sockfd,n_b_w=0;
   struct sockaddr_un mio_indirizzo;
+  LogServerStart(&fdLog);
   if((sock=socket(PF_LOCAL,SOCK_STREAM,0))<0){
     printf("Errore apertura socket\n");
   }else{
     mio_indirizzo.sun_family=AF_LOCAL;
-    strcpy(mio_indirizzo.sun_path,"/tmp/mio_socket5");
+    strcpy(mio_indirizzo.sun_path,"/tmp/mio_socket1");
     if(bind(sock,(struct sockaddr *)&mio_indirizzo,sizeof(mio_indirizzo))<0){
       printf("Errore bind\n");
     }else{
@@ -26,16 +20,31 @@ int main(){
         if((sockfd=accept(sock,NULL,NULL))<0){
           printf("Errore accept\n");
         }else{
-          char str[25];
-          oraEsatta(str);
-          write(sockfd,str,sizeof(str));
+          write(sockfd,"HAHAHAHHAHA",25);
+          /*Qui va la fork che crea nuove partite
+          si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
+          se client ha accesso e non è finito il tempo:
+            il client invia messaggio e il server controlla casella di destinazione, poi:
+              Player si muove, server sposta giocatore e invia nuova posizione a client, cliente aggiorna
+                              propria vista su matrice e libera mutex;
+              Player su ostacolo, server non sposta il giocatore e aggiorna matrice così da far vedere ostacolo
+                              a quel player, client riceve nuova vista, stampa e libera mutex;
+              Player  spawna, server assegna al nuovo player posizione iniziale, posizione di vittoria, aggiorna tutte
+                              le viste delle matrici aggiungendo posizione nuovo player e sua win condition, il client
+                              riceve la nuova matrice e la stampa, libera mutex;
+              Player vince, server manda messaggio di vittoria a vincitore e di sconfitta a perdenti, client libera mutex,
+                            server chiude mutex, fa ritornare al menu principale i client
+          se è finito il tempo:
+            messaggio di sconfitta e chiusura partita.
+          */
         }
       }
     }
   }
   close(sock);
   close(sockfd);
-  unlink("/tmp/mio_socket5");
+  unlink("/tmp/mio_socket1");
+  LogServerClose(&fdLog);
   return 1;
 }
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
@@ -68,19 +77,20 @@ int registerUser(char* newuser, char* newpassw){
   int fdUserFile,n_b_w,lenght_user,lenght_passw;
   lenght_user=strlen(newuser);
   lenght_passw=strlen(newpassw);
-  if(lenght_user>MAX_SIZE_USERNAME||lenght_passw>MAX_SIZE_PASSW){
+
+  if( lenght_user > MAX_SIZE_USERNAME || lenght_passw > MAX_SIZE_PASSW ){
     //Gestire il comportamento nel caso in cui l'input non è valido
   }else{
-    if(checkUsername(newuser)<0){
-      if((fdUserFile=open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
+    if(checkUsername(newuser) < 0){
+      if((fdUserFile = open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
         /*Gestire cosa succede se non si riesce ad aprire il file*/
       }else{
-        if((n_b_w=write(fdUserFile,newuser,lenght_user))<lenght_user){
+        if((n_b_w = write(fdUserFile,newuser,lenght_user))<lenght_user){
           /*Gestire cosa succede se non si riesce a scrivere su file*/
           close(fdUserFile);
         }else{
           write(fdUserFile,"%",1);
-          if((n_b_w=write(fdUserFile,newpassw,lenght_passw))<lenght_passw){
+          if((n_b_w = write(fdUserFile,newpassw,lenght_passw))<lenght_passw){
             /*Gestire cosa succede se non si riesce a scrivere su file*/
             close(fdUserFile);
           }else{

@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include "log.c"
 #include "../costanti.h"
 
 typedef short int GameGrid[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H];
