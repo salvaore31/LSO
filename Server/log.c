@@ -282,7 +282,7 @@ void LogErrorMessage(int* fdLog, char* err){
   int n_b_w;
   char buf[1000];
   strcpy(buf, err);
-  strcat(buf, ")\n");
+  strcat(buf, ").\n");
 
   oraEsatta(ora);
 
