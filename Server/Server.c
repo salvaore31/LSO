@@ -5,7 +5,7 @@ int main(int argc, char* argv[]){
 
   int fdLog,sock,sockfd,n_b_w=0;
   struct sockaddr_un mio_indirizzo;
-  LogServerStart(&fdLog);
+ LogServerStart(&fdLog);
   if((sock=socket(PF_LOCAL,SOCK_STREAM,0))<0){
     printf("Errore apertura socket\n");
   }else{
@@ -20,7 +20,14 @@ int main(int argc, char* argv[]){
         if((sockfd=accept(sock,NULL,NULL))<0){
           printf("Errore accept\n");
         }else{
-          LogPlayerJoin(&fdLog,27,"saverio");
+          LogNewGame(&fdLog,27);
+          LogPlayerJoin(&fdLog, 27, "Gianbagigi");
+          LogPlayerMoves(&fdLog, 27,"Gianbagigi", "(25,13)", "(25,14)");
+          LogPlayerWin(&fdLog, 27, "Gianbagigi");
+          LogNewUser(&fdLog, "Possssosoos");
+          LogUserSignIn(&fdLog, "Gidud");
+          LogUserSignOut(&fdLog, "lojoj");
+          LogErrorMessage(&fdLog, "Niente di tutto ciò è reale, abbiamo solo scritto roba a caso nel log");
           write(sockfd,"HAHAHAHHAHA",25);
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
@@ -45,7 +52,7 @@ int main(int argc, char* argv[]){
   close(sock);
   close(sockfd);
   unlink(MIO_SOCK);
-  LogServerClose(&fdLog);
+  	LogServerClose(&fdLog);
   return 1;
 }
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
