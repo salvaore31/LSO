@@ -37,8 +37,8 @@ int main(int argc, char* argv[]){
     printGameGrid();
     movementRequest();
   }*/
-  int sockfd;
-  char c;
+  int sockfd,n_b_r;
+  char msg[50];
   struct sockaddr_un server_addr;
   if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
     printf("Errore apertura socket");
@@ -50,9 +50,11 @@ int main(int argc, char* argv[]){
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");
     }else{
-      while(read(sockfd,&c,1)>0){
-        write(1,&c,1);
-      }
+      n_b_r=read(sockfd,msg,50);
+      msg[n_b_r]='\0';
+      printf("%s\n",msg );
+      sleep(10);
+      write(sockfd,"boh",3);
     }
   }
   close(sockfd);

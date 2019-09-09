@@ -1,10 +1,15 @@
 #ifndef CONSTANT_H_
 #define CONSTANT_H_
-//TODO CAPIRE COME SI DEFINISCE UN VALORE INTERO POSITIVO A 16 bit e metterli dove ha senso
+typedef struct {
+  unsigned int infocasella:2;
+  unsigned int playerJ:3;
+  unsigned int playerI:3;
+  unsigned int permessi:8;
+} GameGrid;
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
-#define MIO_SOCK  "/tmp/mio_socket3"
+#define MIO_SOCK  "/tmp/mio_socket"
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
  * di gioco per ottenere informazioni sullo stato della casella.
@@ -38,10 +43,4 @@
 #define MAX_OBSTACLES_N 50 //po se vere
 #define MAX_GRID_SIZE_L 64
 #define MAX_GRID_SIZE_H 48
-typedef struct {
-  unsigned int infocasella:2;
-  unsigned int playerJ:3;
-  unsigned int playerI:3;
-  unsigned int permessi:8;
-} GameGrid;
 #endif

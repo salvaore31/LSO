@@ -3,10 +3,12 @@
 
 int main(int argc, char* argv[]){
 
-
   signal(SIGINT, handleSignal);
-  int fdLog,sock,sockfd,n_b_w=0;
+
+  int fdLog, sock, sockfd, n_b_w=0, n_b_r=0, fdPlayer, fdGame;
+  char msg[50],c;
   struct sockaddr_un mio_indirizzo;
+
   LogServerStart(&fdLog);
   if((sock=socket(PF_LOCAL,SOCK_STREAM,0))<0){
     printf("Errore apertura socket\n");
@@ -19,10 +21,11 @@ int main(int argc, char* argv[]){
       if(listen(sock,3)<0){
         printf("Errore listen\n");
       }else{
-        if((sockfd=accept(sock,NULL,NULL))<0){
-          printf("Errore accept\n");
-        }else{
-          write(sockfd,"HAHAHAHHAHA",25);
+        while((sockfd=accept(sock,NULL,NULL))>-1){
+          write(sockfd,"ciao",5);
+          n_b_r=read(sockfd,msg,50);
+          msg[n_b_r]='\0';
+          printf("%s\n",msg );
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
           se client ha accesso e non è finito il tempo:
@@ -46,7 +49,7 @@ int main(int argc, char* argv[]){
   close(sock);
   close(sockfd);
   unlink(MIO_SOCK);
-  	LogServerClose(&fdLog);
+  LogServerClose(&fdLog);
   return 1;
 }
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
@@ -140,7 +143,8 @@ int logInUser(char* user, char* passw){
 void handleSignal(int Sig){
 
   if(Sig == SIGINT){
-    printf(" CTRL + C non ti aiuterà\n");
+    unlink(MIO_SOCK);
+    exit(1);
   }
 
 }
