@@ -38,5 +38,10 @@
 #define MAX_OBSTACLES_N 50 //po se vere
 #define MAX_GRID_SIZE_L 64
 #define MAX_GRID_SIZE_H 48
-typedef short int GameGrid[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H];
+typedef struct {
+  unsigned int infocasella:2;
+  unsigned int playerJ:3;
+  unsigned int playerI:3;
+  unsigned int permessi:8;
+} GameGrid;
 #endif

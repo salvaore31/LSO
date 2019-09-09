@@ -9,10 +9,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <signal.h>
 #include "log.c"
 #include "../costanti.h"
 
-typedef short int GameGrid[MAX_GRID_SIZE_L][MAX_GRID_SIZE_H];
 
 int registerUser(char* newuser, char* newpassw);//Prende un nome utente, una password e,se non presente, lo aggiunge al file degli utenti; Ritorna 0 in caso di successo
 
@@ -29,3 +29,5 @@ void endgame();
 void readPlayerMovement();
 
 int countdown();
+
+void handleSignal(int Sig);//Handler dei segnali da gestire
