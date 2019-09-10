@@ -10,11 +10,14 @@
 #include <fcntl.h>
 #include <string.h>
 #include "../costanti.h"
+#include "../messaggi.h"
 void printGameGrid(GameGrid grid);
 
 int logInRequest(char* username, char * password);
 
 int signInRequest(char* username, char* password);
+
+int beforeLogin(int);
 
 int newGame();
 

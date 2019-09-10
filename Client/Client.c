@@ -50,17 +50,28 @@ int main(int argc, char* argv[]){
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");
     }else{
-      n_b_r=read(sockfd,msg,250);
-      msg[n_b_r]='\0';
-      printf("%s\n",msg );
-      scanf("%c",&input);
-      write(sockfd,&input,5);
-      n_b_r=read(sockfd,msg,250);
-      msg[n_b_r]='\0';
-      printf("%s\n",msg );
-
+      beforeLogin(sockfd);
+      clear();
     }
   }
+  
   close(sockfd);
   return 0;
+}
+
+int beforeLogin(int sockfd){
+
+  int n_b_r, logged=0;
+  char msg[250],input[50];
+  while(1){
+    n_b_r=read(sockfd,msg,250);
+    msg[n_b_r]='\0';
+    printf("%s",msg);
+    if(strcmp(msg,SUCCESS_MESSAGE_LIM)==0)
+      return 1;
+    if(strcmp(msg,ERR_NO_CONNECTION)==0 || strcmp(msg,"-1")==0 )
+      return -1;
+    scanf("%s",input);
+    write(sockfd,input,strlen(input));
+  }
 }

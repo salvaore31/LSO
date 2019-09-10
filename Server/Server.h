@@ -31,3 +31,7 @@ void readPlayerMovement();
 int countdown();
 
 void handleSignal(int Sig);//Handler dei segnali da gestire
+
+int logInUserMenu(int);
+
+int signInUserMenu(int);

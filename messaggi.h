@@ -8,15 +8,15 @@
 /*
  * Stringhe per la generazione dei menu.
  */
-#define WELCOME_MESSAGE       "Benvenuto in Progetto Laboratorio di Sistemi Operativi\nCosa vuoi fare?\nPremi 'l' per eseguire il login.\nPremi 'r' per registrarti.\nPremi 'e' per uscire."
+#define WELCOME_MESSAGE       "Benvenuto in Progetto Laboratorio di Sistemi Operativi\nCosa vuoi fare?\nPremi 'l' per eseguire il login.\nPremi 'r' per registrarti.\nPremi 'e' per uscire.\n"
       /*
        * Stringhe per la generazione di schermate di Login.
        */
        #define INSERT_USERNAME_LIM           "Inserisci il tuo nome utente:\n"
        #define INSERT_PASSWORD_LIM           "Inserisci la tua password:\n"
        #define SUCCESS_MESSAGE_LIM           "Bentornato!\n"
-       #define WRONG_USERNAME_LIM            "Il nome utente inserito non è stato trovato.\n"
-       #define WRONG_PASSWORD_LIM            "Password errata.\n"
+       #define WRONG_USERNAME_LIM            "Il nome utente inserito non è stato trovato.\nInserisci di nuovo il tuo nome utente:\n"
+       #define WRONG_PASSWORD_LIM            "Password errata.\nInserisci di nuovo la tua password:\n"
 
       /*
        * Stringhe per la generazione della schermata di Sign In.
@@ -25,7 +25,7 @@
        #define INSERT_PASSWORD_SIM            "Inserisci la tua password.\n"
        #define INSERT_PASSWORD_CONFIRM_SIM    "Re-inserisci la password.\n"
        #define USER_ALREADY_PRESENT_SIM       "Il nome utente è già presente.\n"
-       #define SUCCESS_MESSAGE_LIM            "Benvenuto!\n"
+       #define SUCCESS_MESSAGE_SIM            "Benvenuto!\n"
 
 #define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\n"
 #define NO_SUCH_GAMES         "Non ci sono partite disponibili in corso.\n"
