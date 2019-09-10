@@ -48,7 +48,7 @@
 /*
  * Messaggi di errore relativi al server.
  */
-#define ERR_NO_CONNECTION     "Impossibile connettersi al server.\n"
+#define ERR_NO_CONNECTION     "Impossibile connettersi al server.\nL'applicazione verrà chiusa.\n"
 #define ERR_SOCKET_CREATION   "Impossibile creare la socket.\n"
 #define ERR_SOCKET_BINDING    "Impossibile collegarsi alla socket.\n"
 #define ERR_SOCKET_LISTEN     "Impossibile ricevere dati dalla socket.\n"

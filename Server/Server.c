@@ -28,6 +28,13 @@ int main(int argc, char* argv[]){
           switch (msg[0]) {
             case 'l': case 'L':
               logInUserMenu(sockfd);
+              break;
+            case 'r': case 'R':
+              signInUserMenu(sockfd);
+              break;
+            case 'e': case 'E':
+              write(sockfd, "-1", sizeof("-1"));
+              break;
           }
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
@@ -120,13 +127,16 @@ int logInUser(char* user, char* passw){
   char c,str[MAX_SIZE_PASSW];
 
   if((pos=checkUsername(user))<0){
-    //Gestire il comportamento in caso di problemi checkUsername
+    //La funzione ritorna -2 nel caso in cui non trova l'utente tra quelli registrati;
+    return -2
   }else{
     if((fdUserFile=open(USERS_FILE,O_RDONLY))<0){
       //Gestire il comportamento in caso di errore apertura file
+      return -3
     }else{
       if(lseek(fdUserFile,pos,SEEK_SET)!=pos){
         //GESTIRE il comportamentoin caso di errore lseek
+        return -4;
       }else{
         while((n_b_r=read(fdUserFile,&c,1))>0 && c!='\n' )
           str[i++]=c;
@@ -146,8 +156,45 @@ int logInUser(char* user, char* passw){
 int logInUserMenu(int sockfd){
 
   int n_b_r;
-  char msg[50];
-  write()
+  char usrn[50];
+  char pssw[50]
+  int err
+
+  //da aggiungere controllo su effettiva lettura
+    write(sockfd, INSERT_USERNAME_LIM, sizeof(INSERT_USERNAME_LIM));
+    n_b_r = read(sockfd, usrn, 50);
+    msg[n_b_r] ='\0';
+    write(sockfd, INSERT_PASSWORD_LIM, sizeof(INSERT_PASSWORD_LIM)):
+    n_b_r = read(sockfd, pssw, 50);
+    msg[n_b_r] = '\0';
+
+    while((err=(logInUser(usrn, pssw))) != 0){
+      //l'utente non è stato trovato tra quelli registrati
+      switch(err){
+        case -1:
+          write(sockfd, WRONG_PASSWORD_LIM, sizeof(WRONG_PASSWORD_LIM));
+          write(sockfd, INSERT_PASSWORD_LIM, sizeof(INSERT_PASSWORD_LIM)):
+          n_b_r = read(sockfd, pssw, 50);
+          msg[n_b_r] = '\0';
+          break;
+        case -2:
+          write(sockfd, WRONG_USERNAME_LIM, sizeof(WRONG_USERNAME_LIM));
+          write(sockfd, INSERT_USERNAME_LIM, sizeof(INSERT_USERNAME_LIM));
+          n_b_r = read(sockfd, usrn, 50);
+          msg[n_b_r] ='\0';
+          write(sockfd, INSERT_PASSWORD_LIM, sizeof(INSERT_PASSWORD_LIM)):
+          n_b_r = read(sockfd, pssw, 50);
+          msg[n_b_r] = '\0';
+          break;
+        case -3:
+          write(sockfd, ERR_NO_CONNECTION, sizeof(ERR_NO_CONNECTION));
+          break;
+        case -4:
+          break;
+        default:
+          break;
+      }
+    }
 
 }
 void handleSignal(int Sig){
