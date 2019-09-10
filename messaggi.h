@@ -1,15 +1,40 @@
 #ifndef STRINGHE_H_
 #define STRINGHE_H_
 
+
+
+
+
 /*
  * Stringhe per la generazione dei menu.
  */
 #define WELCOME_MESSAGE       "Benvenuto in Progetto Laboratorio di Sistemi Operativi\nCosa vuoi fare?\nPremi 'l' per eseguire il login.\nPremi 'r' per registrarti.\nPremi 'e' per uscire."
+      /*
+       * Stringhe per la generazione di schermate di Login.
+       */
+       #define INSERT_USERNAME_LIM           "Inserisci il tuo nome utente:\n"
+       #define INSERT_PASSWORD_LIM           "Inserisci la tua password:\n"
+       #define SUCCESS_MESSAGE_LIM           "Bentornato!\n"
+       #define WRONG_USERNAME_LIM            "Il nome utente inserito non è stato trovato.\n"
+       #define WRONG_PASSWORD_LIM            "Password errata.\n"
+
+      /*
+       * Stringhe per la generazione della schermata di Sign In.
+       */
+       #define INSERT_USERNAME_SIM            "Come vuoi farti chiamare?\n"
+       #define INSERT_PASSWORD_SIM            "Inserisci la tua password.\n"
+       #define INSERT_PASSWORD_CONFIRM_SIM    "Re-inserisci la password.\n"
+       #define USER_ALREADY_PRESENT_SIM       "Il nome utente è già presente.\n"
+       #define SUCCESS_MESSAGE_LIM            "Benvenuto!\n"
+
 #define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\n"
-#define GAMES_PLAYED          "Partita %i.\nGiocatori: [...]\n"
+#define NO_SUCH_GAMES         "Non ci sono partite disponibili in corso.\n"
+
+//E' follia, follia dico però il messaggio non lo cancello perché l'ho scritto e mi scoccio troppo assai di cancellarlo
+#define CURRENT_GAMES_PLAYED  "Partita %i.\nGiocatori: [...]\n"
 #define SELECT_FROM_CURRENT   "Inserisci il numero della partita a cui vuoi aggiungerti.\n"
 #define SELECT_DIRECTION      "Inserisci:\n\t'w' per muoverti verso NORD;\n\t'a' per muoverti verso OVEST;\n\t's' per muoverti verso SUD\n\t'd' per muoverti verso EST"
-#define LOG_IN_MENU           "Inserisci il tuo nome utente:\n"
+
 /*
  * Messaggi relativi al gioco.
  */
@@ -19,12 +44,6 @@
 #define TIME_OVER_MESSAGE     "Il gioco finisce e nessuno vince.\n"
 #define LOSS_MESSAGE          "... Sarà per un'altra volta.\n"
 
-/*
- * Messaggi di errore per gestire problemi sul login/signin
- */
-#define ERR_NO_SUCH_USER      "L'username inserito non corrisponde a nessun utente.\n"
-#define ERR_ALREADY_PRESENT   "L'username inserito è già associato ad un utente.\n"
-#define ERR_WRONG_PASSWORD    "La password inserita non è corretta.\n"
 
 /*
  * Messaggi di errore relativi al server.
