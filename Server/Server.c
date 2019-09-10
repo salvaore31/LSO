@@ -22,10 +22,13 @@ int main(int argc, char* argv[]){
         printf("Errore listen\n");
       }else{
         while((sockfd=accept(sock,NULL,NULL))>-1){
-          write(sockfd,"ciao",5);
+          write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
           n_b_r=read(sockfd,msg,50);
           msg[n_b_r]='\0';
-          printf("%s\n",msg );
+          switch (msg[0]) {
+            case 'l': case 'L':
+              logInUserMenu(sockfd);
+          }
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
           se client ha accesso e non è finito il tempo:
@@ -139,7 +142,14 @@ int logInUser(char* user, char* passw){
   }
   return -1;
 }
+//logInUserMenu gesitsce la comunicazione con il client per quanto riguarda il logIn
+int logInUserMenu(int sockfd){
 
+  int n_b_r;
+  char msg[50];
+  write()
+
+}
 void handleSignal(int Sig){
 
   if(Sig == SIGINT){

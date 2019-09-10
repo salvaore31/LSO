@@ -4,12 +4,12 @@
 /*
  * Stringhe per la generazione dei menu.
  */
-#define LOG_IN_MENU           "Cosa vuoi fare?\nPremi 'l' per eseguire il login.\nPremi 'r' per registrarti.\nPremi 'e' per uscire."
+#define WELCOME_MESSAGE       "Benvenuto in Progetto Laboratorio di Sistemi Operativi\nCosa vuoi fare?\nPremi 'l' per eseguire il login.\nPremi 'r' per registrarti.\nPremi 'e' per uscire."
 #define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\n"
 #define GAMES_PLAYED          "Partita %i.\nGiocatori: [...]\n"
 #define SELECT_FROM_CURRENT   "Inserisci il numero della partita a cui vuoi aggiungerti.\n"
 #define SELECT_DIRECTION      "Inserisci:\n\t'w' per muoverti verso NORD;\n\t'a' per muoverti verso OVEST;\n\t's' per muoverti verso SUD\n\t'd' per muoverti verso EST"
-
+#define LOG_IN_MENU           "Inserisci il tuo nome utente:\n"
 /*
  * Messaggi relativi al gioco.
  */
@@ -18,7 +18,6 @@
 #define COLLISION_MESSAGE     "Vedi che è occupata.\n"
 #define TIME_OVER_MESSAGE     "Il gioco finisce e nessuno vince.\n"
 #define LOSS_MESSAGE          "... Sarà per un'altra volta.\n"
-
 
 /*
  * Messaggi di errore per gestire problemi sul login/signin
