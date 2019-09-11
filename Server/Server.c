@@ -26,16 +26,23 @@ int main(int argc, char* argv[]){
           write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
           n_b_r=read(sockfd,msg,50);
           msg[n_b_r]='\0';
+          printf("%s", msg);
+          char user[50];
           switch (msg[0]) {
             case 'l': case 'L':
-              logInUserMenu(sockfd);
+              logInUserMenu(sockfd,user);
               break;
             case 'r': case 'R':
-              signInUserMenu(sockfd);
+              signInUserMenu(sockfd,user);
               break;
             case 'e': case 'E':
               write(sockfd, "-1", sizeof("-1"));
               break;
+          }
+          n_b_r=read(sockfd,msg,250);
+          msg[n_b_r]='\0';
+          if(strcmp(msg,USER_LOG_OUT)==0){
+            LogUserSignOut(&fdLog,user);
           }
           /*Qui va la fork che crea nuove partite
           si crea nuovo processo; si dichiara nuova GameGrid, si mette mutex,
@@ -67,14 +74,54 @@ int main(int argc, char* argv[]){
 void handleSignal(int Sig){
 
   if(Sig == SIGINT){
+    LogServerClose(&fdLog);
     unlink(MIO_SOCK);
     exit(1);
   }
 }
 
-int signInUserMenu(int sockfd){
-  return 0;
-}
+int signInUserMenu(int sockfd, char usrn[]){
+  int n_b_r;
+  char pssw[50];
+  int err;
+
+  //da aggiungere controllo su effettiva lettura
+    write(sockfd, INSERT_USERNAME_SIM, sizeof(INSERT_USERNAME_SIM));
+    n_b_r = read(sockfd, usrn, 50);
+    usrn[n_b_r] ='\0';
+    write(sockfd, INSERT_PASSWORD_SIM, sizeof(INSERT_PASSWORD_SIM));
+    n_b_r = read(sockfd, pssw, 50);
+    pssw[n_b_r] = '\0';
+
+    while((err=registerUser(usrn, pssw)) != 0){
+      //l'utente non è stato trovato tra quelli registrati
+      switch(err){
+        case NO_CONNECTION:
+          write(sockfd, ERR_NO_CONNECTION, sizeof(ERR_NO_CONNECTION));
+          n_b_r = read(sockfd, pssw, 50);
+          pssw[n_b_r] = '\0';
+          break;
+        case INVALID_USERNAME:
+          write(sockfd, USER_ALREADY_PRESENT_SIM, sizeof(USER_ALREADY_PRESENT_SIM));
+          n_b_r = read(sockfd, usrn, 50);
+          usrn[n_b_r] ='\0';
+          write(sockfd, INSERT_PASSWORD_LIM, sizeof(INSERT_PASSWORD_LIM));
+          n_b_r = read(sockfd, pssw, 50);
+          pssw[n_b_r] = '\0';
+          break;
+        case -3:
+          write(sockfd, ERR_NO_CONNECTION, sizeof(ERR_NO_CONNECTION));
+          break;
+        case -4:
+          break;
+        default:
+          break;
+      }
+    }
+    LogNewUser(&fdLog, usrn);
+    write(sockfd,SUCCESS_MESSAGE_SIM,sizeof(SUCCESS_MESSAGE_SIM));
+    return 1;
+  }
 
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
 int checkUsername(char* username){
@@ -108,13 +155,15 @@ int registerUser(char* newuser, char* newpassw){
   lenght_passw=strlen(newpassw);
 
   if( lenght_user > MAX_SIZE_USERNAME || lenght_passw > MAX_SIZE_PASSW ){
-    //Gestire il comportamento nel caso in cui l'input non è valido
+    return INVALID_USERNAME;
   }else{
     if(checkUsername(newuser) < 0){
       if((fdUserFile = open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
+        return NO_CONNECTION;
         /*Gestire cosa succede se non si riesce ad aprire il file*/
       }else{
         if((n_b_w = write(fdUserFile,newuser,lenght_user))<lenght_user){
+          return NO_CONNECTION;
           /*Gestire cosa succede se non si riesce a scrivere su file*/
           close(fdUserFile);
         }else{
@@ -130,7 +179,7 @@ int registerUser(char* newuser, char* newpassw){
         }
       }
     }else{
-    /*Gestire cosa succede se il nome utente inserito è già presente*/
+      return INVALID_USERNAME;
     }
   }
 }
@@ -167,10 +216,9 @@ int logInUser(char* user, char* passw){
   return -1;
 }
 //logInUserMenu gesitsce la comunicazione con il client per quanto riguarda il logIn
-int logInUserMenu(int sockfd){
+int logInUserMenu(int sockfd, char usrn[]){
 
   int n_b_r;
-  char usrn[50];
   char pssw[50];
   int err;
 

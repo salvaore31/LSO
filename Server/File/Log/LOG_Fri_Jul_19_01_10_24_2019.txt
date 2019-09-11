@@ -1,3 +1,0 @@
-Fri Jul 19 01:10:24 2019: iniziata nuova sessione Server.
-Fri Jul 19 01:10:27 2019: l'utente saverio si è unito alla partita con ID 27.
-Fri Jul 19 01:10:27 2019: finita sessione Server.

@@ -6,11 +6,13 @@ typedef struct {
   unsigned int playerI:3;
   unsigned int permessi:8;
 } GameGrid;
+#define USER_LOG_OUT  "UTENTE ANDATO"
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
 #define MIO_SOCK  "/tmp/mio_socket"
 #define clear() sleep(1); printf("\033[H\033[J");
+#define leggi() n_b_r=read(sockfd,msg,250);msg[n_b_r]='\0';printf("%s",msg);
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
  * di gioco per ottenere informazioni sullo stato della casella.
@@ -44,4 +46,9 @@ typedef struct {
 #define MAX_OBSTACLES_N 50 //po se vere
 #define MAX_GRID_SIZE_L 64
 #define MAX_GRID_SIZE_H 48
+/*Le costanti seguenti contengono i valori degli errori
+ *
+ */
+#define NO_CONNECTION -1
+#define INVALID_USERNAME -2
 #endif

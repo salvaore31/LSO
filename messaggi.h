@@ -24,7 +24,7 @@
        #define INSERT_USERNAME_SIM            "Come vuoi farti chiamare?\n"
        #define INSERT_PASSWORD_SIM            "Inserisci la tua password.\n"
        #define INSERT_PASSWORD_CONFIRM_SIM    "Re-inserisci la password.\n"
-       #define USER_ALREADY_PRESENT_SIM       "Il nome utente è già presente.\n"
+       #define USER_ALREADY_PRESENT_SIM       "Il nome utente è già presente.\nScegli un altro nome con cui farti chiamare:\n"
        #define SUCCESS_MESSAGE_SIM            "Benvenuto!\n"
 
 #define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\n"
@@ -82,7 +82,7 @@
 #define LOG_PLAYER_MOVES2     " è andato da "
 #define LOG_PLAYER_WINS1      ": l'utente "
 #define LOG_PLAYER_WINS2      " ha vinto la partita con ID "
-#define LOG_NEW_USER          " si è unito al Server.\n"
+#define LOG_NEW_USER          " si è registrato al Server.\n"
 #define LOG_SIGN_IN           " si è connesso al Server.\n"
 #define LOG_SIGN_OUT          " si è disconesso dal Server.\n"
 #define LOG_ERROR             ": ERRORE( "

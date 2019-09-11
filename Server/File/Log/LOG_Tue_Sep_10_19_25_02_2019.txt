@@ -1,3 +1,0 @@
-Tue Sep 10 19:25:02 2019: iniziata nuova sessione Server.
-Tue Sep 10 19:25:17 2019: salvaore si è connesso al Server.
-Tue Sep 10 19:26:24 2019: salvaore si è connesso al Server.

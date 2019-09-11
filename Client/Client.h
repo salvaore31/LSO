@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <signal.h>
 #include "../costanti.h"
 #include "../messaggi.h"
 void printGameGrid(GameGrid grid);
@@ -24,3 +25,5 @@ int newGame();
 int joinGame();
 
 int movementRequest();
+
+void handleSignal(int);

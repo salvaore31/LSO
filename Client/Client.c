@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Client.h"
-
+int sockfd,logged=0;
 int main(int argc, char* argv[]){
-
+  signal(SIGINT, handleSignal);
   /*int inputInt;
   char[MAX_SIZE_USERNAME] inputUser;
 
@@ -37,7 +37,8 @@ int main(int argc, char* argv[]){
     printGameGrid();
     movementRequest();
   }*/
-  int sockfd,n_b_r;
+  clear();
+  int n_b_r;
   char msg[250],input;
   struct sockaddr_un server_addr;
   if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
@@ -50,28 +51,36 @@ int main(int argc, char* argv[]){
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");
     }else{
-      beforeLogin(sockfd);
-      clear();
+      logged=beforeLogin(sockfd);
     }
   }
-  
+  write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
   close(sockfd);
   return 0;
 }
-
+void handleSignal(int sig){
+  if(sig==SIGINT){
+    if(logged==1){
+      write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+    }
+    clear();
+    exit(-1);
+  }
+}
 int beforeLogin(int sockfd){
 
   int n_b_r, logged=0;
   char msg[250],input[50];
   while(1){
-    n_b_r=read(sockfd,msg,250);
-    msg[n_b_r]='\0';
-    printf("%s",msg);
-    if(strcmp(msg,SUCCESS_MESSAGE_LIM)==0)
+    leggi();
+    if(strcmp(msg,SUCCESS_MESSAGE_LIM)==0 || strcmp(msg,SUCCESS_MESSAGE_SIM)==0){
+      clear();
       return 1;
+    }
     if(strcmp(msg,ERR_NO_CONNECTION)==0 || strcmp(msg,"-1")==0 )
       return -1;
     scanf("%s",input);
     write(sockfd,input,strlen(input));
+    clear();
   }
 }

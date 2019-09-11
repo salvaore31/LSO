@@ -1,2 +1,6 @@
 "NOMEUTENTE"%"PASSWORD"
 salvaore%passw
+sinogrante%principe
+franchitiello%buatta
+luigio%trattore
+utente1%passw1

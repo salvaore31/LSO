@@ -32,6 +32,6 @@ int countdown();
 
 void handleSignal(int Sig);//Handler dei segnali da gestire
 
-int logInUserMenu(int);
+int logInUserMenu(int, char[]);
 
-int signInUserMenu(int);
+int signInUserMenu(int, char[]);
