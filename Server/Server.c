@@ -105,14 +105,9 @@ int signInUserMenu(int sockfd, char usrn[]){
           write(sockfd, USER_ALREADY_PRESENT_SIM, sizeof(USER_ALREADY_PRESENT_SIM));
           n_b_r = read(sockfd, usrn, 50);
           usrn[n_b_r] ='\0';
-          write(sockfd, INSERT_PASSWORD_LIM, sizeof(INSERT_PASSWORD_LIM));
+          write(sockfd, INSERT_PASSWORD_SIM, sizeof(INSERT_PASSWORD_SIM));
           n_b_r = read(sockfd, pssw, 50);
           pssw[n_b_r] = '\0';
-          break;
-        case -3:
-          write(sockfd, ERR_NO_CONNECTION, sizeof(ERR_NO_CONNECTION));
-          break;
-        case -4:
           break;
         default:
           break;

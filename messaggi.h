@@ -21,10 +21,10 @@
       /*
        * Stringhe per la generazione della schermata di Sign In.
        */
-       #define INSERT_USERNAME_SIM            "Come vuoi farti chiamare?\n"
-       #define INSERT_PASSWORD_SIM            "Inserisci la tua password.\n"
+       #define INSERT_USERNAME_SIM            "Come vuoi farti chiamare? (lunghezza massima 15)\n"
+       #define INSERT_PASSWORD_SIM            "Inserisci la tua password (lunghezza massima 12).\n"
        #define INSERT_PASSWORD_CONFIRM_SIM    "Re-inserisci la password.\n"
-       #define USER_ALREADY_PRESENT_SIM       "Il nome utente è già presente.\nScegli un altro nome con cui farti chiamare:\n"
+       #define USER_ALREADY_PRESENT_SIM       "Il nome utente non è valido.\nScegli un altro nome, di lunghezza massima 15, con cui farti chiamare:\n"
        #define SUCCESS_MESSAGE_SIM            "Benvenuto!\n"
 
 #define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\n"

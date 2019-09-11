@@ -1,0 +1,4 @@
+Wed Sep 11 10:27:18 2019: iniziata nuova sessione Server.
+Wed Sep 11 10:27:30 2019: totore si è registrato al Server.
+Wed Sep 11 10:27:32 2019: totore si è disconesso dal Server.
+Wed Sep 11 10:27:41 2019: finita sessione Server.

@@ -1,3 +1,4 @@
 Wed Sep 11 10:18:35 2019: iniziata nuova sessione Server.
 Wed Sep 11 10:18:58 2019: salvaore si è connesso al Server.
 Wed Sep 11 10:19:00 2019: salvaore si è disconesso dal Server.
+Wed Sep 11 10:25:11 2019: finita sessione Server.
