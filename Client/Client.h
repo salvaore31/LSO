@@ -27,3 +27,9 @@ int joinGame();
 int movementRequest();
 
 void handleSignal(int);
+
+int selectGame(int);
+
+int goOn(char []);
+
+int goOut(char []);

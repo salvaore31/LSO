@@ -35,3 +35,7 @@ void handleSignal(int Sig);//Handler dei segnali da gestire
 int logInUserMenu(int, char[]);
 
 int signInUserMenu(int, char[]);
+
+GameGrid **createGameGrid(GameGrid **);
+
+int GameGridToText(GameGrid **, char [], int);

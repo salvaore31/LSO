@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Client.h"
-int sockfd,logged=0;
+int sockfd,ingame=0,logged=0;
 int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
   /*int inputInt;
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
   }*/
   clear();
   int n_b_r;
-  char msg[250],input;
+  char msg[8000],input;
   struct sockaddr_un server_addr;
   if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
     printf("Errore apertura socket");
@@ -52,6 +52,11 @@ int main(int argc, char* argv[]){
       printf("Errore connessione socket\n");
     }else{
       logged=beforeLogin(sockfd);
+      printf("le nonne\n" );
+      //ingame=selectGame(sockfd);
+      printf("prima di leggi\n" );
+      leggi();
+      printf("dopo leggi\n" );
     }
   }
   write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
@@ -60,9 +65,8 @@ int main(int argc, char* argv[]){
 }
 void handleSignal(int sig){
   if(sig==SIGINT){
-    if(logged==1){
+    if(logged==1)
       write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
-    }
     clear();
     exit(-1);
   }
@@ -73,14 +77,32 @@ int beforeLogin(int sockfd){
   char msg[250],input[50];
   while(1){
     leggi();
-    if(strcmp(msg,SUCCESS_MESSAGE_LIM)==0 || strcmp(msg,SUCCESS_MESSAGE_SIM)==0){
+    if(goOn(msg)){
       clear();
       return 1;
     }
-    if(strcmp(msg,ERR_NO_CONNECTION)==0 || strcmp(msg,"-1")==0 )
+    if(goOut(msg))
       return -1;
     scanf("%s",input);
     write(sockfd,input,strlen(input));
     clear();
   }
+}
+
+int selectGame(int sockfd){
+
+    int n_b_r;
+    char msg[250], input[250];
+    while(1){
+      leggi();
+
+    }
+}
+
+int goOn(char msg[]){
+  return (strcmp(msg,SUCCESS_MESSAGE_LIM)==0 || strcmp(msg,SUCCESS_MESSAGE_SIM)==0);
+}
+
+int goOut(char msg[]){
+  return (strcmp(msg,ERR_NO_CONNECTION)==0 || strcmp(msg,"-1")==0);
 }

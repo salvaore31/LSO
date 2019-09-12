@@ -1,2 +1,0 @@
-Wed Sep 11 10:27:15 2019: iniziata nuova sessione Server.
-Wed Sep 11 10:27:15 2019: finita sessione Server.

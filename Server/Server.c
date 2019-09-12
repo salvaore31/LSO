@@ -5,11 +5,10 @@ int fdLog;
 int main(int argc, char* argv[]){
 
   signal(SIGINT, handleSignal);
-
+  clear();
   int sock, sockfd, n_b_w=0, n_b_r=0, fdPlayer, fdGame;
-  char msg[50],c;
+  char msg[1024*5],c;
   struct sockaddr_un mio_indirizzo;
-
   LogServerStart(&fdLog);
   if((sock=socket(PF_LOCAL,SOCK_STREAM,0))<0){
     printf("Errore apertura socket\n");
@@ -26,7 +25,6 @@ int main(int argc, char* argv[]){
           write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
           n_b_r=read(sockfd,msg,50);
           msg[n_b_r]='\0';
-          printf("%s", msg);
           char user[50];
           switch (msg[0]) {
             case 'l': case 'L':
@@ -39,6 +37,11 @@ int main(int argc, char* argv[]){
               write(sockfd, "-1", sizeof("-1"));
               break;
           }
+          GameGrid **game=NULL;
+          game=createGameGrid(game);
+          GameGridToText(game,msg,1);
+          write(sockfd,msg,strlen(msg));
+          printf("dovrebbe essere %d\nma è %d\n", strlen(msg), n_b_w);
           n_b_r=read(sockfd,msg,250);
           msg[n_b_r]='\0';
           if(strcmp(msg,USER_LOG_OUT)==0){
@@ -253,4 +256,53 @@ int logInUserMenu(int sockfd, char usrn[]){
     LogUserSignIn(&fdLog, usrn);
     write(sockfd,SUCCESS_MESSAGE_LIM,sizeof(SUCCESS_MESSAGE_LIM));
     return 1;
+}
+
+GameGrid **createGameGrid(GameGrid **p){
+
+  int i,j;
+  p=(GameGrid**)malloc(MAX_GRID_SIZE_H * sizeof(GameGrid*));
+
+  for(i=0;i<MAX_GRID_SIZE_H;i++)
+    p[i]=(GameGrid*)calloc(MAX_GRID_SIZE_L, sizeof(GameGrid));
+
+  for(i=0;i<MAX_GRID_SIZE_H;i++){
+    for(j=0;j<MAX_GRID_SIZE_L;j++){
+      p[i][j].infocasella=rand()%4;
+      p[i][j].playerI=rand()%8;
+      p[i][j].playerJ=rand()%8;
+      p[i][j].permessi=rand()%3;//%256;
+    }
+  }
+  return p;
+}
+
+int GameGridToText(GameGrid **p, char msg[], int giocatore){
+
+  int i,j;
+  msg[0]='\0';
+  for(i=0;i<MAX_GRID_SIZE_H;i++){
+    for(j=0;j<MAX_GRID_SIZE_L;j++){
+      if(p[i][j].permessi-giocatore!=(2-giocatore))
+        strcat(msg,"? ");
+      else{
+        switch(p[i][j].infocasella){
+          case 0:
+            strcat(msg,"\033[92m\033[92m0 \033[0m");
+            break;
+          case 1:
+            strcat(msg,"\033[91m\033[91mX \033[0m");
+            break;
+          case 2:
+            strcat(msg,"\033[96m\033[96mI \033[0m");
+            break;
+          default:
+            strcat(msg,"\033[93m\033[93m! \033[0m");
+            break;
+        }
+      }
+    }
+    strcat(msg,"\n");
+  }
+  return 1;
 }
