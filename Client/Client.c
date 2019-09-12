@@ -52,10 +52,11 @@ int main(int argc, char* argv[]){
       printf("Errore connessione socket\n");
     }else{
       logged=beforeLogin(sockfd);
+      char griglia[5000];
       printf("le nonne\n" );
       //ingame=selectGame(sockfd);
       printf("prima di leggi\n" );
-      leggi();
+      leggiG();
       printf("dopo leggi\n" );
     }
   }

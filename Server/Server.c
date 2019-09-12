@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
               write(sockfd, "-1", sizeof("-1"));
               break;
           }
-          GameGrid **game=NULL;
+          /*GameGrid **game=NULL;
           game=createGameGrid(game);
           GameGridToText(game,msg,1);
           write(sockfd,msg,strlen(msg));
@@ -199,9 +199,11 @@ int logInUser(char* user, char* passw){
         //GESTIRE il comportamentoin caso di errore lseek
         return -4;
       }else{
-        while((n_b_r=read(fdUserFile,&c,1))>0 && c!='\n' )
+        while((n_b_r=read(fdUserFile,&c,1))>0 && c!='\n')
           str[i++]=c;
-        str[--i]='\0';
+        str[i]='\0';
+        write(1,str,strlen(str));
+        write(1,passw,strlen(passw));
         if(strcmp(passw,str)==0){
           return 0;
         }else{

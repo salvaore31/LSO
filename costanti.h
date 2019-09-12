@@ -13,6 +13,8 @@ typedef struct {
 #define MIO_SOCK  "/tmp/mio_socket"
 #define clear() sleep(1); printf("\033[H\033[J");
 #define leggi() n_b_r=read(sockfd,msg,5000);msg[n_b_r]='\0';printf("%s",msg);
+#define leggiG() n_b_r=read(sockfd,griglia,5000);griglia[n_b_r]='\0';printf("%s",griglia);
+
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
  * di gioco per ottenere informazioni sullo stato della casella.
