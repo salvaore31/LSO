@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
           game=createGameGrid(game);
           GameGridToText(game,msg,1);
           write(sockfd,msg,strlen(msg));
-          printf("dovrebbe essere %d\nma è %d\n", strlen(msg), n_b_w);
+          printf("%ssono %d caratteri\n",msg,strlen(msg));
           n_b_r=read(sockfd,msg,250);
           msg[n_b_r]='\0';
           if(strcmp(msg,USER_LOG_OUT)==0){
@@ -224,6 +224,11 @@ int logInUserMenu(int sockfd, char usrn[]){
     write(sockfd, INSERT_USERNAME_LIM, sizeof(INSERT_USERNAME_LIM));
     n_b_r = read(sockfd, usrn, 50);
     usrn[n_b_r] ='\0';
+    while(checkUsername(usrn)<0){
+      write(sockfd, WRONG_USERNAME_LIM, sizeof(WRONG_USERNAME_LIM));
+      n_b_r = read(sockfd, usrn, 50);
+      usrn[n_b_r] ='\0';
+    }
     write(sockfd, INSERT_PASSWORD_LIM, sizeof(INSERT_PASSWORD_LIM));
     n_b_r = read(sockfd, pssw, 50);
     pssw[n_b_r] = '\0';
@@ -271,7 +276,7 @@ GameGrid **createGameGrid(GameGrid **p){
       p[i][j].infocasella=rand()%4;
       p[i][j].playerI=rand()%8;
       p[i][j].playerJ=rand()%8;
-      p[i][j].permessi=rand()%3;//%256;
+      p[i][j].permessi=rand()%256;
     }
   }
   return p;
@@ -283,7 +288,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
   msg[0]='\0';
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
-      if(p[i][j].permessi-giocatore!=(2-giocatore))
+      if(p[i][j].permessi-giocatore!=(255-giocatore))
         strcat(msg,"? ");
       else{
         switch(p[i][j].infocasella){
