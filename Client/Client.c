@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
   }*/
   clear();
   int n_b_r;
-  char msg[8000],input;
+  char msg[500],input;
   struct sockaddr_un server_addr;
   if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
     printf("Errore apertura socket");
@@ -52,11 +52,9 @@ int main(int argc, char* argv[]){
       printf("Errore connessione socket\n");
     }else{
       logged=beforeLogin(sockfd);
-      char griglia[5000];
-      printf("le nonne\n" );
       //ingame=selectGame(sockfd);
       printf("prima di leggi\n" );
-      leggiG();
+      leggi();
       printf("dopo leggi\n" );
     }
   }
@@ -79,7 +77,7 @@ int beforeLogin(int sockfd){
   while(1){
     leggi();
     if(goOn(msg)){
-      clear();
+
       return 1;
     }
     if(goOut(msg))
@@ -92,12 +90,6 @@ int beforeLogin(int sockfd){
 
 int selectGame(int sockfd){
 
-    int n_b_r;
-    char msg[250], input[250];
-    while(1){
-      leggi();
-
-    }
 }
 
 int goOn(char msg[]){

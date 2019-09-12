@@ -37,12 +37,12 @@ int main(int argc, char* argv[]){
               write(sockfd, "-1", sizeof("-1"));
               break;
           }
-          /*GameGrid **game=NULL;
+          GameGrid **game=NULL;
           game=createGameGrid(game);
           GameGridToText(game,msg,1);
           write(sockfd,msg,strlen(msg));
-          printf("%ssono %d caratteri\n",msg,strlen(msg));
           n_b_r=read(sockfd,msg,250);
+          printf("%s",msg );
           msg[n_b_r]='\0';
           if(strcmp(msg,USER_LOG_OUT)==0){
             LogUserSignOut(&fdLog,user);
@@ -202,8 +202,6 @@ int logInUser(char* user, char* passw){
         while((n_b_r=read(fdUserFile,&c,1))>0 && c!='\n')
           str[i++]=c;
         str[i]='\0';
-        write(1,str,strlen(str));
-        write(1,passw,strlen(passw));
         if(strcmp(passw,str)==0){
           return 0;
         }else{
