@@ -1,36 +1,26 @@
-1) Studiare la teoria
-2) Funzioni lato server:
-  .1 tenere traccia degli utenti registrati(Probabile uso di un file di testo)
-  .2 tenere traccia degli eventi in un Log
-  .3 gestire le richieste di registrazione e login
-  .4 generare casualmente una matrice (dimensioni al momento da decidere) contenente ostacoli
-  .5 inizializzare una partita
-  .6 gestire l'aggiunta di giocatori ad una partita in corso
-  .7 gestire le richieste dei giocatori
-3) Funzioni lato client:
-  .1 inviare richiesta rgistrazione e/o Login
-  .2 inviare richiesta di giocare una partita
-  .3 mostrare la matrice
-  .4 mostrare lo stato corrente della partita
+Separe errori da costanti creando nuovo file errori.h, tutti gli errori cominciano con ERR_...
 
+cambia NO_CONNECTION in ERR_NO_CONNECTION
 
-Idea rappresentazione matrice:
+Errori registerUser funtion
 
-16bit  0 0 0 |0 0 0 0 0 0 0 0 |  0 0 0 | 0 0 in ogni casella Grid [x][y]
+1. cambia NO_CONNECTION in nuova costante (fai def)ERR_NO_USER_FILE per il secondo caso di Errore;
+2. cambia NO_CONNECTION in nuova costante (fai def)ERR_WRITE_ERROR per il terzo caso di errore;
+3. gestire quarto caso di errore;
 
-bit 15/16 meno significativi: infocasella
-  00 = casella libera;
-  01 = ostacolo;
-  10 = posizione corrente giocatore i;
-  11 = win condition giocatore j.
+Fare nuova libreria funzioni utenti(log. in, sign in);
 
-bit 12/13/14: playerJ
-   000 = dato valido e identificativo giocatore j-esimo.
+in logInUser cambiare da numeri a costanti gli errori;
 
-bit 1/2/3: playerI
-   000 = identificativo giocatore i-esimo che si trova nella casella [x][y].
+in logInUserMenu Cambiare valori numerici con costanti definite al punto di sopra;
 
-bit 4/5/6/7/8/9/10/11: permessi
-  Codifica one hot per verificare se il giocatore
-  k-esimo(identificato dalla posizione da sinistra a destra nella codifica)
-  vede la casella identificata.
+modificare le intestazioni dei messaggi da ERR a MSG dove presenti
+
+cambia NO_CONNECTION in ERR_NO_CONNECTION in registerUSer
+come sopra per INVALID_USERNAME
+
+cambia NO_CONNECTION in ERR_NO_USER_FILE in primo if registerUSer
+ cambiare i signIn in Register
+
+cambia gli Errori in ERR_nome_errore
+cambia baba in BABA
