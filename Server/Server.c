@@ -3,7 +3,7 @@
 
 int fdLog;
 int main(int argc, char* argv[]){
-
+  srand(time(NULL));
   signal(SIGINT, handleSignal);
   clear();
   int sock, sockfd, n_b_w=0, n_b_r=0, fdPlayer, fdGame;
@@ -12,6 +12,7 @@ int main(int argc, char* argv[]){
   LogServerStart(&fdLog);
   if((sock=socket(PF_LOCAL,SOCK_STREAM,0))<0){
     printf("Errore apertura socket\n");
+    //Gestire cosa fare in caso di errore in apertura Socket
   }else{
     mio_indirizzo.sun_family=AF_LOCAL;
     strcpy(mio_indirizzo.sun_path,MIO_SOCK);
@@ -26,22 +27,64 @@ int main(int argc, char* argv[]){
           n_b_r=read(sockfd,msg,50);
           msg[n_b_r]='\0';
           char user[50];
-          switch (msg[0]) {
-            case 'l': case 'L':
-              logInUserMenu(sockfd,user);
-              break;
-            case 'r': case 'R':
-              signInUserMenu(sockfd,user);
-              break;
-            case 'e': case 'E':
-              write(sockfd, "-1", sizeof("-1"));
-              break;
+          int baba=-1;
+          while(baba==-1){
+            if(n_b_r==1){
+              switch (msg[0]) {
+                case 'l': case 'L':
+                  logInUserMenu(sockfd,user);
+                  baba=1;
+                  break;
+                case 'r': case 'R':
+                  signInUserMenu(sockfd,user);
+                  baba=1;
+                  break;
+                case 'e': case 'E':
+                  write(sockfd, "-1", sizeof("-1"));
+                  break;
+                default:
+                  clear();
+                  write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
+                  n_b_r=read(sockfd,msg,50);
+                  msg[n_b_r]='\0';
+                  break;
+              }
+            }else{
+                  clear();
+                  write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
+                  n_b_r=read(sockfd,msg,50);
+                  msg[n_b_r]='\0';
+            }
           }
-          GameGrid **game=NULL;
+          read(sockfd,msg,1);
+          write(sockfd,GAME_SELECTION_MENU,sizeof(GAME_SELECTION_MENU));
+          n_b_r=read(sockfd,msg,50);
+          msg[n_b_r]='\0';
+          baba=-1;
+          while(baba==-1){
+            switch (msg[0]) {
+              case 'n': case 'N':
+                newGame(sockfd, user);
+                baba=1;
+                break;
+              case 'j': case 'J':
+                joinGame(sockfd,user);
+                baba=1;
+                break;
+              case 'e': case 'E':
+                write(sockfd, "-1", sizeof("-1"));
+                break;
+              default:
+                write(sockfd,GAME_SELECTION_MENU,sizeof(GAME_SELECTION_MENU));
+                n_b_r=read(sockfd,msg,50);
+                msg[n_b_r]='\0';
+                break;
+            }
+          }
+          /*GameGrid **game=NULL;
           game=createGameGrid(game);
           GameGridToText(game,msg,1);
           write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,250);
           printf("%s",msg );
           msg[n_b_r]='\0';
           if(strcmp(msg,USER_LOG_OUT)==0){
@@ -72,6 +115,28 @@ int main(int argc, char* argv[]){
   unlink(MIO_SOCK);
   LogServerClose(&fdLog);
   return 1;
+}
+
+void joinGame(int sockfd, char user[]){
+  write(sockfd,"Hai scelto joinGame",20);
+  clear();
+  return ;
+}
+
+void newGame(int sockfd, char user[]){
+
+  char msg[5000];
+  GameGrid **g=NULL;
+  if((g=createGameGrid(g))!=NULL){
+    GameGridToText(g,msg,1);
+    write(sockfd,msg,strlen(msg));
+    printf("%s\n",msg );
+    clear();
+  }else{
+    write(sockfd,ERR_NO_CONNECTION,sizeof(ERR_NO_CONNECTION));
+
+  }
+  return;
 }
 
 void handleSignal(int Sig){
@@ -155,7 +220,7 @@ int registerUser(char* newuser, char* newpassw){
   if( lenght_user > MAX_SIZE_USERNAME || lenght_passw > MAX_SIZE_PASSW ){
     return INVALID_USERNAME;
   }else{
-    if(checkUsername(newuser) < 0){
+    if(checkUsername(newuser) < 0){// Se checkUsername ritorna un valore minore di 0 vuol dire che quel username non è presente nel file ed è quindi disponibile
       if((fdUserFile = open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
         return NO_CONNECTION;
         /*Gestire cosa succede se non si riesce ad aprire il file*/
@@ -268,15 +333,39 @@ GameGrid **createGameGrid(GameGrid **p){
   int i,j;
   p=(GameGrid**)malloc(MAX_GRID_SIZE_H * sizeof(GameGrid*));
 
-  for(i=0;i<MAX_GRID_SIZE_H;i++)
-    p[i]=(GameGrid*)calloc(MAX_GRID_SIZE_L, sizeof(GameGrid));
-
-  for(i=0;i<MAX_GRID_SIZE_H;i++){
-    for(j=0;j<MAX_GRID_SIZE_L;j++){
-      p[i][j].infocasella=rand()%4;
-      p[i][j].playerI=rand()%8;
-      p[i][j].playerJ=rand()%8;
-      p[i][j].permessi=rand()%256;
+  if(p!=NULL){
+    for(i=0;i<MAX_GRID_SIZE_H;i++)
+      p[i]=(GameGrid*)calloc(MAX_GRID_SIZE_L, sizeof(GameGrid));
+    for(i=0;i<MAX_GRID_SIZE_H;i++){
+      for(j=0;j<MAX_GRID_SIZE_L;j++){
+        p[i][j].infocasella=0;
+        p[i][j].playerI=0;
+        p[i][j].playerJ=0;
+        p[i][j].p1=0;
+        p[i][j].p2=0;
+        p[i][j].p3=0;
+        p[i][j].p4=0;
+        p[i][j].p5=0;
+        p[i][j].p6=0;
+        p[i][j].p7=0;
+        p[i][j].p8=0;
+      }
+    }
+    int x,y=rand()%MAX_GRID_SIZE_L;
+    x=rand()%MAX_GRID_SIZE_H;
+    p[x][y].playerI=1;
+    p[x][y].infocasella=2;
+    p[x][y].p1+=1;
+    y=rand()%MAX_GRID_SIZE_L;
+    x=rand()%MAX_GRID_SIZE_H;
+    p[x][y].playerJ=1;
+    p[x][y].infocasella=3;
+    p[x][y].p1+=1;
+    for(i=0;i<MAX_OBSTACLES_N;i++){
+      y=rand()%MAX_GRID_SIZE_L;
+      x=rand()%MAX_GRID_SIZE_H;
+      if(p[x][y].infocasella==0)
+        p[x][y].infocasella=1;
     }
   }
   return p;
@@ -288,26 +377,179 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
   msg[0]='\0';
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
-      if(p[i][j].permessi-giocatore!=(255-giocatore))
-        strcat(msg,"? ");
-      else{
-        switch(p[i][j].infocasella){
-          case 0:
-            strcat(msg,"\033[92m\033[92m0 \033[0m");
-            break;
-          case 1:
-            strcat(msg,"\033[91m\033[91mX \033[0m");
-            break;
-          case 2:
-            strcat(msg,"\033[96m\033[96mI \033[0m");
-            break;
-          default:
-            strcat(msg,"\033[93m\033[93m! \033[0m");
-            break;
+      switch(giocatore){
+        case 1:
+        if(p[i][j].p1==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
         }
+        break;
+        case 3:
+        if(p[i][j].p3==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
+        case 4:
+        if(p[i][j].p4==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
+        case 5:
+        if(p[i][j].p5==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
+        case 6:
+        if(p[i][j].p6==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
+        case 7:
+        if(p[i][j].p7==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
+        case 8:
+        if(p[i][j].p8==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
+        case 2:
+        if(p[i][j].p2==0)
+          strcat(msg,"? ");
+        else{
+          switch(p[i][j].infocasella){
+            case 0:
+              strcat(msg,"\033[92m\033[92m0 \033[0m");
+              break;
+            case 1:
+              strcat(msg,"\033[91m\033[91mX \033[0m");
+              break;
+            case 2:
+              strcat(msg,"\033[96m\033[96mI \033[0m");
+              break;
+            default:
+              strcat(msg,"\033[93m\033[93m! \033[0m");
+              break;
+          }
+        }
+        break;
       }
     }
-    strcat(msg,"\n");
+  strcat(msg,"\n");
   }
   return 1;
+}
+
+void deleteGrid(GameGrid **g){
+
+  int i;
+  for(i=0;i<MAX_GRID_SIZE_H;i++)
+    free(g[i]);
+  free(g);
+  return;
 }
