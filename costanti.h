@@ -1,10 +1,13 @@
 #ifndef CONSTANT_H_
 #define CONSTANT_H_
 typedef struct {
-  unsigned int infocasella:2;
-  unsigned int playerJ:3;
-  unsigned int playerI:3;
-  //unsigned int permessi:8;
+  unsigned int ostacolo:1;
+  unsigned int giocatore:1;
+  unsigned int pacco:1;
+  unsigned int locazione:1;
+  unsigned int codiceGiocatore:3;
+  unsigned int codicePacco:4;
+  unsigned int codiceLocazione:4;
   unsigned int p1:1;
   unsigned int p2:1;
   unsigned int p3:1;
@@ -13,8 +16,8 @@ typedef struct {
   unsigned int p6:1;
   unsigned int p7:1;
   unsigned int p8:1;
-
 } GameGrid;
+
 #define USER_LOG_OUT  "UTENTE ANDATO"
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
