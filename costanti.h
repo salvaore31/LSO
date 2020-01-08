@@ -56,9 +56,5 @@ typedef struct {
 #define MAX_OBSTACLES_N 50 //po se vere
 #define MAX_GRID_SIZE_L 12
 #define MAX_GRID_SIZE_H 8
-/*Le costanti seguenti contengono i valori degli errori
- *
- */
-#define NO_CONNECTION -1
-#define INVALID_USERNAME -2
+
 #endif

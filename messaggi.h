@@ -1,5 +1,5 @@
-#ifndef STRINGHE_H_
-#define STRINGHE_H_
+#ifndef MESSAGGI_H_
+#define MESSAGGI_H_
 
 
 
@@ -47,27 +47,27 @@
 /*
  * Messaggi di errore relativi al server.
  */
-#define ERR_NO_CONNECTION     "Impossibile connettersi al server.\nL'applicazione verrà chiusa.\n"
-#define ERR_SOCKET_CREATION   "Impossibile creare la socket.\n"
-#define ERR_SOCKET_BINDING    "Impossibile collegarsi alla socket.\n"
-#define ERR_SOCKET_LISTEN     "Impossibile ricevere dati dalla socket.\n"
+#define NO_CONNECTION_ERR_MESSAGE     "Impossibile connettersi al server.\nL'applicazione verrà chiusa.\n"
+#define SOCKET_CREATION_ERR_MESSAGE   "Impossibile creare la socket.\n"
+#define SOCKET_BINDING_ERR_MESSAGE    "Impossibile collegarsi alla socket.\n"
+#define SOCKET_LISTEN_ERR_MESSAGE     "Impossibile ricevere dati dalla socket.\n"
 
 /*
  * Messaggi di errore relativi al gioco stesso
  */
-#define ERR_FILLED_GAME       "Non puoi unirti a questa partita...\n"
-#define ERR_MATRIX_ALLOCATION "Errore nella creazione della matrice di gioco.\n"
-#define ERR_ON_MOVEMENT       "Errore nel movimento del giocatore.\n"
+#define FILLED_GAME_ERR_MESSAGE       "Non puoi unirti a questa partita...\n"
+#define MATRIX_ALLOCATION_ERR_MESSAGE "Errore nella creazione della matrice di gioco.\n"
+#define ON_MOVEMENT_ERR_MESSAGE       "Errore nel movimento del giocatore.\n"
 
 /*
  * Messaggi di errore lato client.
  */
-#define ERR_INVALID_CHOICE    "La scelta inserita non è valida.\n"
+#define INVALID_CHOICE_ERR_MESSAGE    "La scelta inserita non è valida.\n"
 
 /*
  * Messaggi di errore relativi ai thread.
  */
-#define ERR_THREAD_CREATION   "Impossibile creare un nuovo thread.\n"
+#define THREAD_CREATION_ERR_MESSAGE   "Impossibile creare un nuovo thread.\n"
 /*
  *Messaggi di LOG
  */
