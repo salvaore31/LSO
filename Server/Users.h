@@ -12,6 +12,9 @@
 #include <signal.h>
 #include "log.c"
 #include "../costanti.h"
+#include "../codicierrori.h"
+#include "../messaggi.h"
+
 
 
 int registerUser(char* newuser, char* newpassw);//Prende un nome utente, una password e,se non presente, lo aggiunge al file degli utenti; Ritorna 0 in caso di successo

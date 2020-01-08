@@ -1,3 +1,4 @@
+#include "Users.h"
 
 int signInUserMenu(int sockfd, char usrn[]){
   int n_b_r;
@@ -69,15 +70,15 @@ int registerUser(char* newuser, char* newpassw){
   lenght_passw=strlen(newpassw);
 
   if( lenght_user > MAX_SIZE_USERNAME || lenght_passw > MAX_SIZE_PASSW ){
-    return INVALID_USERNAME;
+    return ERR_INVALID_USERNAME;
   }else{
     if(checkUsername(newuser) < 0){// Se checkUsername ritorna un valore minore di 0 vuol dire che quel username non è presente nel file ed è quindi disponibile
       if((fdUserFile = open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
-        return NO_CONNECTION;
+        return ERR_NO_CONNECTION;
         /*Gestire cosa succede se non si riesce ad aprire il file*/
       }else{
         if((n_b_w = write(fdUserFile,newuser,lenght_user))<lenght_user){
-          return NO_CONNECTION;
+          return ERR_NO_CONNECTION;
           /*Gestire cosa succede se non si riesce a scrivere su file*/
           close(fdUserFile);
         }else{
@@ -93,7 +94,7 @@ int registerUser(char* newuser, char* newpassw){
         }
       }
     }else{
-      return INVALID_USERNAME;
+      return ERR_INVALID_USERNAME;
     }
   }
 }
