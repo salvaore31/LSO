@@ -330,7 +330,7 @@ int logInUserMenu(int sockfd, char usrn[]){
 
 GameGrid **createGameGrid(GameGrid **p){
 
-  int i,j;
+  int i, j, x, y, numOstacoli=0;
   p=(GameGrid**)malloc(MAX_GRID_SIZE_H * sizeof(GameGrid*));
 
   if(p!=NULL){
@@ -338,9 +338,14 @@ GameGrid **createGameGrid(GameGrid **p){
       p[i]=(GameGrid*)calloc(MAX_GRID_SIZE_L, sizeof(GameGrid));
     for(i=0;i<MAX_GRID_SIZE_H;i++){
       for(j=0;j<MAX_GRID_SIZE_L;j++){
-        p[i][j].infocasella=0;
-        p[i][j].playerI=0;
-        p[i][j].playerJ=0;
+        p[i][j].ostacolo=0;
+        p[i][j].giocatore=0;
+        p[i][j].pacco=0;
+        p[i][j].locazione=0;
+        p[i][j].codiceGiocatore=0;
+        p[i][j].codicePacco=0;
+        p[i][j].codiceLocazione=0;
+        p[i][j].p0=0;
         p[i][j].p1=0;
         p[i][j].p2=0;
         p[i][j].p3=0;
@@ -348,27 +353,48 @@ GameGrid **createGameGrid(GameGrid **p){
         p[i][j].p5=0;
         p[i][j].p6=0;
         p[i][j].p7=0;
-        p[i][j].p8=0;
       }
     }
-    int x,y=rand()%MAX_GRID_SIZE_L;
-    x=rand()%MAX_GRID_SIZE_H;
-    p[x][y].playerI=1;
-    p[x][y].infocasella=2;
-    p[x][y].p1+=1;
     y=rand()%MAX_GRID_SIZE_L;
     x=rand()%MAX_GRID_SIZE_H;
-    p[x][y].playerJ=1;
-    p[x][y].infocasella=3;
-    p[x][y].p1+=1;
+    p[x][y].giocatore=1;
+    p[x][y].codiceGiocatore=0;
+    p[x][y].p1=1;
+    for (i=0; i < MAX_PACCHI; i++) {
+      do {
+        y=rand()%MAX_GRID_SIZE_L;
+        x=rand()%MAX_GRID_SIZE_H;
+      } while(p[x][y].giocatore);
+      p[x][y].pacco=1;
+      p[x][y].codicePacco=i;
+    }
+    for (i=0; i < MAX_PACCHI; i++) {
+      do {
+        y=rand()%MAX_GRID_SIZE_L;
+        x=rand()%MAX_GRID_SIZE_H;
+      } while(p[x][y].giocatore || p[x][y].pacco);
+      p[x][y].locazione=1;
+      p[x][y].codiceLocazione=i;
+    }
     for(i=0;i<MAX_OBSTACLES_N;i++){
       y=rand()%MAX_GRID_SIZE_L;
       x=rand()%MAX_GRID_SIZE_H;
-      if(p[x][y].infocasella==0)
-        p[x][y].infocasella=1;
+      if(!(p[x][y].giocatore || p[x][y].pacco || p[x][y].locazione)){
+        p[x][y].ostacolo=1;
+        numOstacoli++;
+      }
+    }
+    while(numOstacoli<MIN_OBSTACLES){
+      y=rand()%MAX_GRID_SIZE_L;
+      x=rand()%MAX_GRID_SIZE_H;
+      if(!(p[x][y].giocatore || p[x][y].pacco || p[x][y].locazione)){
+        p[x][y].ostacolo=1;
+        numOstacoli++;
+      }
     }
   }
   return p;
+
 }
 
 int GameGridToText(GameGrid **p, char msg[], int giocatore){
