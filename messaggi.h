@@ -4,7 +4,6 @@
 
 
 
-
 /*
  * Stringhe per la generazione dei menu.
  */
@@ -14,7 +13,7 @@
        */
        #define INSERT_USERNAME_LIM           "Inserisci il tuo nome utente:\n"
        #define INSERT_PASSWORD_LIM           "Inserisci la tua password:\n"
-       #define SUCCESS_MESSAGE_LIM           "Bentornato!\n"
+       #define SUCCESS_MESSAGE_LIM           "Bentornato!\nPremi qualcosa per andare avanti...\n"
        #define WRONG_USERNAME_LIM            "Il nome utente inserito non è stato trovato.\nInserisci di nuovo il tuo nome utente:\n"
        #define WRONG_PASSWORD_LIM            "Password errata.\nInserisci di nuovo la tua password:\n"
 
@@ -25,9 +24,9 @@
        #define INSERT_PASSWORD_SIM            "Inserisci la tua password (lunghezza massima 12).\n"
        #define INSERT_PASSWORD_CONFIRM_SIM    "Re-inserisci la password.\n"
        #define USER_ALREADY_PRESENT_SIM       "Il nome utente non è valido.\nScegli un altro nome, di lunghezza massima 15, con cui farti chiamare:\n"
-       #define SUCCESS_MESSAGE_SIM            "Benvenuto!\n"
+       #define SUCCESS_MESSAGE_SIM            "Benvenuto!\nPremi qualcosa per andare avanti...\n"
 
-#define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\n"
+#define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\nPremi 'e' per uscire.\n"
 #define NO_SUCH_GAMES         "Non ci sono partite disponibili in corso.\n"
 
 //E' follia, follia dico però il messaggio non lo cancello perché l'ho scritto e mi scoccio troppo assai di cancellarlo

@@ -39,3 +39,9 @@ int signInUserMenu(int, char[]);
 GameGrid **createGameGrid(GameGrid **);
 
 int GameGridToText(GameGrid **, char [], int);
+
+void joinGame(int, char[]);
+
+void newGame(int, char[]);
+
+void deleteGrid(GameGrid **);

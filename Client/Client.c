@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
   }*/
   clear();
   int n_b_r;
-  char msg[500],input;
+  char msg[500],input[10];
   struct sockaddr_un server_addr;
   if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
     printf("Errore apertura socket");
@@ -52,10 +52,12 @@ int main(int argc, char* argv[]){
       printf("Errore connessione socket\n");
     }else{
       logged=beforeLogin(sockfd);
-      //ingame=selectGame(sockfd);
-      printf("prima di leggi\n" );
+      scanf("%s",input);
+      write(sockfd,input,strlen(input));
+      clear();
+      ingame=selectGame(sockfd);
       leggi();
-      printf("dopo leggi\n" );
+
     }
   }
   write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
@@ -70,30 +72,48 @@ void handleSignal(int sig){
     exit(-1);
   }
 }
+
 int beforeLogin(int sockfd){
 
-  int n_b_r, logged=0;
+  int n_b_r;
   char msg[250],input[50];
   while(1){
     leggi();
-    if(goOn(msg)){
-
+    if(goOn(msg)==1){
       return 1;
+    }else{
+      if(goOut(msg)==1)
+        return -1;
+      else{
+        scanf("%s",input);
+        write(sockfd,input,strlen(input));
+        clear();
+      }
     }
-    if(goOut(msg))
-      return -1;
-    scanf("%s",input);
-    write(sockfd,input,strlen(input));
-    clear();
   }
 }
 
 int selectGame(int sockfd){
-
+  int n_b_r;
+  char msg[250],input[50];
+  while(1){
+    leggi();
+    if(goOn(msg)==1){
+      return 1;
+    }else{
+      if(goOut(msg)==1)
+        return -1;
+      else{
+        scanf("%s",input);
+        write(sockfd,input,strlen(input));
+        clear();
+      }
+    }
+  }
 }
 
 int goOn(char msg[]){
-  return (strcmp(msg,SUCCESS_MESSAGE_LIM)==0 || strcmp(msg,SUCCESS_MESSAGE_SIM)==0);
+  return ((strcmp(msg,SUCCESS_MESSAGE_LIM)==0) || (strcmp(msg,SUCCESS_MESSAGE_SIM)==0));
 }
 
 int goOut(char msg[]){

@@ -4,7 +4,16 @@ typedef struct {
   unsigned int infocasella:2;
   unsigned int playerJ:3;
   unsigned int playerI:3;
-  unsigned int permessi:8;
+  //unsigned int permessi:8;
+  unsigned int p1:1;
+  unsigned int p2:1;
+  unsigned int p3:1;
+  unsigned int p4:1;
+  unsigned int p5:1;
+  unsigned int p6:1;
+  unsigned int p7:1;
+  unsigned int p8:1;
+
 } GameGrid;
 #define USER_LOG_OUT  "UTENTE ANDATO"
 #define MAX_SIZE_USERNAME 15
@@ -12,7 +21,8 @@ typedef struct {
 #define USERS_FILE "File/RegisteredUser.txt"
 #define MIO_SOCK  "/tmp/mio_socket"
 #define clear() sleep(1); printf("\033[H\033[J");
-#define leggi() n_b_r=read(sockfd,msg,500);msg[n_b_r]='\0';printf("%s",msg);
+#define leggi() n_b_r=read(sockfd,msg,5000);msg[n_b_r]='\0';printf("%s",msg);
+
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice
  * di gioco per ottenere informazioni sullo stato della casella.
