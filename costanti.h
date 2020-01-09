@@ -25,7 +25,7 @@ typedef struct {
 #define USERS_FILE "File/RegisteredUser.txt"
 #define MIO_SOCK  "/tmp/mio_socket"
 #define clear() sleep(1); printf("\033[H\033[J");
-#define leggi() n_b_r=read(sockfd,msg,5000);msg[n_b_r]='\0';printf("%s",msg);
+#define leggi() n_b_r=read(sockfd,msg,6);printf("%s 1\n",msg );msg[n_b_r]='\0';printf("%s 2\n",msg );n_b_r=atoi(msg);printf("%d 3\n",n_b_r);write(sockfd,"1",sizeof("1"));read(sockfd,msg,n_b_r);printf("%s 4\n", msg);printf("%s",msg);
 
 /* Le costanti seguenti corrispondono ai valori da usare come secondo operando
  * di un AND bit a bit con il valore corrente di una casella della matrice

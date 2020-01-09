@@ -18,7 +18,7 @@ int logInRequest(char* username, char * password);
 
 int signInRequest(char* username, char* password);
 
-int beforeLogin(int);
+int comunication(int);
 
 int newGame();
 

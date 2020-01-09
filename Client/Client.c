@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Client.h"
+
 int sockfd,ingame=0,logged=0;
+
 int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
   clear();
@@ -18,12 +20,30 @@ int main(int argc, char* argv[]){
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");
     }else{
-      logged=beforeLogin(sockfd);
+      sleep(5);
+      logged=comunication(sockfd);
+      if (logged<0) {
+        printf("LET ME OUT\n" );
+        write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+        //clear();
+        close(sockfd);
+        exit(-1);
+      }
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
-      ingame=selectGame(sockfd);
-      leggi();
+      ingame=comunication(sockfd);
+      if(ingame<0){
+        printf("NON SONO INGAME");
+        write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+      //  clear();
+        close(sockfd);
+        exit(-1);
+      }
+      scanf("%s",input);
+      write(sockfd,input,strlen(input));
+      clear();
+
 
     }
   }
@@ -33,23 +53,23 @@ int main(int argc, char* argv[]){
 }
 void handleSignal(int sig){
   if(sig==SIGINT){
-    if(logged==1)
+    if(logged)
       write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
     clear();
     exit(-1);
   }
 }
 
-int beforeLogin(int sockfd){
+int comunication(int sockfd){
 
   int n_b_r;
   char msg[250],input[50];
   while(1){
     leggi();
-    if(goOn(msg)==1){
+    if(goOn(msg)){
       return 1;
     }else{
-      if(goOut(msg)==1)
+      if(goOut(msg))
         return -1;
       else{
         scanf("%s",input);
@@ -65,10 +85,10 @@ int selectGame(int sockfd){
   char msg[250],input[50];
   while(1){
     leggi();
-    if(goOn(msg)==1){
+    if(goOn(msg)){
       return 1;
     }else{
-      if(goOut(msg)==1)
+      if(goOut(msg))
         return -1;
       else{
         scanf("%s",input);
@@ -84,5 +104,5 @@ int goOn(char msg[]){
 }
 
 int goOut(char msg[]){
-  return (strcmp(msg,ERR_NO_CONNECTION)==0 || strcmp(msg,"-1")==0);
+  return (strcmp(msg,NO_CONNECTION_ERR_MESSAGE)==0 || strcmp(msg,"-1")==0);
 }

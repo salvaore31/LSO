@@ -21,6 +21,6 @@ int checkUsername(char* username); // Ritorna la posizione dell'offset dello use
 
 int logInUser(char* user, char* passw);//Effettua il login dell'utente passato come paremetro usando la password passata come parametro
 
-int logInUserMenu(int, char[]); //Contiene la gestione del menu di Login
+int logInUserMenu(int, char[], int*); //Contiene la gestione del menu di Login
 
-int signInUserMenu(int, char[]);//Contiene la gestione del menu di Registrazione
+int signInUserMenu(int, char[], int*);//Contiene la gestione del menu di Registrazione

@@ -105,6 +105,7 @@ int main(int argc, char const *argv[]) {
   }
 
   printf("%s\n\nmsg ha numero %d di caratteri.\nnumero ostacoli %d\n",msg, strlen(msg),numOstacoli);
-
+  sprintf(msg,"%d",strlen(msg));
+  printf("%s\n",msg);
   return 0;
 }

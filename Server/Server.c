@@ -1,5 +1,4 @@
 #include "Server.h"
-#include "Users.h"
 #include <time.h>
 
 int fdLog;
@@ -24,8 +23,17 @@ int main(int argc, char* argv[]){
         printf("Errore listen\n");
       }else{
         while((sockfd=accept(sock,NULL,NULL))>-1){
+          sprintf(msg,"%d",sizeof(WELCOME_MESSAGE));
+          printf("%s 1\n",msg );
+          write(sockfd,msg,sizeof(msg));
+          printf("%s 2\n",msg );
+          n_b_r=read(sockfd,msg,5);
+          printf("%s 3\n",msg );
+          sleep(5);
           write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
+          printf("%s 4\n",msg );
           n_b_r=read(sockfd,msg,50);
+          printf("%s 5\n",msg );
           msg[n_b_r]='\0';
           char user[50];
           int baba=-1;
@@ -33,11 +41,11 @@ int main(int argc, char* argv[]){
             if(n_b_r==1){
               switch (msg[0]) {
                 case 'l': case 'L':
-                  logInUserMenu(sockfd,user);
+                  logInUserMenu(sockfd,user,&fdLog);
                   baba=1;
                   break;
                 case 'r': case 'R':
-                  signInUserMenu(sockfd,user);
+                  signInUserMenu(sockfd,user,&fdLog);
                   baba=1;
                   break;
                 case 'e': case 'E':
@@ -45,6 +53,9 @@ int main(int argc, char* argv[]){
                   break;
                 default:
                   clear();
+                  sprintf(msg,"%d",sizeof(WELCOME_MESSAGE));
+                  write(sockfd,msg,sizeof(msg));
+                  n_b_r=read(sockfd,msg,5);
                   write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
                   n_b_r=read(sockfd,msg,50);
                   msg[n_b_r]='\0';
@@ -52,12 +63,18 @@ int main(int argc, char* argv[]){
               }
             }else{
                   clear();
+                  sprintf(msg,"%d",sizeof(WELCOME_MESSAGE));
+                  write(sockfd,msg,sizeof(msg));
+                  n_b_r=read(sockfd,msg,5);
                   write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
                   n_b_r=read(sockfd,msg,50);
                   msg[n_b_r]='\0';
             }
           }
           read(sockfd,msg,1);
+          sprintf(msg,"%d",sizeof(GAME_SELECTION_MENU));
+          write(sockfd,msg,sizeof(msg));
+          n_b_r=read(sockfd,msg,5);
           write(sockfd,GAME_SELECTION_MENU,sizeof(GAME_SELECTION_MENU));
           n_b_r=read(sockfd,msg,50);
           msg[n_b_r]='\0';
@@ -76,6 +93,9 @@ int main(int argc, char* argv[]){
                 write(sockfd, "-1", sizeof("-1"));
                 break;
               default:
+                sprintf(msg,"%d",sizeof(GAME_SELECTION_MENU));
+                write(sockfd,msg,sizeof(msg));
+                n_b_r=read(sockfd,msg,5);
                 write(sockfd,GAME_SELECTION_MENU,sizeof(GAME_SELECTION_MENU));
                 n_b_r=read(sockfd,msg,50);
                 msg[n_b_r]='\0';
@@ -127,6 +147,7 @@ void joinGame(int sockfd, char user[]){
 void newGame(int sockfd, char user[]){
 
   char msg[5000];
+  int n_b_r;
   GameGrid **g=NULL;
   if((g=createGameGrid(g))!=NULL){
     GameGridToText(g,msg,1);
@@ -134,6 +155,9 @@ void newGame(int sockfd, char user[]){
     printf("%s\n",msg );
     clear();
   }else{
+    sprintf(msg,"%d",sizeof(NO_CONNECTION_ERR_MESSAGE));
+    write(sockfd,msg,sizeof(msg));
+    n_b_r=read(sockfd,msg,5);
     write(sockfd,NO_CONNECTION_ERR_MESSAGE,sizeof(NO_CONNECTION_ERR_MESSAGE));
 
   }

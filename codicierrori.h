@@ -30,4 +30,4 @@
 #define ERR_LOG_WRITE -301
 
 
-#endif CODICIERRORI_H_
+#endif

@@ -12,6 +12,7 @@
 #include <signal.h>
 #include "log.c"
 #include "../costanti.h"
+#include "Users.c"
 
 
 int createNewGame(GameGrid grid);//Crea un nuovo processo che inzializza una partita
