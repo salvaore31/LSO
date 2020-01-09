@@ -1,0 +1,3 @@
+Thu Jan  9 16:20:37 2020: iniziata nuova sessione Server.
+Thu Jan  9 16:20:51 2020: papete si è connesso al Server.
+Thu Jan  9 16:21:14 2020: finita sessione Server.
