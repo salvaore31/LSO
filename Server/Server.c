@@ -23,17 +23,11 @@ int main(int argc, char* argv[]){
         printf("Errore listen\n");
       }else{
         while((sockfd=accept(sock,NULL,NULL))>-1){
-          sprintf(msg,"%d",sizeof(WELCOME_MESSAGE));
-          printf("%s 1\n",msg );
-          write(sockfd,msg,sizeof(msg));
-          printf("%s 2\n",msg );
+          sprintf(msg,"%d",strlen(WELCOME_MESSAGE));
+          write(sockfd,msg,strlen(msg));
           n_b_r=read(sockfd,msg,5);
-          printf("%s 3\n",msg );
-          sleep(5);
-          write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
-          printf("%s 4\n",msg );
+          write(sockfd,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE));
           n_b_r=read(sockfd,msg,50);
-          printf("%s 5\n",msg );
           msg[n_b_r]='\0';
           char user[50];
           int baba=-1;
@@ -49,33 +43,33 @@ int main(int argc, char* argv[]){
                   baba=1;
                   break;
                 case 'e': case 'E':
-                  write(sockfd, "-1", sizeof("-1"));
+                  write(sockfd, "-1", strlen("-1"));
                   break;
                 default:
                   clear();
-                  sprintf(msg,"%d",sizeof(WELCOME_MESSAGE));
-                  write(sockfd,msg,sizeof(msg));
+                  sprintf(msg,"%d",strlen(WELCOME_MESSAGE));
+                  write(sockfd,msg,strlen(msg));
                   n_b_r=read(sockfd,msg,5);
-                  write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
+                  write(sockfd,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE));
                   n_b_r=read(sockfd,msg,50);
                   msg[n_b_r]='\0';
                   break;
               }
             }else{
                   clear();
-                  sprintf(msg,"%d",sizeof(WELCOME_MESSAGE));
-                  write(sockfd,msg,sizeof(msg));
+                  sprintf(msg,"%d",strlen(WELCOME_MESSAGE));
+                  write(sockfd,msg,strlen(msg));
                   n_b_r=read(sockfd,msg,5);
-                  write(sockfd,WELCOME_MESSAGE,sizeof(WELCOME_MESSAGE));
+                  write(sockfd,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE));
                   n_b_r=read(sockfd,msg,50);
                   msg[n_b_r]='\0';
             }
           }
           read(sockfd,msg,1);
-          sprintf(msg,"%d",sizeof(GAME_SELECTION_MENU));
-          write(sockfd,msg,sizeof(msg));
+          sprintf(msg,"%d",strlen(GAME_SELECTION_MENU));
+          write(sockfd,msg,strlen(msg));
           n_b_r=read(sockfd,msg,5);
-          write(sockfd,GAME_SELECTION_MENU,sizeof(GAME_SELECTION_MENU));
+          write(sockfd,GAME_SELECTION_MENU,strlen(GAME_SELECTION_MENU));
           n_b_r=read(sockfd,msg,50);
           msg[n_b_r]='\0';
           baba=-1;
@@ -90,13 +84,13 @@ int main(int argc, char* argv[]){
                 baba=1;
                 break;
               case 'e': case 'E':
-                write(sockfd, "-1", sizeof("-1"));
+                write(sockfd, "-1", strlen("-1"));
                 break;
               default:
-                sprintf(msg,"%d",sizeof(GAME_SELECTION_MENU));
-                write(sockfd,msg,sizeof(msg));
+                sprintf(msg,"%d",strlen(GAME_SELECTION_MENU));
+                write(sockfd,msg,strlen(msg));
                 n_b_r=read(sockfd,msg,5);
-                write(sockfd,GAME_SELECTION_MENU,sizeof(GAME_SELECTION_MENU));
+                write(sockfd,GAME_SELECTION_MENU,strlen(GAME_SELECTION_MENU));
                 n_b_r=read(sockfd,msg,50);
                 msg[n_b_r]='\0';
                 break;
@@ -155,10 +149,10 @@ void newGame(int sockfd, char user[]){
     printf("%s\n",msg );
     clear();
   }else{
-    sprintf(msg,"%d",sizeof(NO_CONNECTION_ERR_MESSAGE));
-    write(sockfd,msg,sizeof(msg));
+    sprintf(msg,"%d",strlen(NO_CONNECTION_ERR_MESSAGE));
+    write(sockfd,msg,strlen(msg));
     n_b_r=read(sockfd,msg,5);
-    write(sockfd,NO_CONNECTION_ERR_MESSAGE,sizeof(NO_CONNECTION_ERR_MESSAGE));
+    write(sockfd,NO_CONNECTION_ERR_MESSAGE,strlen(NO_CONNECTION_ERR_MESSAGE));
 
   }
   return;

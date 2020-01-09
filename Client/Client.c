@@ -20,11 +20,10 @@ int main(int argc, char* argv[]){
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");
     }else{
-      sleep(5);
       logged=comunication(sockfd);
       if (logged<0) {
         printf("LET ME OUT\n" );
-        write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+        write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
         //clear();
         close(sockfd);
         exit(-1);
@@ -35,7 +34,7 @@ int main(int argc, char* argv[]){
       ingame=comunication(sockfd);
       if(ingame<0){
         printf("NON SONO INGAME");
-        write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+        write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
       //  clear();
         close(sockfd);
         exit(-1);
@@ -47,14 +46,14 @@ int main(int argc, char* argv[]){
 
     }
   }
-  write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+  write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
   close(sockfd);
   return 0;
 }
 void handleSignal(int sig){
   if(sig==SIGINT){
     if(logged)
-      write(sockfd,USER_LOG_OUT,sizeof(USER_LOG_OUT));
+      write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
     clear();
     exit(-1);
   }
