@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
           write(sockfd,msg,strlen(msg));
           n_b_r=read(sockfd,msg,5);
           write(sockfd,GAME_SELECTION_MENU,strlen(GAME_SELECTION_MENU));
-          n_b_r=read(sockfd,msg,50);
+          n_b_r=read(sockfd,msg,5);
           msg[n_b_r]='\0';
           baba=-1;
           while(baba==-1){
