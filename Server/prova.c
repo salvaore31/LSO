@@ -6,7 +6,7 @@ int main(int argc, char const *argv[]) {
 
   clear();
   unsigned int giocatore=1;
-  int i,j;
+  int i,j,x,y,numOstacoli;
   GameGrid **p;
   char msg[1024*5];
   msg[0]='\0';
@@ -15,46 +15,95 @@ int main(int argc, char const *argv[]) {
   for(i=0;i<MAX_GRID_SIZE_H;i++)
     p[i]=(GameGrid*)calloc(MAX_GRID_SIZE_L, sizeof(GameGrid));
 
-  for(i=0;i<MAX_GRID_SIZE_H;i++){
-    for(j=0;j<MAX_GRID_SIZE_L;j++){
-      p[i][j].infocasella=rand()%4;
-      p[i][j].playerI=rand()%8;
-      p[i][j].playerJ=rand()%8;
-      p[i][j].permessi=rand()%3;//%256;
+    for(i=0;i<MAX_GRID_SIZE_H;i++){
+      for(j=0;j<MAX_GRID_SIZE_L;j++){
+        p[i][j].ostacolo=0;
+        p[i][j].giocatore=0;
+        p[i][j].pacco=0;
+        p[i][j].locazione=0;
+        p[i][j].codiceGiocatore=0;
+        p[i][j].codicePacco=0;
+        p[i][j].codiceLocazione=0;
+        p[i][j].p0=1;
+        p[i][j].p1=0;
+        p[i][j].p2=0;
+        p[i][j].p3=0;
+        p[i][j].p4=0;
+        p[i][j].p5=0;
+        p[i][j].p6=0;
+        p[i][j].p7=0;
+      }
     }
-  }
+    y=rand()%MAX_GRID_SIZE_L;
+    x=rand()%MAX_GRID_SIZE_H;
+    p[x][y].giocatore=1;
+    p[x][y].codiceGiocatore=0;
+    p[x][y].p1=1;
+    for (i=0; i < MAX_PACCHI; i++) {
+      do {
+        y=rand()%MAX_GRID_SIZE_L;
+        x=rand()%MAX_GRID_SIZE_H;
+      } while(p[x][y].giocatore);
+      p[x][y].pacco=1;
+      p[x][y].codicePacco=i;
+    }
+    for (i=0; i < MAX_PACCHI; i++) {
+      do {
+        y=rand()%MAX_GRID_SIZE_L;
+        x=rand()%MAX_GRID_SIZE_H;
+      } while(p[x][y].giocatore || p[x][y].pacco);
+      p[x][y].locazione=1;
+      p[x][y].codiceLocazione=i;
+    }
+    for(i=0;i<MAX_OBSTACLES_N;i++){
+      y=rand()%MAX_GRID_SIZE_L;
+      x=rand()%MAX_GRID_SIZE_H;
+      if(!(p[x][y].giocatore || p[x][y].pacco || p[x][y].locazione)){
+        p[x][y].ostacolo=1;
+        numOstacoli++;
+      }
+    }
+    while(numOstacoli<MIN_OBSTACLES){
+      y=rand()%MAX_GRID_SIZE_L;
+      x=rand()%MAX_GRID_SIZE_H;
+      if(!(p[x][y].giocatore || p[x][y].pacco || p[x][y].locazione)){
+        p[x][y].ostacolo=1;
+        numOstacoli++;
+      }
+    }
+
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
-      if(p[i][j].permessi-giocatore!=(2-giocatore))
+      if(!p[i][j].p0)
         strcat(msg,"? ");
       else{
-        switch(p[i][j].infocasella){
-          case 0:
-            //printf(GREEN);
-            strcat(msg,"\033[92m\033[92m0 \033[0m");
-            //printf(RESET);
-            break;
-          case 1:
-            //printf(RED);
-            strcat(msg,"\033[91m\033[91mX \033[0m");
-            //printf(RESET);
-            break;
-          case 2:
-            //printf(CYAN);
-            strcat(msg,"\033[96m\033[96mI \033[0m");
-            //printf(RESET);
-            break;
-          default:
-            //printf(YELLOW);
-            strcat(msg,"\033[93m\033[93m! \033[0m");
-            //printf(RESET);
-            break;
+        if (p[i][j].ostacolo) {
+          strcat(msg,"\033[91m\033[91mX   \033[0m");
+        }
+        else{
+          if (p[i][j].giocatore) {
+            if (p[i][j].codiceGiocatore==0) {
+              strcat(msg,"\033[92m\033[92m0   \033[0m");
+            }else{
+              /*ALTRO GIOCATORE*/
+            }
+          }else{
+            if (p[i][j].pacco) {
+              strcat(msg,"\033[93m\033[93mP   \033[0m");
+            } else {
+              if(p[i][j].locazione){
+                strcat(msg,"\033[96m\033[96mL   \033[0m");
+              }else{
+                strcat(msg,"[]  ");
+              }
+            }
+          }
         }
       }
     }
-    strcat(msg,"\n");
+    strcat(msg,"\n\n");
   }
-  printf("%s\n\n msg ha numero %d di caratteri.\n",msg, strlen(msg));
+  printf("%s\n\nmsg ha numero %d di caratteri.\nnumero ostacoli %d\n",msg, strlen(msg),numOstacoli);
   /*GameGrid d;
   unsigned int one=1, temp;
   d.permessi=0;

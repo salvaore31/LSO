@@ -10,7 +10,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <signal.h>
-#include "log.c"
+#include "log.h"
 #include "../costanti.h"
 #include "../codicierrori.h"
 #include "../messaggi.h"

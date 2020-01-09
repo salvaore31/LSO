@@ -220,7 +220,7 @@ GameGrid **createGameGrid(GameGrid **p){
 
 int GameGridToText(GameGrid **p, char msg[], int giocatore){
 
-  int i,j;
+  /*int i,j;
   msg[0]='\0';
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
@@ -388,7 +388,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
       }
     }
   strcat(msg,"\n");
-  }
+}*/
   return 1;
 }
 
