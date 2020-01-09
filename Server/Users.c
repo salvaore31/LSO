@@ -16,7 +16,7 @@ int signInUserMenu(int sockfd, char usrn[]){
     while((err=registerUser(usrn, pssw)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
-        case NO_CONNECTION:
+        case ERR_NO_CONNECTION:
           write(sockfd, NO_CONNECTION_ERR_MESSAGE, sizeof(NO_CONNECTION_ERR_MESSAGE));
           n_b_r = read(sockfd, pssw, 50);
           pssw[n_b_r] = '\0';
@@ -74,18 +74,19 @@ int registerUser(char* newuser, char* newpassw){
   }else{
     if(checkUsername(newuser) < 0){// Se checkUsername ritorna un valore minore di 0 vuol dire che quel username non è presente nel file ed è quindi disponibile
       if((fdUserFile = open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
-        return ERR_NO_CONNECTION;
+        return ERR_NO_USER_FILE;
         /*Gestire cosa succede se non si riesce ad aprire il file*/
       }else{
         if((n_b_w = write(fdUserFile,newuser,lenght_user))<lenght_user){
-          return ERR_NO_CONNECTION;
           /*Gestire cosa succede se non si riesce a scrivere su file*/
           close(fdUserFile);
+          return ERR_INPUT_OUTPUT;
         }else{
           write(fdUserFile,"%",1);
           if((n_b_w = write(fdUserFile,newpassw,lenght_passw))<lenght_passw){
             /*Gestire cosa succede se non si riesce a scrivere su file*/
             close(fdUserFile);
+            return ERR_INPUT_OUTPUT
           }else{
             write(fdUserFile,"\n",1);
             close(fdUserFile);
@@ -106,15 +107,15 @@ int logInUser(char* user, char* passw){
 
   if((pos=checkUsername(user))<0){
     //La funzione ritorna -2 nel caso in cui non trova l'utente tra quelli registrati;
-    return -2;
+    return ERR_USERNAME_NOT_FOUND;
   }else{
     if((fdUserFile=open(USERS_FILE,O_RDONLY))<0){
       //Gestire il comportamento in caso di errore apertura file
-      return -3;
+      return ERR_NO_USER_FILE;
     }else{
       if(lseek(fdUserFile,pos,SEEK_SET)!=pos){
         //GESTIRE il comportamentoin caso di errore lseek
-        return -4;
+        return ERR_INPUT_OUTPUT;
       }else{
         while((n_b_r=read(fdUserFile,&c,1))>0 && c!='\n')
           str[i++]=c;
@@ -122,7 +123,7 @@ int logInUser(char* user, char* passw){
         if(strcmp(passw,str)==0){
           return 0;
         }else{
-          return -1;
+          return ERR_WRONG_PASSWORD;
           //Gestire il comportamento in caso in cui la password inserita non è corretta
         }
       }
@@ -153,12 +154,12 @@ int logInUserMenu(int sockfd, char usrn[]){
     while((err=logInUser(usrn, pssw)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
-        case -1:
+        case ERR_WRONG_PASSWORD:
           write(sockfd, WRONG_PASSWORD_LIM, sizeof(WRONG_PASSWORD_LIM));
           n_b_r = read(sockfd, pssw, 50);
           pssw[n_b_r] = '\0';
           break;
-        case -2:
+        case ERR_USERNAME_NOT_FOUND:
           write(sockfd, WRONG_USERNAME_LIM, sizeof(WRONG_USERNAME_LIM));
           n_b_r = read(sockfd, usrn, 50);
           usrn[n_b_r] ='\0';
@@ -166,10 +167,10 @@ int logInUserMenu(int sockfd, char usrn[]){
           n_b_r = read(sockfd, pssw, 50);
           pssw[n_b_r] = '\0';
           break;
-        case -3:
+        case ERR_NO_CONNECTION:
           write(sockfd, NO_CONNECTION_ERR_MESSAGE, sizeof(NO_CONNECTION_ERR_MESSAGE));
           break;
-        case -4:
+        case ERR_INPUT_OUTPUT:
           break;
         default:
           break;
