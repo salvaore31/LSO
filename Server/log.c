@@ -299,3 +299,20 @@ void LogErrorMessage(int* fdLog, char* err){
   }
   return;
 }
+
+void LogUnkownClientDisconnection (int*fdLog){
+
+  char ora[26];
+  int n_b_w;
+
+  oraEsatta(ora);
+
+  if((n_b_w = write(*fdLog,ora,strlen(ora))< strlen(ora))){
+      /*Gesire mancata scrittura su LOG*/
+  } else {
+    if((n_b_w = write(*fdLog,LOG_UNKNOWN_CLIENT_DISCONNECTION,sizeof(LOG_UNKNOWN_CLIENT_DISCONNECTION)-1)) < sizeof(LOG_UNKNOWN_CLIENT_DISCONNECTION)-1){
+      /*Gesire mancata scrittura su LOG*/
+    }
+  }
+  return ;
+}

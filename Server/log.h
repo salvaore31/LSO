@@ -18,3 +18,4 @@ void LogNewUser(int*, char[]);
 void LogUserSignIn(int*, char[]);
 void LogUserSignOut(int*, char[]);
 void LogErrorMessage(int*, char[]);
+void LogUnkownClientDisconnection (int*fdLog);

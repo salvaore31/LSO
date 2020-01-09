@@ -71,19 +71,21 @@
 /*
  *Messaggi di LOG
  */
-#define LOG_START_SERVER      ": iniziata nuova sessione Server.\n"
-#define LOG_CLOSE_SERVER      ": finita sessione Server.\n"
-#define LOG_NEW_GAME          ": iniziata nuova partita con ID "
-#define LOG_END_GAME          ": finita partita con ID "
-#define LOG_NEW_PLAYER_JOIN1  ": l'utente "
-#define LOG_NEW_PLAYER_JOIN2  " si è unito alla partita con ID "
-#define LOG_PLAYER_MOVES1     ": in partita con ID "
-#define LOG_PLAYER_MOVES2     " è andato da "
-#define LOG_PLAYER_WINS1      ": l'utente "
-#define LOG_PLAYER_WINS2      " ha vinto la partita con ID "
-#define LOG_NEW_USER          " si è registrato al Server.\n"
-#define LOG_SIGN_IN           " si è connesso al Server.\n"
-#define LOG_SIGN_OUT          " si è disconesso dal Server.\n"
-#define LOG_ERROR             ": ERRORE( "
+#define LOG_START_SERVER                    ": iniziata nuova sessione Server.\n"
+#define LOG_CLOSE_SERVER                    ": finita sessione Server.\n"
+#define LOG_NEW_GAME                        ": iniziata nuova partita con ID "
+#define LOG_END_GAME                        ": finita partita con ID "
+#define LOG_NEW_PLAYER_JOIN1                ": l'utente "
+#define LOG_NEW_PLAYER_JOIN2                " si è unito alla partita con ID "
+#define LOG_PLAYER_MOVES1                   ": in partita con ID "
+#define LOG_PLAYER_MOVES2                   " è andato da "
+#define LOG_PLAYER_WINS1                    ": l'utente "
+#define LOG_PLAYER_WINS2                    " ha vinto la partita con ID "
+#define LOG_NEW_USER                        " si è registrato al Server.\n"
+#define LOG_SIGN_IN                         " si è connesso al Server.\n"
+#define LOG_SIGN_OUT                        " si è disconesso dal Server.\n"
+#define LOG_ERROR                           ": ERRORE( "
+#define LOG_UNKNOWN_CLIENT_DISCONNECTION    ": un Client non identificato si è disconesso dal Server.\n"
+
 
 #endif

@@ -22,10 +22,6 @@ int main(int argc, char* argv[]){
     }else{
       logged=comunication(sockfd);
       if (logged<0) {
-        printf("LET ME OUT\n" );
-        write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
-        //clear();
-        close(sockfd);
         exit(-1);
       }
       scanf("%s",input);
@@ -33,7 +29,6 @@ int main(int argc, char* argv[]){
       clear();
       ingame=comunication(sockfd);
       if(ingame<0){
-        printf("NON SONO INGAME");
         write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
       //  clear();
         close(sockfd);
@@ -60,7 +55,6 @@ void handleSignal(int sig){
 }
 
 int comunication(int sockfd){
-
   int n_b_r;
   char msg[250],input[50];
   while(1){

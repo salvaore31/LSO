@@ -43,7 +43,12 @@ int main(int argc, char* argv[]){
                   baba=1;
                   break;
                 case 'e': case 'E':
-                  write(sockfd, "-1", strlen("-1"));
+                  clear();
+                  write(sockfd,"-1", strlen("-1"));
+                  n_b_r = read(sockfd, msg, 50);
+                  if(strcmp(msg, USER_LOG_OUT)){
+                    LogUnkownClientDisconnection(&fdLog);
+                  }
                   break;
                 default:
                   clear();
@@ -84,7 +89,12 @@ int main(int argc, char* argv[]){
                 baba=1;
                 break;
               case 'e': case 'E':
+                clear();
                 write(sockfd, "-1", strlen("-1"));
+                n_b_r = read(sockfd, msg, 50);
+                if(strcmp(msg, USER_LOG_OUT)){
+                  LogUserSignOut(&fdLog, user);
+                }
                 break;
               default:
                 sprintf(msg,"%d",strlen(GAME_SELECTION_MENU));
