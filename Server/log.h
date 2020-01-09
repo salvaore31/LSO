@@ -5,6 +5,7 @@
 #include <string.h>
 #include "../costanti.h"
 #include "../messaggi.h"
+#include "../cocicierrori.h"
 
 void LogServerStart(int*);
 void LogServerClose(int*);
