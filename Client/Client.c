@@ -34,6 +34,7 @@ int main(int argc, char* argv[]){
         close(sockfd);
         exit(-1);
       }
+      comunication(sockfd);
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
