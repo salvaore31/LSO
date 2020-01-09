@@ -103,20 +103,8 @@ int main(int argc, char const *argv[]) {
     }
     strcat(msg,"\n\n");
   }
+
   printf("%s\n\nmsg ha numero %d di caratteri.\nnumero ostacoli %d\n",msg, strlen(msg),numOstacoli);
-  /*GameGrid d;
-  unsigned int one=1, temp;
-  d.permessi=0;
-  printf("%d\n", d.permessi);
-  d.permessi= d.permessi | (one<<(1-1));
-  printf("%d\n", d.permessi);
-  d.permessi = d.permessi | (one<<(2-1));
-  printf("%d\n", d.permessi);
-  d.permessi = d.permessi | (one<<(3-1));
-  printf("%d\n", d.permessi);
-  d.permessi = d.permessi | (one<<(4-1));
-  printf("%d\n", d.permessi);
-*/
 
   return 0;
 }
