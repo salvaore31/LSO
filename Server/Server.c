@@ -140,14 +140,16 @@ void joinGame(int sockfd, char user[]){
 
 void newGame(int sockfd, char user[]){
 
-  char msg[5000];
+  char matrix[2000];
+  char msg[50];
   int n_b_r;
   GameGrid **g=NULL;
   if((g=createGameGrid(g))!=NULL){
-    GameGridToText(g,msg,1);
+    GameGridToText(g,matrix,1);
+    sprintf(msg,"%d",strlen(matrix));
     write(sockfd,msg,strlen(msg));
-    printf("%s\n",msg );
-    clear();
+    n_b_r=read(sockfd,msg,5);
+    write(sockfd,matrix,strlen(matrix));
   }else{
     sprintf(msg,"%d",strlen(NO_CONNECTION_ERR_MESSAGE));
     write(sockfd,msg,strlen(msg));
@@ -175,36 +177,25 @@ GameGrid **createGameGrid(GameGrid **p){
   if(p!=NULL){
     for(i=0;i<MAX_GRID_SIZE_H;i++)
       p[i]=(GameGrid*)calloc(MAX_GRID_SIZE_L, sizeof(GameGrid));
-    for(i=0;i<MAX_GRID_SIZE_H;i++){
-      for(j=0;j<MAX_GRID_SIZE_L;j++){
-        p[i][j].ostacolo=0;
-        p[i][j].giocatore=0;
-        p[i][j].pacco=0;
-        p[i][j].locazione=0;
-        p[i][j].codiceGiocatore=0;
-        p[i][j].codicePacco=0;
-        p[i][j].codiceLocazione=0;
-        p[i][j].p0=0;
-        p[i][j].p1=0;
-        p[i][j].p2=0;
-        p[i][j].p3=0;
-        p[i][j].p4=0;
-        p[i][j].p5=0;
-        p[i][j].p6=0;
-        p[i][j].p7=0;
-      }
-    }
     y=rand()%MAX_GRID_SIZE_L;
     x=rand()%MAX_GRID_SIZE_H;
     p[x][y].giocatore=1;
+    p[x][y].p0=1;
     p[x][y].codiceGiocatore=0;
-    p[x][y].p1=1;
     for (i=0; i < MAX_PACCHI; i++) {
       do {
         y=rand()%MAX_GRID_SIZE_L;
         x=rand()%MAX_GRID_SIZE_H;
       } while(p[x][y].giocatore);
       p[x][y].pacco=1;
+      p[x][y].p0=1;
+      p[x][y].p1=1;
+      p[x][y].p2=1;
+      p[x][y].p3=1;
+      p[x][y].p4=1;
+      p[x][y].p5=1;
+      p[x][y].p6=1;
+      p[x][y].p7=1;
       p[x][y].codicePacco=i;
     }
     for (i=0; i < MAX_PACCHI; i++) {
@@ -213,6 +204,14 @@ GameGrid **createGameGrid(GameGrid **p){
         x=rand()%MAX_GRID_SIZE_H;
       } while(p[x][y].giocatore || p[x][y].pacco);
       p[x][y].locazione=1;
+      p[x][y].p0=1;
+      p[x][y].p1=1;
+      p[x][y].p2=1;
+      p[x][y].p3=1;
+      p[x][y].p4=1;
+      p[x][y].p5=1;
+      p[x][y].p6=1;
+      p[x][y].p7=1;
       p[x][y].codiceLocazione=i;
     }
     for(i=0;i<MAX_OBSTACLES_N;i++){
@@ -238,175 +237,238 @@ GameGrid **createGameGrid(GameGrid **p){
 
 int GameGridToText(GameGrid **p, char msg[], int giocatore){
 
-  /*int i,j;
+  int i,j;
   msg[0]='\0';
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
       switch(giocatore){
         case 1:
+        if(p[i][j].p0==0)
+          strcat(msg,"?   ");
+          else{
+            if (p[i][j].ostacolo) {
+              strcat(msg,"\033[91m\033[91mX   \033[0m");
+            }
+            else{
+              if (p[i][j].giocatore) {
+                if (p[i][j].codiceGiocatore==giocatore-1) {
+                  strcat(msg,"\033[92m\033[92mME  \033[0m");
+                }else{
+                  strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+                }
+              }else{
+                if (p[i][j].pacco) {
+                  strcat(msg,"\033[93m\033[93mP   \033[0m");
+                } else {
+                  if(p[i][j].locazione){
+                    strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  }else{
+                    strcat(msg,"[]  ");
+                  }
+                }
+              }
+            }
+          }
+        break;
+        case 2:
         if(p[i][j].p1==0)
-          strcat(msg,"? ");
+        strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
         break;
         case 3:
-        if(p[i][j].p3==0)
-          strcat(msg,"? ");
+        if(p[i][j].p2==0)
+          strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
         break;
         case 4:
-        if(p[i][j].p4==0)
-          strcat(msg,"? ");
+        if(p[i][j].p3==0)
+          strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
         break;
         case 5:
-        if(p[i][j].p5==0)
-          strcat(msg,"? ");
+        if(p[i][j].p4==0)
+          strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
         break;
         case 6:
-        if(p[i][j].p6==0)
-          strcat(msg,"? ");
+        if(p[i][j].p5==0)
+          strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
         break;
         case 7:
-        if(p[i][j].p7==0)
-          strcat(msg,"? ");
+        if(p[i][j].p6==0)
+          strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
         break;
         case 8:
-        if(p[i][j].p8==0)
-          strcat(msg,"? ");
+        if(p[i][j].p7==0)
+          strcat(msg,"?   ");
         else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore-1) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
           }
         }
-        break;
-        case 2:
-        if(p[i][j].p2==0)
-          strcat(msg,"? ");
-        else{
-          switch(p[i][j].infocasella){
-            case 0:
-              strcat(msg,"\033[92m\033[92m0 \033[0m");
-              break;
-            case 1:
-              strcat(msg,"\033[91m\033[91mX \033[0m");
-              break;
-            case 2:
-              strcat(msg,"\033[96m\033[96mI \033[0m");
-              break;
-            default:
-              strcat(msg,"\033[93m\033[93m! \033[0m");
-              break;
-          }
-        }
-        break;
       }
     }
-  strcat(msg,"\n");
-}*/
+    strcat(msg,"\n\n");
+  }
   return 1;
 }
 

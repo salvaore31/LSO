@@ -71,7 +71,16 @@ int main(int argc, char const *argv[]) {
         numOstacoli++;
       }
     }
-
+  int flag=0;
+  do {
+    y=rand()%MAX_GRID_SIZE_L;
+    x=rand()%MAX_GRID_SIZE_H;
+    if(!(p[x][y].ostacolo || p[x][y].pacco || p[x][y].locazione)){
+      p[x][y].giocatore=1;
+      p[x][y].codiceGiocatore=2;
+      flag=1;
+    }
+  } while(flag==0);
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
       if(!p[i][j].p0)
@@ -83,9 +92,9 @@ int main(int argc, char const *argv[]) {
         else{
           if (p[i][j].giocatore) {
             if (p[i][j].codiceGiocatore==0) {
-              strcat(msg,"\033[92m\033[92m0   \033[0m");
+              strcat(msg,"\033[92m\033[92mME  \033[0m");
             }else{
-              /*ALTRO GIOCATORE*/
+              strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
             }
           }else{
             if (p[i][j].pacco) {
