@@ -74,6 +74,7 @@ typedef struct {
 typedef struct {
   GameGrid **grid;
   player giocatori[MAX_PLAYER_N];
+  unsigned int piena:1;
   pthread_mutex_t sem;
   int punteggio[MAX_PLAYER_N];
   int locazioneXPacchi[MAX_PACCHI];

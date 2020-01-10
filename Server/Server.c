@@ -76,6 +76,7 @@ void newGame(int sockfd, char user[]){
     }
   }else{
     LogNewGame(&fdLog,gameId);
+
   }
   return;
 }
