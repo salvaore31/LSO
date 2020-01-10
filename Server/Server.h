@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <pthread.h>
 #include <string.h>
 #include <signal.h>
 #include "log.c"
@@ -25,9 +26,19 @@ void readPlayerMovement();
 
 int countdown();
 
+int creaSocket();
+
+Game *createGame();
+
+int azioneGiocatore(Game*,int,char,int);
+
+int playGame(Game*, int, int);
+
+void * gestisci(void *arg);
+
 void handleSignal(int Sig);//Handler dei segnali da gestire
 
-GameGrid **createGameGrid(GameGrid **);
+int createGameGrid(Game*);
 
 int GameGridToText(GameGrid **, char [], int);
 
@@ -36,3 +47,5 @@ void joinGame(int, char[]);
 void newGame(int, char[]);
 
 void deleteGrid(GameGrid **);
+
+void setPermessi(int x, int y, int giocatore, GameGrid ** grid);

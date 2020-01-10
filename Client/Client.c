@@ -9,14 +9,17 @@ int main(int argc, char* argv[]){
   clear();
   int n_b_r;
   char msg[500],input[10];
-  struct sockaddr_un server_addr;
-  if ((sockfd=socket(PF_LOCAL,SOCK_STREAM,0))<0) {
+  if(argc!=3){
+    perror("Passa indirizzo e porta\n");
+    exit(-1);
+  }
+  struct sockaddr_in server_addr;
+  server_addr.sin_family=AF_INET;
+  server_addr.sin_port=htons(atoi(argv[2]));
+  inet_aton(argv[1],&server_addr.sin_addr);
+  if ((sockfd=socket(AF_INET,SOCK_STREAM,0))<0) {
     printf("Errore apertura socket");
   }else{
-
-    server_addr.sun_family=AF_LOCAL;
-    strcpy(server_addr.sun_path,MIO_SOCK);
-
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket\n");
     }else{
@@ -38,7 +41,6 @@ int main(int argc, char* argv[]){
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
-
 
     }
   }

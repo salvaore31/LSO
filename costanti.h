@@ -1,22 +1,6 @@
 #ifndef CONSTANT_H_
 #define CONSTANT_H_
-typedef struct {
-  unsigned int ostacolo:1;
-  unsigned int giocatore:1;
-  unsigned int pacco:1;
-  unsigned int locazione:1;
-  unsigned int codiceGiocatore:3;
-  unsigned int codicePacco:4;
-  unsigned int codiceLocazione:4;
-  unsigned int p0:1;
-  unsigned int p1:1;
-  unsigned int p2:1;
-  unsigned int p3:1;
-  unsigned int p4:1;
-  unsigned int p5:1;
-  unsigned int p6:1;
-  unsigned int p7:1;
-} GameGrid;
+
 #define MAX_PACCHI 16
 #define MIN_OBSTACLES 5
 #define USER_LOG_OUT  "UTENTE ANDATO"
@@ -60,5 +44,40 @@ typedef struct {
 #define MAX_OBSTACLES_N 20 //po se vere
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
+
+typedef struct {
+  int posx;
+  int posy;
+  unsigned int pacco:1;
+  unsigned int codicePacco:4;
+  char nome[MAX_SIZE_USERNAME];
+} player;
+
+typedef struct {
+  unsigned int ostacolo:1;
+  unsigned int giocatore:1;
+  unsigned int pacco:1;
+  unsigned int locazione:1;
+  unsigned int codiceGiocatore:3;
+  unsigned int codicePacco:4;
+  unsigned int codiceLocazione:4;
+  unsigned int p0:1;
+  unsigned int p1:1;
+  unsigned int p2:1;
+  unsigned int p3:1;
+  unsigned int p4:1;
+  unsigned int p5:1;
+  unsigned int p6:1;
+  unsigned int p7:1;
+} GameGrid;
+
+typedef struct {
+  GameGrid **grid;
+  player giocatori[MAX_PLAYER_N];
+  pthread_mutex_t sem;
+  int punteggio[MAX_PLAYER_N];
+  int locazioneXPacchi[MAX_PACCHI];
+  int locazioneYPacchi[MAX_PACCHI];
+} Game;
 
 #endif
