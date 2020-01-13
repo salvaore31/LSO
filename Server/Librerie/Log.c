@@ -1,4 +1,5 @@
-#include "log.h"
+#include "Log.h"
+
 void substituteChar(char st[],char a, char b){
   int i=0;
   while(st[i]!='\0'){

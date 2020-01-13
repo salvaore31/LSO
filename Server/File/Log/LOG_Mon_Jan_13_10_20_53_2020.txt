@@ -1,0 +1,11 @@
+Mon Jan 13 10:20:53 2020: iniziata nuova sessione Server.
+Mon Jan 13 10:21:08 2020: Giovanni si è registrato al Server.
+Mon Jan 13 10:21:14 2020: iniziata nuova partita con ID 2233.
+Mon Jan 13 10:21:14 2020: l'utente Giovanni si è unito alla partita con ID 2233.
+Mon Jan 13 10:22:28 2020: Kevin si è registrato al Server.
+Mon Jan 13 10:22:33 2020: iniziata nuova partita con ID 2268.
+Mon Jan 13 10:22:33 2020: l'utente Kevin si è unito alla partita con ID 2268.
+Mon Jan 13 10:24:06 2020: a si è registrato al Server.
+Mon Jan 13 10:24:10 2020: iniziata nuova partita con ID 2288.
+Mon Jan 13 10:24:10 2020: l'utente a si è unito alla partita con ID 2288.
+Mon Jan 13 10:25:49 2020: finita sessione Server.

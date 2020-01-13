@@ -1,11 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-#include <string.h>
-#include "../costanti.h"
-#include "../messaggi.h"
-#include "../codicierrori.h"
+#include "../../codici_errori.h"
+#include "../../messaggi.h"
+#include "../../costanti.h"
 
 void LogServerStart(int*);
 void LogServerClose(int*);

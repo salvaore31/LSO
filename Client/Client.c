@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Client.h"
-
+#include <errno.h>
 int sockfd,ingame=0,logged=0;
 
 int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
+  printf("Client Parte.\n");
   clear();
   int n_b_r;
   char msg[500],input[10];
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]){
     printf("Errore apertura socket");
   }else{
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
-      printf("Errore connessione socket\n");
+      printf("Errore connessione socket %d\n", errno);
     }else{
       logged=comunication(sockfd);
       if (logged<0) {

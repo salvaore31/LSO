@@ -1,0 +1,4 @@
+Sun Jan 12 17:48:19 2020: iniziata nuova sessione Server.
+Sun Jan 12 17:48:19 2020: ERRORE( Impossibile collegarsi alla socket.
+).
+Sun Jan 12 17:48:19 2020: finita sessione Server.

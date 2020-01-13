@@ -1,12 +1,3 @@
-sinogrante%principe
-franchitiello%buatta
-luigio%trattore
-utente1%passw1
-giorio%jojo
-totore%totore
-papete%beach
+Giovanni%Giorgio
+Kevin%Kevin
 a%a
-cuculo%cuculo
-salvaore%passw
-salvaor%passw
-tatore%perepe

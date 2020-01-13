@@ -1,9 +1,6 @@
 #ifndef MESSAGGI_H_
 #define MESSAGGI_H_
 
-
-
-
 /*
  * Stringhe per la generazione dei menu.
  */
@@ -42,22 +39,24 @@
 #define COLLISION_MESSAGE     "Vedi che è occupata.\n"
 #define TIME_OVER_MESSAGE     "Il gioco finisce e nessuno vince.\n"
 #define LOSS_MESSAGE          "... Sarà per un'altra volta.\n"
-
+#define USER_LOG_OUT "No Utente\n"
 
 /*
  * Messaggi di errore relativi al server.
  */
-#define NO_CONNECTION_ERR_MESSAGE     "Impossibile connettersi al server.\nL'applicazione verrà chiusa.\n"
-#define SOCKET_CREATION_ERR_MESSAGE   "Impossibile creare la socket.\n"
-#define SOCKET_BINDING_ERR_MESSAGE    "Impossibile collegarsi alla socket.\n"
-#define SOCKET_LISTEN_ERR_MESSAGE     "Impossibile ricevere dati dalla socket.\n"
-
+#define NO_CONNECTION_ERR_MESSAGE     "Impossibile connettersi al server.\nL'applicazione verrà chiusa"
+#define SOCKET_CREATION_ERR_MESSAGE   "Impossibile creare la socket"
+#define SOCKET_LISTEN_ERR_MESSAGE     "Impossibile settare la socket in ascolto"
+#define SOCKET_BINDING_ERR_MESSAGE    "Impossibile collegarsi alla socket"
+#define SOCKET_RECEIVE_DATA_ERR_MESSAGE     "Impossibile ricevere dati dalla socket"
+#define NOT_SURE_ERR_MESSAGE "Qualcosa è andato storto"
+#define ACCEPT_SOCKET_ERR_MESSAGE "Errore nella funzione accept"
 /*
  * Messaggi di errore relativi al gioco stesso
  */
-#define FILLED_GAME_ERR_MESSAGE       "Non puoi unirti a questa partita...\n"
-#define MATRIX_ALLOCATION_ERR_MESSAGE "Errore nella creazione della matrice di gioco.\n"
-#define ON_MOVEMENT_ERR_MESSAGE       "Errore nel movimento del giocatore.\n"
+#define FILLED_GAME_ERR_MESSAGE       "Non puoi unirti a questa partita..."
+#define MATRIX_ALLOCATION_ERR_MESSAGE "Errore nella creazione della matrice di gioco"
+#define ON_MOVEMENT_ERR_MESSAGE       "Errore nel movimento del giocatore"
 
 /*
  * Messaggi di errore lato client.
