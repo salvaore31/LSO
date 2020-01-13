@@ -1,0 +1,6 @@
+Gestire joinGame Probabile utilizzo di una struttura dati per tenere traccia di partite in corso.
+aggiunta di gameId a struct Game
+gestione bit paritapiena in struct Game
+Progettazione interfaccia utente per il gioco
+Gestione tempo massimo Partita
+gestione quit in momenti sparsi all'interno del programma
