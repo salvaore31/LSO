@@ -6,7 +6,6 @@ int sockfd,ingame=0,logged=0;
 
 int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
-  printf("Client Parte.\n");
   clear();
   int n_b_r;
   char msg[500],input[10];

@@ -24,7 +24,7 @@
        #define SUCCESS_MESSAGE_SIM            "Benvenuto!\nPremi qualcosa per andare avanti...\n"
 
 #define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\nPremi 'e' per uscire.\n"
-#define NO_SUCH_GAMES         "Non ci sono partite disponibili in corso.\n"
+#define NO_SUCH_GAMES_MESSAGE        "Non ci sono partite disponibili in corso.\nPremi un tasto per continuare.\n"
 
 //E' follia, follia dico però il messaggio non lo cancello perché l'ho scritto e mi scoccio troppo assai di cancellarlo
 #define CURRENT_GAMES_PLAYED  "Partita %i.\nGiocatori: [...]\n"

@@ -26,3 +26,5 @@ int createGameGrid(Game *g);
 Game * createGame();
 
 int playGame(Game * game, int idGiocatori, int gameId);
+
+void spawnNewPlayer(Game * g, char* username);

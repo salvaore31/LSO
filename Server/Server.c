@@ -3,11 +3,15 @@
 
 int fdLog;
 
+Game ** sessionGames;
+
 int main(int argc, char* argv[]){
 
     clear();
     //seed per la generazione di numeri casuali;
     srand(time(NULL));
+
+    int i = 0;
 
     //signal handler set;
     signal(SIGINT, handleSignal);
@@ -18,6 +22,10 @@ int main(int argc, char* argv[]){
 
     int *thread_sd, sock, sockfd;
     pthread_t tid;
+
+    sessionGames= mmap(NULL, (sizeof(Game**)*20), PROT_READ|PROT_WRITE,
+                        MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+
 
     struct sockaddr_in client_addr;
     socklen_t client_len;
@@ -81,9 +89,11 @@ void initializeNewGameProcess(int sockfd, char user[]){
     g=createGame();
     strcpy(g->giocatori[0].nome,user);
     g->giocatori[0].nome[strlen(user)]='\0';
+  
     if(createGameGrid(g) == 0){
       pthread_mutex_lock(&g->sem);
       g->gameId = getpid();
+
       LogPlayerJoin(&fdLog, g->gameId, user);
       GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
@@ -110,6 +120,7 @@ void initializeNewGameProcess(int sockfd, char user[]){
   La funzione che esegue ogni nuovo thread;
 */
 void * gestisci(void *arg){
+  Game* current;
   char msg[1000];
   int n_b_r;
   int sockfd=*((int *) arg);
@@ -175,8 +186,25 @@ void * gestisci(void *arg){
         baba=1;
         break;
       case 'j': case 'J':
-        joinGame(sockfd,user);
-        baba=1;
+      //  current = joinGame(sockfd,user, fdLog, &sessionGames);
+        if(current == NULL){
+          sprintf(msg, "%ld", strlen(NO_SUCH_GAMES_MESSAGE));
+          write(sockfd,msg, strlen(msg));
+          n_b_r=read(sockfd, msg, 5);
+          write(sockfd, NO_SUCH_GAMES_MESSAGE, strlen(NO_SUCH_GAMES_MESSAGE));
+          n_b_r=read(sockfd,msg,5);
+        }else{
+          char matrix[2000];
+          pthread_mutex_lock(&current->sem);
+          LogPlayerJoin(&fdLog, current->gameId, user);
+          GameGridToText(current->grid,matrix,1);
+          sprintf(msg,"%ld",strlen(matrix));
+          write(sockfd,msg,strlen(msg));
+          n_b_r=read(sockfd,msg,5);
+          write(sockfd,matrix,strlen(matrix));
+          pthread_mutex_unlock(&current->sem);
+          baba=1;
+        }
         break;
       case 'e': case 'E':
         clear();
@@ -215,9 +243,8 @@ void deleteGrid(GameGrid **g){
   return;
 }
 
+Game* joinGame(int sockfd, char user[], int fdLog){
+  printf("prima di printList.\n");
 
-void joinGame(int sockfd, char user[]){
-  write(sockfd,"Hai scelto joinGame",20);
-  clear();
-  return ;
+  return NULL;
 }

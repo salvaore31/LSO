@@ -1,7 +1,0 @@
-Mon Jan 13 10:25:57 2020: iniziata nuova sessione Server.
-Mon Jan 13 10:26:45 2020: a si è connesso al Server.
-Mon Jan 13 10:26:50 2020: iniziata nuova partita con ID 2332.
-Mon Jan 13 10:26:50 2020: l'utente a si è unito alla partita con ID 2332.
-Mon Jan 13 10:27:16 2020: Giovanni si è connesso al Server.
-Mon Jan 13 10:27:21 2020: iniziata nuova partita con ID 2350.
-Mon Jan 13 10:27:21 2020: l'utente Giovanni si è unito alla partita con ID 2350.

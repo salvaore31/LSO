@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <signal.h>
+#include <sys/mman.h>
 #include "../costanti.h"
 #include "../messaggi.h"
 #include "../codici_errori.h"
@@ -19,7 +20,7 @@
 #include "Librerie/Users.c"
 #include "Librerie/Communication.c"
 
-void joinGame(int sockfd, char user[]);
+Game* joinGame(int sockfd, char user[], int fdLog);
 
 void deleteGrid(GameGrid **g);
 

@@ -2,8 +2,11 @@
 
 Game *createGame(){
   Game* temp;
-  temp=(Game*)malloc(sizeof(Game));
+  temp=(Game*)calloc(1,sizeof(Game));
   temp->grid=NULL;
+  int i;
+  for(i=0;i<MAX_PLAYER_N;i++)
+    temp->giocatori[i].posx=-1;
   pthread_mutex_init(&(temp->sem),NULL);
   return temp;
 }
@@ -238,4 +241,39 @@ int createGameGrid(Game *g){
   g->grid=p;
   return 0;
 
+}
+
+void spawnNewPlayer(Game* g, char* username){
+  srand(time(NULL));
+  printf("Sono in spawn new Player.\n");
+  int x, y;
+  int i = 0;
+  int done = 0;
+  player playerToAdd;
+  strcpy(playerToAdd.nome, username);
+  playerToAdd.codicePacco = 0;
+  playerToAdd.pacco = 0;
+  pthread_mutex_lock(&g->sem);
+  for(i = 0; i < MAX_PLAYER_N; i++){
+    if(g->giocatori[i].posx==-1){
+      g->giocatori[i] = playerToAdd;
+      break;
+    }
+  }
+  GameGrid** p = g->grid;
+  while(!done){
+    y=rand()%MAX_GRID_SIZE_H;
+    x=rand()%MAX_GRID_SIZE_L;
+    if(!(p[y][x].giocatore && p[y][x].pacco && p[y][x].locazione && p[y][x].ostacolo)){
+      p[y][x].giocatore = 1;
+      p[y][x].codiceGiocatore = i;
+      if(i == MAX_PLAYER_N-1){
+        g->piena = 1;
+      }
+      setPermessi(x, y, i, p);
+      done = 1;
+    }
+  }
+  pthread_mutex_unlock(&g->sem);
+  return;
 }
