@@ -3,15 +3,14 @@
 
 int fdLog;
 
-Game ** sessionGames;
+Game * sessionGames;
+pthread_mutex_t* sessionGamesSem;
 
 int main(int argc, char* argv[]){
 
     clear();
     //seed per la generazione di numeri casuali;
     srand(time(NULL));
-
-    int i = 0;
 
     //signal handler set;
     signal(SIGINT, handleSignal);
@@ -23,15 +22,22 @@ int main(int argc, char* argv[]){
     int *thread_sd, sock, sockfd;
     pthread_t tid;
 
-    sessionGames= mmap(NULL, (sizeof(Game**)*20), PROT_READ|PROT_WRITE,
-                        MAP_SHARED|MAP_ANONYMOUS, -1, 0);
-
-
     struct sockaddr_in client_addr;
     socklen_t client_len;
-
     LogServerStart(&fdLog);
+    sessionGamesSem =(pthread_mutex_t *) mmap(NULL, (sizeof(pthread_mutex_t)), PROT_READ|PROT_WRITE,
+                        MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 
+    pthread_mutex_lock(&sessionGamesSem);
+    sessionGames = (Game * ) initializeGamesArray(sessionGames);
+    pthread_mutex_unlock(&sessionGamesSem);
+
+    if(sessionGames == MAP_FAILED){
+      printf("%s.\n", MAP_FAILED_ERR_MESSAGE);
+      LogErrorMessage(&fdLog, MAP_FAILED_ERR_MESSAGE);
+      LogServerClose(&fdLog);
+      return 1;
+    }
     if((sock = creaSocket())<0){
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);
@@ -56,9 +62,9 @@ int main(int argc, char* argv[]){
             exit(-1);
           }
 
-          thread_sd = (int *) malloc(sizeof(int));
+          int* thread_sd;
+          thread_sd = (int*) malloc(sizeof(int));
           thread_sd = &sockfd;
-
           if((pthread_create(&tid, NULL, gestisci, (void *) thread_sd))<0){
               printf("%s", THREAD_CREATION_ERR_MESSAGE);
               LogErrorMessage(&fdLog, THREAD_CREATION_ERR_MESSAGE);
@@ -89,11 +95,14 @@ void initializeNewGameProcess(int sockfd, char user[]){
     g=createGame();
     strcpy(g->giocatori[0].nome,user);
     g->giocatori[0].nome[strlen(user)]='\0';
-  
     if(createGameGrid(g) == 0){
       pthread_mutex_lock(&g->sem);
       g->gameId = getpid();
-
+      pthread_mutex_lock(sessionGamesSem);
+      putGameInArray(sessionGames, g);
+      printf("Sono nel processo figlio dopo inserimento.\n");
+      printArray(sessionGames);
+      pthread_mutex_unlock(sessionGamesSem);
       LogPlayerJoin(&fdLog, g->gameId, user);
       GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
@@ -123,7 +132,8 @@ void * gestisci(void *arg){
   Game* current;
   char msg[1000];
   int n_b_r;
-  int sockfd=*((int *) arg);
+  int sockfd=*((int *)arg);
+
   sprintf(msg,"%ld",strlen(WELCOME_MESSAGE));
   write(sockfd,msg,strlen(msg));
   n_b_r=read(sockfd,msg,5);

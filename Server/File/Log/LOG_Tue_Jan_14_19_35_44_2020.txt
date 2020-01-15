@@ -1,0 +1,4 @@
+Tue Jan 14 19:35:44 2020: iniziata nuova sessione Server.
+Tue Jan 14 19:35:54 2020: a si è connesso al Server.
+Tue Jan 14 19:35:58 2020: iniziata nuova partita con ID 3571.
+Tue Jan 14 19:38:56 2020: finita sessione Server.
