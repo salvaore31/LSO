@@ -1,4 +1,0 @@
-Tue Jan 14 17:07:07 2020: iniziata nuova sessione Server.
-Tue Jan 14 17:07:17 2020: a si è connesso al Server.
-Tue Jan 14 17:07:33 2020: iniziata nuova partita con ID 4416.
-Tue Jan 14 17:10:34 2020: finita sessione Server.

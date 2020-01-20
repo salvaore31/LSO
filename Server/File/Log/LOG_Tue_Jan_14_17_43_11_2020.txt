@@ -1,3 +1,0 @@
-Tue Jan 14 17:43:11 2020: iniziata nuova sessione Server.
-Tue Jan 14 17:43:21 2020: a si è connesso al Server.
-Tue Jan 14 17:43:24 2020: iniziata nuova partita con ID 5322.

@@ -16,7 +16,8 @@
 #define ERR_INPUT_OUTPUT -1002
 #define ERR_SOCKET_CREATION -1003
 #define ERR_SOCKET_BINDING -1004
-
+#define ERR_RECEIVING_MESSAGE -1010
+#define ERR_SENDING_MESSAGE -1011
 /*
     Codici di errore relativi a problemi su Registrazione e Log-In
  */

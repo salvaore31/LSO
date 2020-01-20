@@ -122,7 +122,7 @@ int logInUser(char* user, char* passw){
 
   int fdUserFile, pos, n_b_r,i=0;
   char c,str[MAX_SIZE_PASSW];
-
+  str[0]='\0';
   if((pos=checkUsername(user))<0){
     //La funzione ritorna -2 nel caso in cui non trova l'utente tra quelli registrati;
     return ERR_USERNAME_NOT_FOUND;
@@ -135,9 +135,9 @@ int logInUser(char* user, char* passw){
         //GESTIRE il comportamentoin caso di errore lseek
         return ERR_INPUT_OUTPUT;
       }else{
-        while((n_b_r=read(fdUserFile,&c,1))>0 && c!='\n')
+        while((n_b_r=read(fdUserFile,&c,1))>0 && (c!='\n'))
           str[i++]=c;
-        str[i]='\0';
+        str[--i]='\0';
         if(strcmp(passw,str)==0){
           return 0;
         }else{
@@ -204,7 +204,6 @@ int logInUserMenu(int sockfd, char usrn[], int *fdLog){
           pssw[n_b_r] = '\0';
           break;
         case ERR_NO_CONNECTION:
-
           sprintf(msg,"%ld",strlen(NO_CONNECTION_ERR_MESSAGE));
           write(sockfd,msg,strlen(msg));
           n_b_r=read(sockfd,msg,5);

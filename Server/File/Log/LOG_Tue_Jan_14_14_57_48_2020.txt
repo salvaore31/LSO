@@ -1,2 +1,0 @@
-Tue Jan 14 14:57:48 2020: iniziata nuova sessione Server.
-Tue Jan 14 14:58:14 2020: finita sessione Server.

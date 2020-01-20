@@ -1,8 +1,0 @@
-Tue Jan 14 19:39:05 2020: iniziata nuova sessione Server.
-Tue Jan 14 19:39:12 2020: a si è connesso al Server.
-Tue Jan 14 19:39:15 2020: iniziata nuova partita con ID 3621.
-Tue Jan 14 19:39:15 2020: l'utente a si è unito alla partita con ID 3621.
-Tue Jan 14 19:40:07 2020: papete si è connesso al Server.
-Tue Jan 14 19:40:11 2020: iniziata nuova partita con ID 3639.
-Tue Jan 14 19:40:11 2020: l'utente papete si è unito alla partita con ID 3639.
-Tue Jan 14 19:41:35 2020: finita sessione Server.

@@ -1,6 +1,0 @@
-Tue Jan 14 17:13:53 2020: iniziata nuova sessione Server.
-Tue Jan 14 17:14:04 2020: a si è connesso al Server.
-Tue Jan 14 17:14:08 2020: iniziata nuova partita con ID 4542.
-Tue Jan 14 17:14:43 2020: papete si è connesso al Server.
-Tue Jan 14 17:14:49 2020: iniziata nuova partita con ID 4558.
-Tue Jan 14 17:15:48 2020: finita sessione Server.

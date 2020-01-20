@@ -2,10 +2,7 @@
 #include <time.h>
 
 int fdLog;
-
-Game * sessionGames;
-pthread_mutex_t* sessionGamesSem;
-
+Game *g;
 int main(int argc, char* argv[]){
 
     clear();
@@ -18,17 +15,17 @@ int main(int argc, char* argv[]){
     signal(SIGQUIT, handleSignal);
     signal(SIGTERM, handleSignal);
     signal(SIGKILL, handleSignal);
-
     int *thread_sd, sock, sockfd;
     pthread_t tid;
 
     struct sockaddr_in client_addr;
     socklen_t client_len;
-    LogServerStart(&fdLog);
+    LogServerStart(&fdLog);/*
     sessionGamesSem =(pthread_mutex_t *) mmap(NULL, (sizeof(pthread_mutex_t)), PROT_READ|PROT_WRITE,
                         MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 
     pthread_mutex_lock(&sessionGamesSem);
+    printf("Fino a qui tutto bene\n" );
     sessionGames = (Game * ) initializeGamesArray(sessionGames);
     pthread_mutex_unlock(&sessionGamesSem);
 
@@ -37,7 +34,7 @@ int main(int argc, char* argv[]){
       LogErrorMessage(&fdLog, MAP_FAILED_ERR_MESSAGE);
       LogServerClose(&fdLog);
       return 1;
-    }
+    }*/
     if((sock = creaSocket())<0){
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);
@@ -91,18 +88,12 @@ void initializeNewGameProcess(int sockfd, char user[]){
     char matrix[2000];
     char msg[50];
     int n_b_r;
-    Game *g=NULL;
     g=createGame();
     strcpy(g->giocatori[0].nome,user);
     g->giocatori[0].nome[strlen(user)]='\0';
     if(createGameGrid(g) == 0){
       pthread_mutex_lock(&g->sem);
       g->gameId = getpid();
-      pthread_mutex_lock(sessionGamesSem);
-      putGameInArray(sessionGames, g);
-      printf("Sono nel processo figlio dopo inserimento.\n");
-      printArray(sessionGames);
-      pthread_mutex_unlock(sessionGamesSem);
       LogPlayerJoin(&fdLog, g->gameId, user);
       GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
@@ -133,15 +124,10 @@ void * gestisci(void *arg){
   char msg[1000];
   int n_b_r;
   int sockfd=*((int *)arg);
-
-  sprintf(msg,"%ld",strlen(WELCOME_MESSAGE));
-  write(sockfd,msg,strlen(msg));
-  n_b_r=read(sockfd,msg,5);
-  write(sockfd,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE));
-  n_b_r=read(sockfd,msg,50);
-  msg[n_b_r]='\0';
   char user[50];
   int baba=-1;
+
+  n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
   while(baba==-1){
     if(n_b_r==1){
       switch (msg[0]) {
@@ -162,77 +148,16 @@ void * gestisci(void *arg){
           }
           break;
         default:
-          clear();
-          sprintf(msg,"%ld",strlen(WELCOME_MESSAGE));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE));
-          n_b_r=read(sockfd,msg,50);
-          msg[n_b_r]='\0';
+          n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
           break;
       }
     }else{
-          clear();
-          sprintf(msg,"%ld",strlen(WELCOME_MESSAGE));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd,WELCOME_MESSAGE,strlen(WELCOME_MESSAGE));
-          n_b_r=read(sockfd,msg,50);
-          msg[n_b_r]='\0';
+          n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
     }
   }
   read(sockfd,msg,1);
-  sprintf(msg,"%ld",strlen(GAME_SELECTION_MENU));
-  write(sockfd,msg,strlen(msg));
-  n_b_r=read(sockfd,msg,5);
-  write(sockfd,GAME_SELECTION_MENU,strlen(GAME_SELECTION_MENU));
-  n_b_r=read(sockfd,msg,5);
-  msg[n_b_r]='\0';
-  baba=-1;
-  while(baba==-1){
-    switch (msg[0]) {
-      case 'n': case 'N':
-        initializeNewGameProcess(sockfd, user);
-        baba=1;
-        break;
-      case 'j': case 'J':
-      //  current = joinGame(sockfd,user, fdLog, &sessionGames);
-        if(current == NULL){
-          sprintf(msg, "%ld", strlen(NO_SUCH_GAMES_MESSAGE));
-          write(sockfd,msg, strlen(msg));
-          n_b_r=read(sockfd, msg, 5);
-          write(sockfd, NO_SUCH_GAMES_MESSAGE, strlen(NO_SUCH_GAMES_MESSAGE));
-          n_b_r=read(sockfd,msg,5);
-        }else{
-          char matrix[2000];
-          pthread_mutex_lock(&current->sem);
-          LogPlayerJoin(&fdLog, current->gameId, user);
-          GameGridToText(current->grid,matrix,1);
-          sprintf(msg,"%ld",strlen(matrix));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd,matrix,strlen(matrix));
-          pthread_mutex_unlock(&current->sem);
-          baba=1;
-        }
-        break;
-      case 'e': case 'E':
-        clear();
-        write(sockfd, "-1", strlen("-1"));
-        n_b_r = read(sockfd, msg, 50);
-        if(strcmp(msg, USER_LOG_OUT)){
-          LogUserSignOut(&fdLog, user);
-        }
-        break;
-      default:
-        sprintf(msg,"%ld",strlen(GAME_SELECTION_MENU));
-        write(sockfd,msg,strlen(msg));
-        n_b_r=read(sockfd,msg,5);
-        write(sockfd,GAME_SELECTION_MENU,strlen(GAME_SELECTION_MENU));
-        n_b_r=read(sockfd,msg,50);
-        msg[n_b_r]='\0';
-        break;
-    }
+  if(g==NULL){
+    initializeNewGameProcess(sockfd,user);
   }
 }
 

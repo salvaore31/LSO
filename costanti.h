@@ -6,11 +6,10 @@
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
-#define SOCKET  8060
+#define SOCKET  8001
 #define MAXIMUM_SOCKET_BACKLOG 3
 #define clear() sleep(1); printf("\033[H\033[J");
 #define leggi() n_b_r=read(sockfd,msg,6);msg[n_b_r]='\0';n_b_r=atoi(msg);write(sockfd,"1",strlen("1")) ;n_b_r=read(sockfd,msg,n_b_r);msg[n_b_r]='\0';printf("%s",msg);
-
 
 /* Le costanti seguenti contengono valori utili alla gestione della matrice di
  * gioco.
