@@ -1,6 +1,6 @@
 #include "Users.h"
 
-int signInUserMenu(int sockfd, char usrn[], int *fdLog){
+int signInUserMenu(int sockfd, char usrn[], LogFile *log){
   int n_b_r;
   char pssw[50],msg[100];
   int err;
@@ -18,8 +18,10 @@ int signInUserMenu(int sockfd, char usrn[], int *fdLog){
           break;
       }
     }
-    LogNewUser(fdLog, usrn);
-    n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_SIM,msg);
+    pthread_mutex_lock(&log->sem);
+    LogNewUser(&log->fd, usrn);
+    pthread_mutex_unlock(&log->sem);
+    n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_SIM);
     return 1;
   }
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
@@ -116,7 +118,7 @@ int logInUser(char* user, char* passw){
   return -1;
 }
 //logInUserMenu gesitsce la comunicazione con il client per quanto riguarda il logIn
-int logInUserMenu(int sockfd, char usrn[], int *fdLog){
+int logInUserMenu(int sockfd, char usrn[],LogFile *log){
 
   int n_b_r;
   char pssw[50],msg[100];
@@ -144,7 +146,9 @@ int logInUserMenu(int sockfd, char usrn[], int *fdLog){
           break;
       }
     }
-    LogUserSignIn(fdLog, usrn);
-    n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_LIM,msg);
+    pthread_mutex_lock(&log->sem);
+    LogUserSignIn(&log->fd, usrn);
+    pthread_mutex_unlock(&log->sem);
+    n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_LIM);
     return 1;
 }

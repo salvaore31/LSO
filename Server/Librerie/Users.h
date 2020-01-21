@@ -2,7 +2,7 @@
 #include "../../messaggi.h"
 #include "../../costanti.h"
 #include "Log.h"
-
+#include "Communication.h"
 //Prende un nome utente, una password e,se non presente, lo aggiunge al file degli utenti; Ritorna 0 in caso di successo
 int registerUser(char* newuser, char* newpassw);
 
@@ -13,7 +13,7 @@ int checkUsername(char* username);
 int logInUser(char* user, char* passw);
 
 //Contiene la gestione del menu di Login
-int logInUserMenu(int, char[], Log*);
+int logInUserMenu(int, char[], LogFile*);
 
 //Contiene la gestione del menu di Registrazione
-int signInUserMenu(int, char[], Log*);
+int signInUserMenu(int, char[], LogFile*);

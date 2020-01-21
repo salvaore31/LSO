@@ -120,12 +120,6 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         /*Gesire mossa non valida*/
       }
     break;
-<<<<<<< HEAD
-    case 'q': case 'Q'://prendi pacco
-
-    break;
-    case 'e': case 'E'://lascia pacco
-=======
     case 'q': case 'Q':
       if(grid[y][x].pacco){
         player->pacco = 1;
@@ -158,7 +152,6 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
       }else{
         /*sciocchino non hai un pacco*/
       }
->>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
     break;
     case 'r': case 'R'://refresh
     break;

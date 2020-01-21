@@ -1,7 +1,7 @@
-&log.fd#include "Server.h"
+#include "Server.h"
 #include <time.h>
 
-Log log;
+LogFile serverLog;
 Game *g;
 int main(int argc, char* argv[]){
 
@@ -24,46 +24,40 @@ int main(int argc, char* argv[]){
     int porta =atoi(argv[1]);
     struct sockaddr_in client_addr;
     socklen_t client_len;
-<<<<<<< HEAD
-    pthread_mutex_lock(&log.sem);
-    LogServerStart(&log.fd);
-    pthread_mutex_unlock(&log.sem);
+    pthread_mutex_lock(&serverLog.sem);
+    LogServerStart(&serverLog.fd);
+    pthread_mutex_unlock(&serverLog.sem);
     if((sock = creaSocket(porta))<0){
-=======
-    LogServerStart(&fdLog);
-
-    if((sock = creaSocket())<0){
->>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);
-        pthread_mutex_lock(&log.sem);
-        LogErrorMessage(&log.fd, SOCKET_CREATION_ERR_MESSAGE);
-        pthread_mutex_unlock(&log.sem);
+        pthread_mutex_lock(&serverLog.sem);
+        LogErrorMessage(&serverLog.fd, SOCKET_CREATION_ERR_MESSAGE);
+        pthread_mutex_unlock(&serverLog.sem);
       }else if(sock = ERR_SOCKET_BINDING){
         printf("%s", SOCKET_BINDING_ERR_MESSAGE);
-        pthread_mutex_lock(&log.sem);
-        LogErrorMessage(&log.fd, SOCKET_BINDING_ERR_MESSAGE);
-        pthread_mutex_unlock(&log.sem);
+        pthread_mutex_lock(&serverLog.sem);
+        LogErrorMessage(&serverLog.fd, SOCKET_BINDING_ERR_MESSAGE);
+        pthread_mutex_unlock(&serverLog.sem);
       }else{
         printf("%s", NOT_SURE_ERR_MESSAGE);
-        pthread_mutex_lock(&log.sem);
-        LogErrorMessage(&log.fd, NOT_SURE_ERR_MESSAGE);
-        pthread_mutex_unlock(&log.sem);
+        pthread_mutex_lock(&serverLog.sem);
+        LogErrorMessage(&serverLog.fd, NOT_SURE_ERR_MESSAGE);
+        pthread_mutex_unlock(&serverLog.sem);
       }
     }else{
       if((listen(sock,MAXIMUM_SOCKET_BACKLOG))<0){
         printf("%s", SOCKET_LISTEN_ERR_MESSAGE);
-        pthread_mutex_lock(&log.sem);
-        LogErrorMessage(&log.fd,SOCKET_LISTEN_ERR_MESSAGE);
-        pthread_mutex_unlock(&log.sem);
+        pthread_mutex_lock(&serverLog.sem);
+        LogErrorMessage(&serverLog.fd,SOCKET_LISTEN_ERR_MESSAGE);
+        pthread_mutex_unlock(&serverLog.sem);
       }else{
         while(1){
           client_len = sizeof(client_addr);
           if((sockfd = accept(sock, NULL, NULL))<0){
             printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
-            pthread_mutex_lock(&log.sem);
-            LogErrorMessage(&log.fd, ACCEPT_SOCKET_ERR_MESSAGE);
-            pthread_mutex_unlock(&log.sem);
+            pthread_mutex_lock(&serverLog.sem);
+            LogErrorMessage(&serverLog.fd, ACCEPT_SOCKET_ERR_MESSAGE);
+            pthread_mutex_unlock(&serverLog.sem);
             exit(-1);
           }
 
@@ -72,18 +66,18 @@ int main(int argc, char* argv[]){
           thread_sd = &sockfd;
           if((pthread_create(&tid, NULL, run, (void *) thread_sd))<0){
               printf("%s", THREAD_CREATION_ERR_MESSAGE);
-              pthread_mutex_lock(&log.sem);
-              LogErrorMessage(&log.fd, THREAD_CREATION_ERR_MESSAGE);
-              pthread_mutex_unlock(&log.sem);
+              pthread_mutex_lock(&serverLog.sem);
+              LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
+              pthread_mutex_unlock(&serverLog.sem);
           }
         }
       }
     }
     close(sock);
     close(sockfd);
-    pthread_mutex_lock(&log.sem);
-    LogServerClose(&log.fd);
-    pthread_mutex_unlock(&log.sem);
+    pthread_mutex_lock(&serverLog.sem);
+    LogServerClose(&serverLog.fd);
+    pthread_mutex_unlock(&serverLog.sem);
     return 1;
 }
 /*
@@ -104,12 +98,11 @@ void initializeNewGameProcess(int sockfd, char user[]){
     if(createGameGrid(g) == 0){
       pthread_mutex_lock(&g->sem);
       g->gameId = getpid();
-      pthread_mutex_lock(&log.sem);
-      LogPlayerJoin(&log.fd, g->gameId, user);
-      pthread_mutex_unlock(&log.sem);
+      pthread_mutex_lock(&serverLog.sem);
+      LogPlayerJoin(&serverLog.fd, g->gameId, user);
+      pthread_mutex_unlock(&serverLog.sem);
       GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
-<<<<<<< HEAD
       sendMsgNoReply(sockfd,matrix);
       pthread_t tid;
       int* thread_sd;
@@ -117,21 +110,19 @@ void initializeNewGameProcess(int sockfd, char user[]){
       thread_sd = &sockfd;
       if((pthread_create(&tid, NULL, timer, (void *) thread_sd))<0){
           printf("%s", THREAD_CREATION_ERR_MESSAGE);
-          pthread_mutex_lock(&log.sem);
-          LogErrorMessage(&log.fd, THREAD_CREATION_ERR_MESSAGE);
-          pthread_mutex_unlock(&log.sem);
+          pthread_mutex_lock(&serverLog.sem);
+          LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
+          pthread_mutex_unlock(&serverLog.sem);
       }
-=======
       n_b_r= sendMsg(sockfd, matrix,msg);
->>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
       playGame(g,0,g->gameId);
     }else{
       /*Gestione errore*/
     }
   }else{
-    pthread_mutex_lock(&log.sem);
-    LogNewGame(&log.fd,gameId);
-    pthread_mutex_unlock(&log.sem);
+    pthread_mutex_lock(&serverLog.sem);
+    LogNewGame(&serverLog.fd,gameId);
+    pthread_mutex_unlock(&serverLog.sem);
   }
   return;
 }
@@ -153,11 +144,11 @@ void * run(void *arg){
     if(n_b_r==1){
       switch (msg[0]) {
         case 'l': case 'L':
-          logInUserMenu(sockfd,user,&log);
+          logInUserMenu(sockfd,user,&serverLog);
           baba=1;
           break;
         case 'r': case 'R':
-          signInUserMenu(sockfd,user,&log);
+          signInUserMenu(sockfd,user,&serverLog);
           baba=1;
           break;
         case 'e': case 'E':
@@ -165,9 +156,9 @@ void * run(void *arg){
           write(sockfd,"-1", strlen("-1"));
           n_b_r = read(sockfd, msg, 50);
           if(strcmp(msg, USER_LOG_OUT)){
-            pthread_mutex_lock(&log.sem);
-            LogUnkownClientDisconnection(&log.fd);
-            pthread_mutex_unlock(&log.sem);
+            pthread_mutex_lock(&serverLog.sem);
+            LogUnkownClientDisconnection(&serverLog.fd);
+            pthread_mutex_unlock(&serverLog.sem);
           }
           break;
         default:
@@ -190,17 +181,17 @@ void * timer(void *arg){
   char mom[]="\033[91mTEMPO SCADUTO\033[0m\n";
   sleep(MAX_TIME);
   sendMsgNoReply(sockfd,mom);
-  pthread_mutex_lock(&log.sem);
-  LogEndGame(&log.fd,getpid());
-  pthread_mutex_unlock(&log.sem);
+  pthread_mutex_lock(&serverLog.sem);
+  LogEndGame(&serverLog.fd,getpid());
+  pthread_mutex_unlock(&serverLog.sem);
 }
 
 
 void handleSignal(int Sig){
   if(Sig == SIGINT){
-    pthread_mutex_lock(&log.sem);
-    LogServerClose(&log.fd);
-    pthread_mutex_unlock(&log.sem);
+    pthread_mutex_lock(&serverLog.sem);
+    LogServerClose(&serverLog.fd);
+    pthread_mutex_unlock(&serverLog.sem);
     //unlink(SOCKET);
     exit(1);
   }
@@ -214,12 +205,6 @@ void deleteGrid(GameGrid **g){
   return;
 }
 
-<<<<<<< HEAD
-Game* joinGame(int sockfd, char user[]){
-  printf("prima di printList.\n");
-=======
 Game* joinGame(int sockfd, char user[], int fdLog){
->>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
-
   return NULL;
 }

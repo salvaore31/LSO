@@ -284,7 +284,7 @@ int sendMsgNoReply(int sockfd,char toSend[]){
   char msg[150];
 
   clear();
-  sprintf(msg,"%ld",strlen(toSend));
+  sprintf(msg,"%d",strlen(toSend));
   n_b_w=write(sockfd,msg,strlen(msg));
   if(n_b_w<strlen(msg)){
       return ERR_SENDING_MESSAGE;
@@ -306,7 +306,7 @@ int sendMsg(int sockfd,char toSend[],char received[]){
   char msg[150];
 
   clear();
-  sprintf(msg,"%ld",strlen(toSend));
+  sprintf(msg,"%d",strlen(toSend));
   n_b_w=write(sockfd,msg,strlen(msg));
   if(n_b_w<strlen(msg)){
       return ERR_SENDING_MESSAGE;

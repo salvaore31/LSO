@@ -6,10 +6,6 @@
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
-<<<<<<< HEAD
-=======
-#define SOCKET  8600
->>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
 #define MAXIMUM_SOCKET_BACKLOG 3
 #define clear() printf("\033[H\033[J");
 #define leggi() n_b_r=read(sockfd,msg,6);msg[n_b_r]='\0';n_b_r=atoi(msg);write(sockfd,"1",strlen("1")) ;n_b_r=read(sockfd,msg,n_b_r);msg[n_b_r]='\0';printf("%s",msg);
@@ -18,18 +14,11 @@
  * gioco.
  */
 #define RESET  "\033[0m"
-<<<<<<< HEAD
 #define GREEN  "\033[92m"
 #define RED    "\033[91m"
 #define CYAN   "\033[96m"
 #define YELLOW "\033[93m"
-=======
-#define GREEN  "\033[92m\033[92m"
-#define RED    "\033[91m\033[91m"
-#define CYAN   "\033[96m\033[96m"
-#define YELLOW "\033[93m\033[93m"
 #define BG_WHITE_FG_BLACK "\u001b[47;30m"
->>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
 
 /* Le costanti seguenti contengono valori utili per gestire una partita.
  *
@@ -113,6 +102,6 @@ typedef struct {
 typedef struct {
   int fd;
   pthread_mutex_t sem;
-} Log;
+} LogFile;
 
 #endif
