@@ -28,6 +28,7 @@ int main(int argc, char* argv[]){
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
+
       ingame=comunicationGame(sockfd);
       if(ingame<0){
         write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
@@ -75,14 +76,22 @@ int comunication(int sockfd){
 
 int comunicationGame(int sockfd){
   int n_b_r;
+  struct termios orig;
   clear();
   char msg[4000],input[50];
+  struct termios raw;
+  tcgetattr(STDIN_FILENO, &raw);
+  orig = raw;
+  raw.c_lflag &= ~(ECHO | ICANON);
+  tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
   while(1){
     leggi();
-    scanf("%s",input);
+    read(STDIN_FILENO, input, 1);
     write(sockfd,input,strlen(input));
     clear();
   }
+  tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);
+  return 0;
 }
 
 

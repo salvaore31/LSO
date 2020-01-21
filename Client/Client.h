@@ -11,6 +11,7 @@
 #include <string.h>
 #include <signal.h>
 #include <errno.h>
+#include "termios.h"
 #include "../costanti.h"
 #include "../messaggi.h"
 
