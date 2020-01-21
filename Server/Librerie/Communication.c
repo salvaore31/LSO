@@ -308,7 +308,6 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore, player * gamer){
     strcat(msg,"\n\n");
   }
   strcat(msg, IN_GAME_MENU);
-  strcat(msg,"\a");
   return 1;
 }
 

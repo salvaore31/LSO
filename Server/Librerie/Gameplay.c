@@ -21,7 +21,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     pthread_mutex_lock(&game->sem);
     GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
     pthread_mutex_unlock(&game->sem);
-
+    strcat(matrix,"\a");
     sendMsg(sockfd,matrix,msg);
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
@@ -53,7 +53,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     if(y>0){
       setPermessi(x,y-1,giocatore,grid);
       if(grid[y-1][x].ostacolo || grid[y-1][x].giocatore){
-        /*Gestire mossa non valida*/
+        return -1;
       }else{
         sprintf(src,"[%d,%d]",player->posx,player->posy);
         grid[y][x].giocatore=0;
@@ -64,14 +64,14 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
     }else{
-      /*Gesire mossa non valida*/
+      return -1;
     }
     break;
     case 'a': case 'A':
       if(x>0){
         setPermessi(x-1,y,giocatore,grid);
         if(grid[y][x-1].ostacolo || grid[y][x-1].giocatore){
-          /*Gestire mossa non valida*/
+          return -1;
         }else{
           sprintf(src,"[%d,%d]",player->posx,player->posy);
           grid[y][x].giocatore=0;
@@ -82,14 +82,14 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
         }
       }else{
-        /*Gesire mossa non valida*/
+        return -1;
       }
     break;
     case 's': case 'S':
     if(y<MAX_GRID_SIZE_H-1){
       setPermessi(x,y+1,giocatore,grid);
       if(grid[y+1][x].ostacolo || grid[y+1][x].giocatore){
-        /*Gestire mossa non valida*/
+        return -1;
       }else{
         sprintf(src,"[%d,%d]",player->posx,player->posy);
         grid[y][x].giocatore=0;
@@ -100,14 +100,14 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
     }else{
-      /*Gesire mossa non valida*/
+      return -1;
     }
     break;
     case 'd': case 'D':
       if(x<MAX_GRID_SIZE_L-1){
         setPermessi(x+1,y,giocatore,grid);
         if(grid[y][x+1].ostacolo || grid[y][x+1].giocatore){
-          /*Gestire mossa non valida*/
+          return -1;
         }else{
           sprintf(src,"[%d,%d]",player->posx,player->posy);
           grid[y][x].giocatore=0;
@@ -118,7 +118,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
         }
       }else{
-        /*Gesire mossa non valida*/
+        return -1;
       }
     break;
     case 'q': case 'Q':
@@ -130,7 +130,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         sprintf(dest,"[%d,%d]",player->posx,player->posy);
         LogPlayerTakePackage(fdLog,gameId,player->nome,player->codicePacco,dest);
       }else{
-        /*mossa non valida perché no pacco*/
+        return -1;
       }
     break;
     case 'e': case 'E':
@@ -145,7 +145,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
             player->codicePacco = 0;
             LogPlayerMakeAPoint(fdLog,gameId,player->nome);
           }else{
-            //mossa non valida, non puoi occupare locazione con pacco non valido
+            return -1;
           }
         }else{
           grid[y][x].pacco=1;
@@ -156,7 +156,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           LogPlayerLeavePackage(fdLog,gameId,player->nome,grid[y][x].codicePacco,dest);
         }
       }else{
-        /*sciocchino non hai un pacco*/
+        return -1;
       }
     break;
     case 'r': case 'R'://refresh
