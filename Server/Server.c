@@ -24,10 +24,16 @@ int main(int argc, char* argv[]){
     int porta =atoi(argv[1]);
     struct sockaddr_in client_addr;
     socklen_t client_len;
+<<<<<<< HEAD
     pthread_mutex_lock(&log.sem);
     LogServerStart(&log.fd);
     pthread_mutex_unlock(&log.sem);
     if((sock = creaSocket(porta))<0){
+=======
+    LogServerStart(&fdLog);
+
+    if((sock = creaSocket())<0){
+>>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);
         pthread_mutex_lock(&log.sem);
@@ -103,6 +109,7 @@ void initializeNewGameProcess(int sockfd, char user[]){
       pthread_mutex_unlock(&log.sem);
       GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
+<<<<<<< HEAD
       sendMsgNoReply(sockfd,matrix);
       pthread_t tid;
       int* thread_sd;
@@ -114,6 +121,9 @@ void initializeNewGameProcess(int sockfd, char user[]){
           LogErrorMessage(&log.fd, THREAD_CREATION_ERR_MESSAGE);
           pthread_mutex_unlock(&log.sem);
       }
+=======
+      n_b_r= sendMsg(sockfd, matrix,msg);
+>>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
       playGame(g,0,g->gameId);
     }else{
       /*Gestione errore*/
@@ -204,8 +214,12 @@ void deleteGrid(GameGrid **g){
   return;
 }
 
+<<<<<<< HEAD
 Game* joinGame(int sockfd, char user[]){
   printf("prima di printList.\n");
+=======
+Game* joinGame(int sockfd, char user[], int fdLog){
+>>>>>>> bf9d1e53425aae729a06762491fbbd172bbe78da
 
   return NULL;
 }

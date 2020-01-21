@@ -10,8 +10,10 @@
 #include <fcntl.h>
 #include <string.h>
 #include <signal.h>
+#include <errno.h>
 #include "../costanti.h"
 #include "../messaggi.h"
+
 void printGameGrid(GameGrid grid);
 
 int logInRequest(char* username, char * password);
@@ -19,6 +21,8 @@ int logInRequest(char* username, char * password);
 int signInRequest(char* username, char* password);
 
 int comunication(int);
+
+int comunicationGame(int);
 
 int newGame();
 
