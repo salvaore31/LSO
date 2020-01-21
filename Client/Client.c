@@ -79,9 +79,6 @@ int comunicationGame(int sockfd){
   char msg[1000],input[50];
   while(1){
     leggi();
-    strcat(msg, IN_GAME_MENU);
-    printf("%s\n", msg );
-    msg[strlen(msg)]='\0';
     scanf("%s",input);
     write(sockfd,input,strlen(input));
     clear();
