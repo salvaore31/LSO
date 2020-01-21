@@ -19,7 +19,6 @@
 #include "Librerie/Gameplay.c"
 #include "Librerie/Users.c"
 #include "Librerie/Communication.c"
-#include "Librerie/GameArrayManagement.c"
 
 Game* joinGame(int sockfd, char user[], int fdLog);
 

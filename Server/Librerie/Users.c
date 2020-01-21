@@ -137,7 +137,7 @@ int logInUser(char* user, char* passw){
       }else{
         while((n_b_r=read(fdUserFile,&c,1))>0 && (c!='\n'))
           str[i++]=c;
-        str[--i]='\0';
+        str[i]='\0';
         if(strcmp(passw,str)==0){
           return 0;
         }else{

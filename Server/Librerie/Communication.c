@@ -29,22 +29,22 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
   for(i=0;i<MAX_GRID_SIZE_L+1;i++){
     if(i!=0){
       if(i/10==0)
-        sprintf(mom,"%d   ",i);
+        sprintf(mom,"\033[30;47m%d   \033[0m",i);
       else
-        sprintf(mom,"%d  ",i);
+        sprintf(mom,"\033[30;47m%d  \033[0m",i);
       strcat(msg,mom);
     }else{
       sprintf(mom,"    ");
       strcat(msg, mom);
     }
   }
-  sprintf(mom, "\n\n\n");
+  sprintf(mom, "\n");
   strcat(msg, mom);
   for(i=0;i<MAX_GRID_SIZE_H;i++){
     if(i+1!=10)
-      sprintf(mom,"%d   ",i+1);
+      sprintf(mom,"\033[30;47m%d   \033[0m",i+1);
     else
-      sprintf(mom,"%d  ",i+1);
+      sprintf(mom,"\033[30;47m%d  \033[0m",i+1);
     strcat(msg,mom);
     for(j=0;j<MAX_GRID_SIZE_L;j++){
       switch(giocatore){

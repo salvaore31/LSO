@@ -20,21 +20,8 @@ int main(int argc, char* argv[]){
 
     struct sockaddr_in client_addr;
     socklen_t client_len;
-    LogServerStart(&fdLog);/*
-    sessionGamesSem =(pthread_mutex_t *) mmap(NULL, (sizeof(pthread_mutex_t)), PROT_READ|PROT_WRITE,
-                        MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+    LogServerStart(&fdLog);
 
-    pthread_mutex_lock(&sessionGamesSem);
-    printf("Fino a qui tutto bene\n" );
-    sessionGames = (Game * ) initializeGamesArray(sessionGames);
-    pthread_mutex_unlock(&sessionGamesSem);
-
-    if(sessionGames == MAP_FAILED){
-      printf("%s.\n", MAP_FAILED_ERR_MESSAGE);
-      LogErrorMessage(&fdLog, MAP_FAILED_ERR_MESSAGE);
-      LogServerClose(&fdLog);
-      return 1;
-    }*/
     if((sock = creaSocket())<0){
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);
@@ -97,10 +84,7 @@ void initializeNewGameProcess(int sockfd, char user[]){
       LogPlayerJoin(&fdLog, g->gameId, user);
       GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
-      sprintf(msg,"%ld",strlen(matrix));
-      write(sockfd,msg,strlen(msg));
-      n_b_r=read(sockfd,msg,5);
-      write(sockfd,matrix,strlen(matrix));
+      n_b_r= sendMsg(sockfd, matrix,msg);
       playGame(g,0,g->gameId);
     }else{
       sprintf(msg,"%ld",strlen(NO_CONNECTION_ERR_MESSAGE));
@@ -179,7 +163,6 @@ void deleteGrid(GameGrid **g){
 }
 
 Game* joinGame(int sockfd, char user[], int fdLog){
-  printf("prima di printList.\n");
 
   return NULL;
 }

@@ -1,0 +1,2 @@
+Mon Jan 20 16:02:54 2020: iniziata nuova sessione Server.
+Mon Jan 20 16:03:36 2020: a si è connesso al Server.

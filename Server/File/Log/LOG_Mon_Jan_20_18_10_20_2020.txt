@@ -1,0 +1,5 @@
+Mon Jan 20 18:10:20 2020: iniziata nuova sessione Server.
+Mon Jan 20 18:10:29 2020: a si è connesso al Server.
+Mon Jan 20 18:10:31 2020: iniziata nuova partita con ID 6768.
+Mon Jan 20 18:10:31 2020: l'utente a si è unito alla partita con ID 6768.
+Mon Jan 20 18:11:35 2020: finita sessione Server.

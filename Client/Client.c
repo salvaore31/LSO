@@ -1,7 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "Client.h"
-#include <errno.h>
+
 int sockfd,ingame=0,logged=0;
 
 int main(int argc, char* argv[]){
@@ -30,14 +28,13 @@ int main(int argc, char* argv[]){
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
-      ingame=comunication(sockfd);
+      ingame=comunicationGame(sockfd);
       if(ingame<0){
         write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
       //  clear();
         close(sockfd);
         exit(-1);
       }
-      comunication(sockfd);
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
@@ -75,6 +72,24 @@ int comunication(int sockfd){
     }
   }
 }
+
+int comunicationGame(int sockfd){
+  int n_b_r;
+  clear();
+  char msg[1000],input[50];
+  while(1){
+    leggi();
+    strcat(msg, IN_GAME_MENU);
+    printf("%s\n", msg );
+    msg[strlen(msg)]='\0';
+    scanf("%s",input);
+    write(sockfd,input,strlen(input));
+    clear();
+  }
+}
+
+
+
 
 int selectGame(int sockfd){
   int n_b_r;

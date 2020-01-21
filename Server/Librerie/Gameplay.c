@@ -121,9 +121,37 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
       }
     break;
     case 'q': case 'Q':
-
+      if(grid[y][x].pacco){
+        player->pacco = 1;
+        player->codicePacco = grid[y][x].codicePacco;
+        grid[y][x].codicePacco = 0;
+        grid[y][x].pacco = 0;
+      }else{
+        /*mossa non valida perché no pacco*/
+      }
     break;
     case 'e': case 'E':
+      if(player->pacco){
+        if(grid[y][x].locazione){
+          //controllo se la locazione corrisponde al pacco
+          if(grid[y][x].codiceLocazione == player->codicePacco){
+            game->punteggio[giocatore]++;
+            grid[y][x].locazione = 0;
+            grid[y][x].codiceLocazione = 0;
+            player->pacco = 0;
+            player->codicePacco = 0;
+          }else{
+            //mossa non valida, non puoi occupare locazione con pacco non valido
+          }
+        }else{
+          grid[y][x].pacco=1;
+          grid[y][x].codicePacco = player->codicePacco;
+          player->pacco = 0;
+          player->codicePacco = 0;
+        }
+      }else{
+        /*sciocchino non hai un pacco*/
+      }
     break;
     case 'r': case 'R':
     break;

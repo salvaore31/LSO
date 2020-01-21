@@ -87,5 +87,5 @@
 #define LOG_ERROR                           ": ERRORE( "
 #define LOG_UNKNOWN_CLIENT_DISCONNECTION    ": un Client non identificato si è disconesso dal Server.\n"
 
-
+#define IN_GAME_MENU "\nQua inseriamo le opzioni in partita.\n"
 #endif
