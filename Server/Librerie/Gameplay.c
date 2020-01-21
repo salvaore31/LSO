@@ -21,8 +21,10 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     pthread_mutex_lock(&game->sem);
     GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
     pthread_mutex_unlock(&game->sem);
-    strcat(matrix,"\a");
+    if(result<0)
+      strcat(matrix,"\a");
     sendMsg(sockfd,matrix,msg);
+    printf("%s\n",msg );
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
     pthread_mutex_unlock(&serverLog->sem);
@@ -53,6 +55,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     if(y>0){
       setPermessi(x,y-1,giocatore,grid);
       if(grid[y-1][x].ostacolo || grid[y-1][x].giocatore){
+        pthread_mutex_unlock(&game->sem);
         return -1;
       }else{
         sprintf(src,"[%d,%d]",player->posx,player->posy);
@@ -64,6 +67,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
     }else{
+      pthread_mutex_unlock(&game->sem);
       return -1;
     }
     break;
@@ -71,6 +75,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
       if(x>0){
         setPermessi(x-1,y,giocatore,grid);
         if(grid[y][x-1].ostacolo || grid[y][x-1].giocatore){
+          pthread_mutex_unlock(&game->sem);
           return -1;
         }else{
           sprintf(src,"[%d,%d]",player->posx,player->posy);
@@ -82,6 +87,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
         }
       }else{
+        pthread_mutex_unlock(&game->sem);
         return -1;
       }
     break;
@@ -89,6 +95,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     if(y<MAX_GRID_SIZE_H-1){
       setPermessi(x,y+1,giocatore,grid);
       if(grid[y+1][x].ostacolo || grid[y+1][x].giocatore){
+        pthread_mutex_unlock(&game->sem);
         return -1;
       }else{
         sprintf(src,"[%d,%d]",player->posx,player->posy);
@@ -100,6 +107,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
     }else{
+      pthread_mutex_unlock(&game->sem);
       return -1;
     }
     break;
@@ -107,6 +115,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
       if(x<MAX_GRID_SIZE_L-1){
         setPermessi(x+1,y,giocatore,grid);
         if(grid[y][x+1].ostacolo || grid[y][x+1].giocatore){
+          pthread_mutex_unlock(&game->sem);
           return -1;
         }else{
           sprintf(src,"[%d,%d]",player->posx,player->posy);
@@ -118,6 +127,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
         }
       }else{
+        pthread_mutex_unlock(&game->sem);
         return -1;
       }
     break;
@@ -130,6 +140,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         sprintf(dest,"[%d,%d]",player->posx,player->posy);
         LogPlayerTakePackage(fdLog,gameId,player->nome,player->codicePacco,dest);
       }else{
+        pthread_mutex_unlock(&game->sem);
         return -1;
       }
     break;
@@ -145,6 +156,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
             player->codicePacco = 0;
             LogPlayerMakeAPoint(fdLog,gameId,player->nome);
           }else{
+            pthread_mutex_unlock(&game->sem);
             return -1;
           }
         }else{
@@ -156,7 +168,9 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           LogPlayerLeavePackage(fdLog,gameId,player->nome,grid[y][x].codicePacco,dest);
         }
       }else{
+        pthread_mutex_unlock(&game->sem);
         return -1;
+
       }
     break;
     case 'r': case 'R'://refresh
@@ -167,6 +181,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     break;
   }
   pthread_mutex_unlock(&game->sem);
+  return 0;
 }
 
 void setPermessi(int x, int y, int giocatore, GameGrid ** grid){

@@ -87,7 +87,9 @@ int comunicationGame(int sockfd){
   while(1){
     leggi();
     read(STDIN_FILENO, input, 1);
-    write(sockfd,input,strlen(input));
+    printf("%s\n",input );
+    write(sockfd,input,1);
+    fflush(STDIN_FILENO);
     clear();
   }
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);

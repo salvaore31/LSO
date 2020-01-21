@@ -28,7 +28,7 @@
 #define MAX_OBSTACLES_N 20
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
-#define MAX_TIME 3000
+#define MAX_TIME 1500
 
 /*
   La struttura seguente contiene i dati utili per la gestione di un giocatore all'interno di una Partita:

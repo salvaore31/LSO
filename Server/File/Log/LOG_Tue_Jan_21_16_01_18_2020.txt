@@ -1,0 +1,14 @@
+Tue Jan 21 16:01:18 2020: iniziata nuova sessione Server.
+Tue Jan 21 16:01:32 2020: a si è connesso al Server.
+Tue Jan 21 16:01:33 2020: iniziata nuova partita con ID 5165.
+Tue Jan 21 16:01:33 2020: l'utente a si è unito alla partita con ID 5165.
+Tue Jan 21 16:01:34 2020: in partita con ID 5165 a è andato da  da [11,4] a [10,4].
+Tue Jan 21 16:01:36 2020: in partita con ID 5165 a è andato da  da [10,4] a [10,5].
+Tue Jan 21 16:01:37 2020: in partita con ID 5165 a è andato da  da [10,5] a [11,5].
+Tue Jan 21 16:01:38 2020: in partita con ID 5165 a è andato da  da [11,5] a [11,6].
+Tue Jan 21 16:01:38 2020: in partita con ID 5165 a ha raccolto il pacco N 15 da posizione [11,6].
+Tue Jan 21 16:01:43 2020: in partita con ID 5165 a è andato da  da [11,6] a [11,5].
+Tue Jan 21 16:01:54 2020: in partita con ID 5165 a è andato da  da [11,5] a [10,5].
+Tue Jan 21 16:01:54 2020: finita partita con ID 5165.
+Tue Jan 21 16:09:55 2020: in partita con ID 5165 a ha lasciato il pacco N 15 in posizione [10,5].
+Tue Jan 21 16:09:56 2020: finita sessione Server.
