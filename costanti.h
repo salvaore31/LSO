@@ -6,19 +6,18 @@
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
-#define SOCKET  8001
 #define MAXIMUM_SOCKET_BACKLOG 3
-#define clear() sleep(1); printf("\033[H\033[J");
+#define clear() printf("\033[H\033[J");
 #define leggi() n_b_r=read(sockfd,msg,6);msg[n_b_r]='\0';n_b_r=atoi(msg);write(sockfd,"1",strlen("1")) ;n_b_r=read(sockfd,msg,n_b_r);msg[n_b_r]='\0';printf("%s",msg);
 
 /* Le costanti seguenti contengono valori utili alla gestione della matrice di
  * gioco.
  */
 #define RESET  "\033[0m"
-#define GREEN  "\033[92m\033[92m"
-#define RED    "\033[91m\033[91m"
-#define CYAN   "\033[96m\033[96m"
-#define YELLOW "\033[93m\033[93m"
+#define GREEN  "\033[92m"
+#define RED    "\033[91m"
+#define CYAN   "\033[96m"
+#define YELLOW "\033[93m"
 
 /* Le costanti seguenti contengono valori utili per gestire una partita.
  *
@@ -28,7 +27,7 @@
 #define MAX_OBSTACLES_N 20
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
-
+#define MAX_TIME 15
 /*
   La struttura seguente contiene i dati utili per la gestione di un giocatore all'interno di una Partita:
     -(posx, posy) rappresentano la sua posizione all'interno della griglia di gioco;
@@ -99,5 +98,9 @@ typedef struct {
   int locazioneYPacchi[MAX_PACCHI];
 } Game;
 
+typedef struct {
+  int fd;
+  pthread_mutex_t sem;
+} Log;
 
 #endif

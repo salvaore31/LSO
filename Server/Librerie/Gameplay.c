@@ -16,7 +16,7 @@ int playGame(Game * game, int idGiocatori, int gameId){
 
   int n_b_r;
   char msg[100], matrix[2000];
-  while(0/*Partita ancora in corso*/){
+  while(0){
 
   }
   return 0;
@@ -120,16 +120,16 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         /*Gesire mossa non valida*/
       }
     break;
-    case 'q': case 'Q':
+    case 'q': case 'Q'://prendi pacco
 
     break;
-    case 'e': case 'E':
+    case 'e': case 'E'://lascia pacco
     break;
-    case 'r': case 'R':
+    case 'r': case 'R'://refresh
     break;
-    case 'l': case 'L':
+    case 'l': case 'L'://leggi locazione pacco
     break;
-    case '0':
+    case '0'://esci
     break;
     default:
     break;

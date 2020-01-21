@@ -4,14 +4,14 @@
   La funzione creaSocket si occupa di creare un socket per la comunicazione
   Client Server.
 */
-int creaSocket(){
+int creaSocket(int porta){
   struct sockaddr_in server_address;
   int sock;
   if((sock=socket(AF_INET, SOCK_STREAM, 0)) < 0){
     return ERR_SOCKET_CREATION ;
   }else{
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(SOCKET);
+    server_address.sin_port = htons(porta);
     memset(&(server_address.sin_zero),'\0',8);
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
     if((bind(sock,(struct sockaddr *)&server_address,sizeof(server_address)))<0){
@@ -278,6 +278,27 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
   return 1;
 }
 
+int sendMsgNoReply(int sockfd,char toSend[]){
+
+  int n_b_r, n_b_w;
+  char msg[150];
+
+  clear();
+  sprintf(msg,"%ld",strlen(toSend));
+  n_b_w=write(sockfd,msg,strlen(msg));
+  if(n_b_w<strlen(msg)){
+      return ERR_SENDING_MESSAGE;
+  }
+  n_b_r=read(sockfd,msg,5);
+  if (n_b_r<0) {
+    return ERR_RECEIVING_MESSAGE;
+  }
+  n_b_w=write(sockfd,toSend,strlen(toSend));
+  if (n_b_w<strlen(toSend)) {
+    return ERR_SENDING_MESSAGE;
+  }
+  return n_b_w;
+}
 
 int sendMsg(int sockfd,char toSend[],char received[]){
 

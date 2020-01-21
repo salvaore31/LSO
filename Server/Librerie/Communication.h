@@ -11,3 +11,5 @@ int creaSocket();
 int GameGridToText(GameGrid **p, char msg[], int giocatore);
 
 int sendMsg(int , char [], char []);
+
+int sendMsgNoReply(int, char []);

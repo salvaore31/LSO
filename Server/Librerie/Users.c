@@ -4,58 +4,24 @@ int signInUserMenu(int sockfd, char usrn[], int *fdLog){
   int n_b_r;
   char pssw[50],msg[100];
   int err;
-
   //da aggiungere controllo su effettiva lettura
-    sprintf(msg,"%ld",strlen(INSERT_USERNAME_SIM));
-    write(sockfd,msg,strlen(msg));
-    n_b_r=read(sockfd,msg,5);
-    write(sockfd, INSERT_USERNAME_SIM, strlen(INSERT_USERNAME_SIM));
-    n_b_r = read(sockfd, usrn, 50);
-    usrn[n_b_r] ='\0';
-    sprintf(msg,"%ld",strlen(INSERT_PASSWORD_SIM));
-    write(sockfd,msg,strlen(msg));
-    n_b_r=read(sockfd,msg,5);
-    write(sockfd, INSERT_PASSWORD_SIM, strlen(INSERT_PASSWORD_SIM));
-    n_b_r = read(sockfd, pssw, 50);
-    pssw[n_b_r] = '\0';
-
+    n_b_r=sendMsg(sockfd,INSERT_USERNAME_SIM,usrn);
+    n_b_r=sendMsg(sockfd,INSERT_PASSWORD_SIM,pssw);
     while((err=registerUser(usrn, pssw)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
-        case ERR_NO_CONNECTION:
-          sprintf(msg,"%ld",strlen(NO_CONNECTION_ERR_MESSAGE));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, NO_CONNECTION_ERR_MESSAGE, strlen(NO_CONNECTION_ERR_MESSAGE));
-          n_b_r = read(sockfd, pssw, 50);
-          pssw[n_b_r] = '\0';
-          break;
         case ERR_INVALID_USERNAME:
-          sprintf(msg,"%ld",strlen(USER_ALREADY_PRESENT_SIM));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, USER_ALREADY_PRESENT_SIM, strlen(USER_ALREADY_PRESENT_SIM));
-          n_b_r = read(sockfd, usrn, 50);
-          usrn[n_b_r] ='\0';
-          sprintf(msg,"%ld",strlen(INSERT_PASSWORD_SIM));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, INSERT_PASSWORD_SIM, strlen(INSERT_PASSWORD_SIM));
-          n_b_r = read(sockfd, pssw, 50);
-          pssw[n_b_r] = '\0';
+          n_b_r=sendMsg(sockfd,USER_ALREADY_PRESENT_SIM,usrn);
+          n_b_r=sendMsg(sockfd,INSERT_PASSWORD_SIM,pssw);
           break;
         default:
           break;
       }
     }
     LogNewUser(fdLog, usrn);
-    sprintf(msg,"%ld",strlen(SUCCESS_MESSAGE_SIM));
-    write(sockfd,msg,strlen(msg));
-    n_b_r=read(sockfd,msg,5);
-    write(sockfd,SUCCESS_MESSAGE_SIM,strlen(SUCCESS_MESSAGE_SIM));
+    n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_SIM,msg);
     return 1;
   }
-
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
 int checkUsername(char* username){
   int fdUserFile, i=0, res,r=1;
@@ -135,9 +101,9 @@ int logInUser(char* user, char* passw){
         //GESTIRE il comportamentoin caso di errore lseek
         return ERR_INPUT_OUTPUT;
       }else{
-        while((n_b_r=read(fdUserFile,&c,1))>0 && (c!='\n'))
+        while((n_b_r=read(fdUserFile,&c,1))>0 && (c!=13 && c!='\n'))
           str[i++]=c;
-        str[--i]='\0';
+        str[i]='\0';
         if(strcmp(passw,str)==0){
           return 0;
         }else{
@@ -157,57 +123,20 @@ int logInUserMenu(int sockfd, char usrn[], int *fdLog){
   int err;
 
   //da aggiungere controllo su effettiva lettura
-    sprintf(msg,"%ld",strlen(INSERT_USERNAME_LIM));
-    write(sockfd,msg,strlen(msg));
-    n_b_r=read(sockfd,msg,5);
-    write(sockfd, INSERT_USERNAME_LIM, strlen(INSERT_USERNAME_LIM));
-    n_b_r = read(sockfd, usrn, 50);
-    usrn[n_b_r] ='\0';
+    n_b_r=sendMsg(sockfd,INSERT_USERNAME_LIM,usrn);
     while(checkUsername(usrn)<0){
-      sprintf(msg,"%ld",strlen(WRONG_USERNAME_LIM));
-      write(sockfd,msg,strlen(msg));
-      n_b_r=read(sockfd,msg,5);
-      write(sockfd, WRONG_USERNAME_LIM, strlen(WRONG_USERNAME_LIM));
-      n_b_r = read(sockfd, usrn, 50);
-      usrn[n_b_r] ='\0';
+      n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
     }
-    sprintf(msg,"%ld",strlen(INSERT_PASSWORD_LIM));
-    write(sockfd,msg,strlen(msg));
-    n_b_r=read(sockfd,msg,5);
-    write(sockfd, INSERT_PASSWORD_LIM, strlen(INSERT_PASSWORD_LIM));
-    n_b_r = read(sockfd, pssw, 50);
-    pssw[n_b_r] = '\0';
-
+    n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
     while((err=logInUser(usrn, pssw)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
         case ERR_WRONG_PASSWORD:
-          sprintf(msg,"%ld",strlen(WRONG_PASSWORD_LIM));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, WRONG_PASSWORD_LIM, strlen(WRONG_PASSWORD_LIM));
-          n_b_r = read(sockfd, pssw, 50);
-          pssw[n_b_r] = '\0';
+          n_b_r=sendMsg(sockfd,WRONG_PASSWORD_LIM,pssw);
           break;
         case ERR_USERNAME_NOT_FOUND:
-          sprintf(msg,"%ld",strlen(WRONG_USERNAME_LIM));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, WRONG_USERNAME_LIM, strlen(WRONG_USERNAME_LIM));
-          n_b_r = read(sockfd, usrn, 50);
-          usrn[n_b_r] ='\0';
-          sprintf(msg,"%ld",strlen(INSERT_PASSWORD_LIM));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, INSERT_PASSWORD_LIM, strlen(INSERT_PASSWORD_LIM));
-          n_b_r = read(sockfd, pssw, 50);
-          pssw[n_b_r] = '\0';
-          break;
-        case ERR_NO_CONNECTION:
-          sprintf(msg,"%ld",strlen(NO_CONNECTION_ERR_MESSAGE));
-          write(sockfd,msg,strlen(msg));
-          n_b_r=read(sockfd,msg,5);
-          write(sockfd, NO_CONNECTION_ERR_MESSAGE, strlen(NO_CONNECTION_ERR_MESSAGE));
+          n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
+          n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
           break;
         case ERR_INPUT_OUTPUT:
           break;
@@ -216,9 +145,6 @@ int logInUserMenu(int sockfd, char usrn[], int *fdLog){
       }
     }
     LogUserSignIn(fdLog, usrn);
-    sprintf(msg,"%ld",strlen(SUCCESS_MESSAGE_LIM));
-    write(sockfd,msg,strlen(msg));
-    n_b_r=read(sockfd,msg,5);
-    write(sockfd,SUCCESS_MESSAGE_LIM,strlen(SUCCESS_MESSAGE_LIM));
+    n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_LIM,msg);
     return 1;
 }

@@ -27,6 +27,8 @@ void deleteGrid(GameGrid **g);
 
 void handleSignal(int Sig);
 
-void * gestisci(void *arg);
+void * run(void *arg);
+
+void * timer(void *arg);
 
 void initializeNewGameProcess(int sockfd, char user[]);

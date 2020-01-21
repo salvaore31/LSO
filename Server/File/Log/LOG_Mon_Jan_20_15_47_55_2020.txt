@@ -1,5 +1,0 @@
-Mon Jan 20 15:47:55 2020: iniziata nuova sessione Server.
-Mon Jan 20 15:48:07 2020: salvaore si è connesso al Server.
-Mon Jan 20 15:48:09 2020: iniziata nuova partita con ID 2686.
-Mon Jan 20 15:48:09 2020: l'utente salvaore si è unito alla partita con ID 2686.
-Mon Jan 20 15:48:21 2020: finita sessione Server.
