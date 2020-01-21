@@ -46,10 +46,9 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
   int x=player->posx,y=player->posy;
   int destx;
   int desty;
-  printf("%c X=%d Y=%d \n",action,x,y );
   switch (action) {
     case 'w': case 'W':
-    if(y>=0){
+    if(y>0){
       setPermessi(x,y-1,giocatore,grid);
       if(grid[y-1][x].ostacolo || grid[y-1][x].giocatore){
         printf("ostacolo o giocatore\n" );
@@ -69,7 +68,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     }
     break;
     case 'a': case 'A':
-      if(x>=0){
+      if(x>0){
         setPermessi(x-1,y,giocatore,grid);
         if(grid[y][x-1].ostacolo || grid[y][x-1].giocatore){
           printf("ostacolo o giocatore\n" );
@@ -89,7 +88,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
       }
     break;
     case 's': case 'S':
-    if(y<MAX_GRID_SIZE_H){
+    if(y<MAX_GRID_SIZE_H-1){
       setPermessi(x,y+1,giocatore,grid);
       if(grid[y+1][x].ostacolo || grid[y+1][x].giocatore){
         printf("ostacolo o giocatore\n" );
@@ -104,12 +103,12 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
     }else{
-      printf("stai fuori\n" );
+      printf("stai fuori\n");
       /*Gesire mossa non valida*/
     }
     break;
     case 'd': case 'D':
-      if(x<MAX_GRID_SIZE_L){
+      if(x<MAX_GRID_SIZE_L-1){
         setPermessi(x+1,y,giocatore,grid);
         if(grid[y][x+1].ostacolo || grid[y][x+1].giocatore){
           printf("ostacolo o giocatore\n" );
@@ -164,6 +163,10 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     case 'r': case 'R'://refresh
     break;
     case 'l': case 'L'://leggi locazione pacco
+      if(player->pacco){
+        destx=game->locazioneXPacchi[player->codicePacco];
+        desty=game->locazioneYPacchi[player->codicePacco];
+      }
     break;
     case '0'://esci
     break;
