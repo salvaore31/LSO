@@ -101,9 +101,7 @@ void initializeNewGameProcess(int sockfd, char user[]){
       pthread_mutex_lock(&serverLog.sem);
       LogPlayerJoin(&serverLog.fd, g->gameId, user);
       pthread_mutex_unlock(&serverLog.sem);
-      GameGridToText(g->grid,matrix,1);
       pthread_mutex_unlock(&g->sem);
-      sendMsgNoReply(sockfd,matrix);
       pthread_t tid;
       int* thread_sd;
       thread_sd = (int*) malloc(sizeof(int));
@@ -114,8 +112,7 @@ void initializeNewGameProcess(int sockfd, char user[]){
           LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
           pthread_mutex_unlock(&serverLog.sem);
       }
-      n_b_r= sendMsg(sockfd, matrix,msg);
-      playGame(g,0,g->gameId);
+      playGame(g,0,g->gameId,sockfd,&serverLog);
     }else{
       /*Gestione errore*/
     }

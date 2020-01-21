@@ -76,7 +76,7 @@ int comunication(int sockfd){
 int comunicationGame(int sockfd){
   int n_b_r;
   clear();
-  char msg[1000],input[50];
+  char msg[4000],input[50];
   while(1){
     leggi();
     scanf("%s",input);

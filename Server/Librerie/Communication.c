@@ -48,17 +48,17 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
     strcat(msg,mom);
     for(j=0;j<MAX_GRID_SIZE_L;j++){
       switch(giocatore){
-        case 1:
+        case 0:
         if(p[i][j].p0==0)
           strcat(msg,"?   ");
           else{
             if (p[i][j].ostacolo) {
-              strcat(msg,"\033[91m\033[91mX   \033[0m");
+              strcat(msg,"\033[91mX   \033[0m");
             }
             else{
               if (p[i][j].giocatore) {
-                if (p[i][j].codiceGiocatore==giocatore-1) {
-                  strcat(msg,"\033[92m\033[92mME  \033[0m");
+                if (p[i][j].codiceGiocatore==giocatore) {
+                  strcat(msg,"\033[92mME  \033[0m");
                 }else{
                   strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
                 }
@@ -76,7 +76,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
             }
           }
         break;
-        case 2:
+        case 1:
         if(p[i][j].p1==0)
         strcat(msg,"?   ");
         else{
@@ -85,7 +85,35 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
           }
           else{
             if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
+              if (p[i][j].codiceGiocatore==giocatore) {
+                strcat(msg,"\033[92m\033[92mME  \033[0m");
+              }else{
+                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+              }
+            }else{
+              if (p[i][j].pacco) {
+                strcat(msg,"\033[93m\033[93mP   \033[0m");
+              } else {
+                if(p[i][j].locazione){
+                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                }else{
+                  strcat(msg,"[]  ");
+                }
+              }
+            }
+          }
+        }
+        break;
+        case 2:
+        if(p[i][j].p2==0)
+          strcat(msg,"?   ");
+        else{
+          if (p[i][j].ostacolo) {
+            strcat(msg,"\033[91m\033[91mX   \033[0m");
+          }
+          else{
+            if (p[i][j].giocatore) {
+              if (p[i][j].codiceGiocatore==giocatore) {
                 strcat(msg,"\033[92m\033[92mME  \033[0m");
               }else{
                 strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
@@ -105,7 +133,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
         }
         break;
         case 3:
-        if(p[i][j].p2==0)
+        if(p[i][j].p3==0)
           strcat(msg,"?   ");
         else{
           if (p[i][j].ostacolo) {
@@ -113,7 +141,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
           }
           else{
             if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
+              if (p[i][j].codiceGiocatore==giocatore) {
                 strcat(msg,"\033[92m\033[92mME  \033[0m");
               }else{
                 strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
@@ -133,7 +161,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
         }
         break;
         case 4:
-        if(p[i][j].p3==0)
+        if(p[i][j].p4==0)
           strcat(msg,"?   ");
         else{
           if (p[i][j].ostacolo) {
@@ -141,7 +169,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
           }
           else{
             if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
+              if (p[i][j].codiceGiocatore==giocatore) {
                 strcat(msg,"\033[92m\033[92mME  \033[0m");
               }else{
                 strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
@@ -161,7 +189,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
         }
         break;
         case 5:
-        if(p[i][j].p4==0)
+        if(p[i][j].p5==0)
           strcat(msg,"?   ");
         else{
           if (p[i][j].ostacolo) {
@@ -169,7 +197,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
           }
           else{
             if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
+              if (p[i][j].codiceGiocatore==giocatore) {
                 strcat(msg,"\033[92m\033[92mME  \033[0m");
               }else{
                 strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
@@ -189,7 +217,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
         }
         break;
         case 6:
-        if(p[i][j].p5==0)
+        if(p[i][j].p6==0)
           strcat(msg,"?   ");
         else{
           if (p[i][j].ostacolo) {
@@ -197,7 +225,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
           }
           else{
             if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
+              if (p[i][j].codiceGiocatore==giocatore) {
                 strcat(msg,"\033[92m\033[92mME  \033[0m");
               }else{
                 strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
@@ -217,34 +245,6 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
         }
         break;
         case 7:
-        if(p[i][j].p6==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
-          else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
-                if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
-                }else{
-                  strcat(msg,"[]  ");
-                }
-              }
-            }
-          }
-        }
-        break;
-        case 8:
         if(p[i][j].p7==0)
           strcat(msg,"?   ");
         else{
@@ -253,7 +253,7 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
           }
           else{
             if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore-1) {
+              if (p[i][j].codiceGiocatore==giocatore) {
                 strcat(msg,"\033[92m\033[92mME  \033[0m");
               }else{
                 strcat(msg,"\033[92m\x1b[35mEN  \033[0m");

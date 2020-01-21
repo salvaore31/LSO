@@ -1,0 +1,69 @@
+Tue Jan 21 12:05:15 2020: iniziata nuova sessione Server.
+Tue Jan 21 12:05:20 2020: a si è connesso al Server.
+Tue Jan 21 12:05:22 2020: iniziata nuova partita con ID 3772.
+Tue Jan 21 12:05:22 2020: l'utente a si è unito alla partita con ID 3772.
+Tue Jan 21 12:05:26 2020: in partita con ID 3772 a è andato da  da [5,5] a [6,5].
+Tue Jan 21 12:05:30 2020: in partita con ID 3772 a è andato da  da [6,5] a [7,5].
+Tue Jan 21 12:05:34 2020: in partita con ID 3772 a è andato da  da [7,5] a [6,5].
+Tue Jan 21 12:05:35 2020: in partita con ID 3772 a è andato da  da [6,5] a [6,6].
+Tue Jan 21 12:05:36 2020: in partita con ID 3772 a è andato da  da [6,6] a [7,6].
+Tue Jan 21 12:05:50 2020: a si è connesso al Server.
+Tue Jan 21 12:05:51 2020: iniziata nuova partita con ID 3776.
+Tue Jan 21 12:05:51 2020: l'utente a si è unito alla partita con ID 3776.
+Tue Jan 21 12:05:53 2020: in partita con ID 3776 a è andato da  da [2,1] a [2,2].
+Tue Jan 21 12:05:54 2020: in partita con ID 3776 a è andato da  da [2,2] a [3,2].
+Tue Jan 21 12:05:54 2020: in partita con ID 3776 a è andato da  da [3,2] a [3,1].
+Tue Jan 21 12:05:55 2020: in partita con ID 3776 a è andato da  da [3,1] a [3,0].
+Tue Jan 21 12:05:55 2020: in partita con ID 3776 a è andato da  da [3,0] a [4,0].
+Tue Jan 21 12:05:56 2020: in partita con ID 3776 a è andato da  da [4,0] a [5,0].
+Tue Jan 21 12:05:56 2020: in partita con ID 3776 a è andato da  da [5,0] a [5,1].
+Tue Jan 21 12:05:57 2020: in partita con ID 3776 a è andato da  da [5,1] a [6,1].
+Tue Jan 21 12:05:58 2020: in partita con ID 3776 a è andato da  da [6,1] a [7,1].
+Tue Jan 21 12:05:59 2020: in partita con ID 3776 a è andato da  da [7,1] a [8,1].
+Tue Jan 21 12:06:00 2020: in partita con ID 3776 a è andato da  da [8,1] a [8,0].
+Tue Jan 21 12:06:01 2020: in partita con ID 3776 a è andato da  da [8,0] a [9,0].
+Tue Jan 21 12:06:01 2020: in partita con ID 3776 a è andato da  da [9,0] a [10,0].
+Tue Jan 21 12:06:02 2020: in partita con ID 3776 a è andato da  da [10,0] a [10,1].
+Tue Jan 21 12:06:02 2020: in partita con ID 3776 a è andato da  da [10,1] a [11,1].
+Tue Jan 21 12:06:04 2020: in partita con ID 3776 a è andato da  da [11,1] a [12,1].
+Tue Jan 21 12:06:04 2020: in partita con ID 3776 a è andato da  da [12,1] a [12,2].
+Tue Jan 21 12:06:06 2020: in partita con ID 3776 a è andato da  da [12,2] a [13,2].
+Tue Jan 21 12:06:06 2020: in partita con ID 3776 a è andato da  da [13,2] a [13,3].
+Tue Jan 21 12:06:07 2020: in partita con ID 3776 a è andato da  da [13,3] a [13,4].
+Tue Jan 21 12:06:07 2020: finita partita con ID 3776.
+Tue Jan 21 12:06:19 2020: a si è connesso al Server.
+Tue Jan 21 12:06:19 2020: iniziata nuova partita con ID 3787.
+Tue Jan 21 12:06:19 2020: l'utente a si è unito alla partita con ID 3787.
+Tue Jan 21 12:06:23 2020: in partita con ID 3787 a è andato da  da [8,4] a [7,4].
+Tue Jan 21 12:06:23 2020: in partita con ID 3787 a è andato da  da [7,4] a [6,4].
+Tue Jan 21 12:06:24 2020: in partita con ID 3787 a è andato da  da [6,4] a [5,4].
+Tue Jan 21 12:06:25 2020: in partita con ID 3787 a è andato da  da [5,4] a [4,4].
+Tue Jan 21 12:06:25 2020: in partita con ID 3787 a è andato da  da [4,4] a [3,4].
+Tue Jan 21 12:06:26 2020: in partita con ID 3787 a è andato da  da [3,4] a [2,4].
+Tue Jan 21 12:06:26 2020: in partita con ID 3787 a è andato da  da [2,4] a [1,4].
+Tue Jan 21 12:06:27 2020: in partita con ID 3787 a è andato da  da [1,4] a [0,4].
+Tue Jan 21 12:06:28 2020: in partita con ID 3787 a è andato da  da [0,4] a [0,5].
+Tue Jan 21 12:06:29 2020: in partita con ID 3787 a è andato da  da [0,5] a [0,6].
+Tue Jan 21 12:06:30 2020: in partita con ID 3787 a è andato da  da [0,6] a [0,7].
+Tue Jan 21 12:06:32 2020: in partita con ID 3787 a è andato da  da [0,7] a [1,7].
+Tue Jan 21 12:06:33 2020: in partita con ID 3787 a è andato da  da [1,7] a [1,8].
+Tue Jan 21 12:06:34 2020: in partita con ID 3787 a è andato da  da [1,8] a [2,8].
+Tue Jan 21 12:06:35 2020: in partita con ID 3787 a è andato da  da [2,8] a [3,8].
+Tue Jan 21 12:06:35 2020: finita partita con ID 3787.
+Tue Jan 21 12:06:42 2020: a si è connesso al Server.
+Tue Jan 21 12:06:50 2020Tue Jan 21 12:06:50 2020: l'utente a si è unito alla partita con ID 3791.
+: iniziata nuova partita con ID 3791.
+Tue Jan 21 12:06:52 2020: in partita con ID 3791 a è andato da  da [7,4] a [7,5].
+Tue Jan 21 12:06:53 2020: in partita con ID 3791 a è andato da  da [7,5] a [7,4].
+Tue Jan 21 12:06:54 2020: in partita con ID 3791 a è andato da  da [7,4] a [7,3].
+Tue Jan 21 12:06:54 2020: in partita con ID 3791 a è andato da  da [7,3] a [8,3].
+Tue Jan 21 12:06:55 2020: in partita con ID 3791 a è andato da  da [8,3] a [8,4].
+Tue Jan 21 12:06:57 2020: in partita con ID 3791 a è andato da  da [8,4] a [9,4].
+Tue Jan 21 12:06:57 2020: in partita con ID 3791 a è andato da  da [9,4] a [9,5].
+Tue Jan 21 12:06:58 2020: in partita con ID 3791 a è andato da  da [9,5] a [10,5].
+Tue Jan 21 12:06:59 2020: in partita con ID 3791 a è andato da  da [10,5] a [10,4].
+Tue Jan 21 12:07:00 2020: in partita con ID 3791 a è andato da  da [10,4] a [10,3].
+Tue Jan 21 12:07:00 2020: in partita con ID 3791 a è andato da  da [10,3] a [10,2].
+Tue Jan 21 12:07:06 2020: in partita con ID 3791 a è andato da  da [10,2] a [11,2].
+Tue Jan 21 12:07:06 2020: finita partita con ID 3791.
+Tue Jan 21 12:09:39 2020: finita sessione Server.

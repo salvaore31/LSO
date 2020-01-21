@@ -1,0 +1,12 @@
+Tue Jan 21 11:55:58 2020: iniziata nuova sessione Server.
+Tue Jan 21 11:56:04 2020: a si è connesso al Server.
+Tue Jan 21 11:56:05 2020: iniziata nuova partita con ID 3707.
+Tue Jan 21 11:56:05 2020: l'utente a si è unito alla partita con ID 3707.
+Tue Jan 21 11:56:17 2020: in partita con ID 3707  è andato da  da [-1,0] a [0,0].
+Tue Jan 21 11:56:18 2020: in partita con ID 3707  è andato da  da [0,0] a [1,0].
+Tue Jan 21 11:56:19 2020: in partita con ID 3707  è andato da  da [1,0] a [2,0].
+Tue Jan 21 11:56:19 2020: in partita con ID 3707  è andato da  da [2,0] a [3,0].
+Tue Jan 21 11:56:20 2020: in partita con ID 3707  è andato da  da [3,0] a [4,0].
+Tue Jan 21 11:56:20 2020: in partita con ID 3707  è andato da  da [4,0] a [5,0].
+Tue Jan 21 11:56:20 2020: finita partita con ID 3707.
+Tue Jan 21 11:57:02 2020: finita sessione Server.

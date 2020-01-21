@@ -12,11 +12,18 @@ Game *createGame(){
 }
 
 
-int playGame(Game * game, int idGiocatori, int gameId){
+int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *serverLog){
 
   int n_b_r;
-  char msg[100], matrix[2000];
-  while(0){
+  char msg[100], matrix[4000];
+  while(1){
+    pthread_mutex_lock(&game->sem);
+    GameGridToText(game->grid,matrix,idGiocatore);
+    pthread_mutex_unlock(&game->sem);
+    sendMsg(sockfd,matrix,msg);
+    pthread_mutex_lock(&serverLog->sem);
+    azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
+    pthread_mutex_unlock(&serverLog->sem);
 
   }
   return 0;
@@ -39,9 +46,10 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
   int x=player->posx,y=player->posy;
   int destx;
   int desty;
+  printf("%c X=%d Y=%d \n",action,x,y );
   switch (action) {
     case 'w': case 'W':
-    if(y>0){
+    if(y>=0){
       setPermessi(x,y-1,giocatore,grid);
       if(grid[y-1][x].ostacolo || grid[y-1][x].giocatore){
         printf("ostacolo o giocatore\n" );
@@ -61,7 +69,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     }
     break;
     case 'a': case 'A':
-      if(x>0){
+      if(x>=0){
         setPermessi(x-1,y,giocatore,grid);
         if(grid[y][x-1].ostacolo || grid[y][x-1].giocatore){
           printf("ostacolo o giocatore\n" );

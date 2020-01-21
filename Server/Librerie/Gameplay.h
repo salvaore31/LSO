@@ -1,7 +1,7 @@
 #include "../../codici_errori.h"
 #include "../../messaggi.h"
 #include "../../costanti.h"
-
+#include "Communication.h"
 /*
   La funzione modifica la griglia di gioco in accordo con le mosse del giocatore.
     Il parametro di tipo Game game è un puntatore alla partita specifica;
@@ -25,6 +25,6 @@ int createGameGrid(Game *g);
 
 Game * createGame();
 
-int playGame(Game * game, int idGiocatori, int gameId);
+int playGame(Game * game, int idGiocatori, int gameId,int sockfd, LogFile* serverLog);
 
 void spawnNewPlayer(Game * g, char* username);

@@ -1,0 +1,8 @@
+Tue Jan 21 11:54:51 2020: iniziata nuova sessione Server.
+Tue Jan 21 11:54:56 2020: salvaore si è connesso al Server.
+Tue Jan 21 11:54:57 2020: iniziata nuova partita con ID 3695.
+Tue Jan 21 11:54:57 2020: l'utente salvaore si è unito alla partita con ID 3695.
+Tue Jan 21 11:55:43 2020: in partita con ID 3695  è andato da  da [-1,0] a [0,0].
+Tue Jan 21 11:55:43 2020: finita partita con ID 3695.
+Tue Jan 21 11:55:51 2020: in partita con ID 3695  è andato da  da [0,0] a [0,1].
+Tue Jan 21 11:55:55 2020: finita sessione Server.
