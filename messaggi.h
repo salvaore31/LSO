@@ -87,7 +87,7 @@
 #define LOG_ERROR                           ": ERRORE( "
 #define LOG_UNKNOWN_CLIENT_DISCONNECTION    ": un Client non identificato si è disconesso dal Server.\n"
 
-#define IN_GAME_MENU "\033[30;47mW,A,S,D per muoverti Q per raccogliere          E per consegnare\nR per refresh       L per indirizzo di consegna      0 per uscire\033[0m"
+#define IN_GAME_MENU "\033[30;47mW,A,S,D per muoverti  Q per raccogliere                E per consegnare\nR per refresh         L per indirizzo di consegna      0 per uscire    \033[0m\n"
 
 
 #endif
