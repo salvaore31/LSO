@@ -8,7 +8,7 @@
 
 int creaSocket();
 
-int GameGridToText(GameGrid **p, char msg[], int giocatore);
+int GameGridToText(GameGrid **p, char msg[], int giocatore, player*);
 
 int sendMsg(int , char [], char []);
 

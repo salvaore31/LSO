@@ -21,7 +21,7 @@ int creaSocket(int porta){
   return sock;
 }
 
-int GameGridToText(GameGrid **p, char msg[], int giocatore){
+int GameGridToText(GameGrid **p, char msg[], int giocatore, player * gamer){
 
   int i,j;
   char mom[150];
@@ -64,10 +64,14 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 }
               }else{
                 if (p[i][j].pacco) {
-                  strcat(msg,"\033[93m\033[93mP   \033[0m");
+                  strcat(msg,"\033[93mP   \033[0m");
                 } else {
                   if(p[i][j].locazione){
-                    strcat(msg,"\033[96m\033[96mL   \033[0m");
+                    if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                      strcat(msg,"\033[92mL   \033[0m");
+                    }else{
+                      strcat(msg,"\033[96mL   \033[0m");
+                    }
                   }else{
                     strcat(msg,"[]  ");
                   }
@@ -95,7 +99,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }
@@ -123,7 +131,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }
@@ -151,7 +163,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }
@@ -179,7 +195,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }
@@ -207,7 +227,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }
@@ -235,7 +259,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }
@@ -263,7 +291,11 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore){
                 strcat(msg,"\033[93m\033[93mP   \033[0m");
               } else {
                 if(p[i][j].locazione){
-                  strcat(msg,"\033[96m\033[96mL   \033[0m");
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                    strcat(msg,"\033[92mL   \033[0m");
+                  }else{
+                    strcat(msg,"\033[96mL   \033[0m");
+                  }
                 }else{
                   strcat(msg,"[]  ");
                 }

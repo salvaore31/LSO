@@ -178,6 +178,62 @@ void LogPlayerMoves(int* fdLog, int gameId, char* player, char* src, char *dst )
   return;
 }
 
+void LogPlayerTakePackage(int* fdLog,int gameId,char player[], int pacco, char loc[]){
+
+  char ora[26];
+  int n_b_w;
+  char buf[100];
+
+  oraEsatta(ora);
+  sprintf(buf, LOG_PLAYER_TAKE, gameId,player,pacco,loc);
+
+  if( (n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora)) ) {
+      //Gesire mancata scrittura su LOG
+  }else{
+    if((n_b_w = write(*fdLog, buf ,strlen(buf))) < strlen(buf)){
+      /*Già sai*/
+    }
+  }
+  return;
+}
+
+void LogPlayerLeavePackage(int *fdLog, int gameId, char player[], int pacco, char loc[]){
+
+  char ora[26];
+  int n_b_w;
+  char buf[100];
+
+  oraEsatta(ora);
+  sprintf(buf, LOG_PLAYER_DELIVER, gameId,player,pacco,loc);
+  if( (n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora)) ) {
+      //Gesire mancata scrittura su LOG
+  }else{
+    if((n_b_w = write(*fdLog, buf ,strlen(buf))) < strlen(buf)){
+      /*Già sai*/
+    }
+  }
+  return;
+}
+
+void LogPlayerMakeAPoint(int *fdLog, int gameId, char player[]){
+
+  char ora[26];
+  int n_b_w;
+  char buf[100];
+
+  oraEsatta(ora);
+  sprintf(buf, LOG_PLAYER_MAKE_POINT, gameId,player);
+  if( (n_b_w = write(*fdLog,ora,strlen(ora)) < strlen(ora)) ) {
+      //Gesire mancata scrittura su LOG
+  }else{
+    if((n_b_w = write(*fdLog, buf ,strlen(buf))) < strlen(buf)){
+      /*Già sai*/
+    }
+  }
+  return;
+
+}
+
 void LogPlayerWin(int* fdLog, int gameId, char * player){
   char ora[26];
   int n_b_w;

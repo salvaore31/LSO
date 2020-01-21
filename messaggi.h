@@ -86,7 +86,9 @@
 #define LOG_SIGN_OUT                        " si è disconesso dal Server.\n"
 #define LOG_ERROR                           ": ERRORE( "
 #define LOG_UNKNOWN_CLIENT_DISCONNECTION    ": un Client non identificato si è disconesso dal Server.\n"
-
+#define LOG_PLAYER_TAKE                     ": in partita con ID %d %s ha raccolto il pacco N %d da posizione %s.\n"
+#define LOG_PLAYER_DELIVER                  ": in partita con ID %d %s ha lasciato il pacco N %d in posizione %s.\n"
+#define LOG_PLAYER_MAKE_POINT               ": in partita con ID %d %s ha fatto un punto.\n"
 #define IN_GAME_MENU "\033[30;47mW,A,S,D per muoverti  Q per raccogliere                E per consegnare\nR per refresh         L per indirizzo di consegna      0 per uscire    \033[0m\n"
 
 
