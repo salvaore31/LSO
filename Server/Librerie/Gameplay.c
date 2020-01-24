@@ -21,8 +21,14 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     pthread_mutex_lock(&game->sem);
     GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
     pthread_mutex_unlock(&game->sem);
-    if(result<0)
+    if(result == PLAYER_EXITS){
+      /*
+        Qua mandi segnale a cliente per chiudere e dopodiché ammazzi thread;
+        */
+    }
+    if(result<0){
       strcat(matrix,"\a");
+    }
     sendMsg(sockfd,matrix,msg);
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
@@ -42,6 +48,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
 */
 int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fdLog){
 
+  srand(time(NULL));
   pthread_mutex_lock(&game->sem);
   char src[9], dest[9];
   player *player = &game->giocatori[giocatore];
@@ -101,7 +108,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         grid[y][x].giocatore=0;
         grid[y+1][x].giocatore=1;
         grid[y+1][x].codiceGiocatore=giocatore;
-        player->posy=y+1;
+)        player->posy=y+1;
         sprintf(dest,"[%d,%d]",player->posx,player->posy);
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
@@ -163,6 +170,9 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
           grid[y][x].codicePacco = player->codicePacco;
           player->pacco = 0;
           player->codicePacco = 0;
+          for(int i = 0; i<MAX_PLAYER_N; i++){
+            setPermessi(x, y, i, grid);
+          }
           sprintf(dest,"[%d,%d]",player->posx,player->posy);
           LogPlayerLeavePackage(fdLog,gameId,player->nome,grid[y][x].codicePacco,dest);
         }
@@ -175,6 +185,38 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
     case 'r': case 'R'://refresh
     break;
     case '0'://esci
+      grid[y][x].giocatore = 0;
+      int empty = 1;
+      if(player->pacco){
+        destx = x;
+        desty = y;
+        while(grid[desty][destx].pacco || grid[desty][destx].locazione || grid[desty][destx].giocatore || grid[desty][destx].ostacolo ){
+          destx = rand()%MAX_GRID_SIZE_L;
+          desty = rand()%MAX_GRID_SIZE_L;
+        }
+        grid[desty][destx].pacco=1;
+        grid[desty][destx].codicePacco = player->codicePacco;
+        for(int i = 0; i<MAX_PLAYER_N; i++){
+          setPermessi(destx, desty, i, grid);
+        }
+        player->pacco = 0;
+        player->codicePacco = 0;
+      }
+      game->giocatori[giocatore] = NULL;
+      game->punteggio[giocatore] = 0;
+      if(game->piena){
+        game->piena = 0;
+      }
+      for(int i = 0; i<MAX_PLAYER_N; i++ ){
+        if(giocatori[i]!= NULL){
+          empty = 0;
+        }
+      }
+      if(empty){
+        //distruggi;
+      }
+      pthread_mutex_unlock(&game->sem);
+      return PLAYER_EXITS;
     break;
     default:
     break;

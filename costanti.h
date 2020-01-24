@@ -29,6 +29,7 @@
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
 #define MAX_TIME 1500
+#define PLAYER_EXITS 1000
 
 /*
   La struttura seguente contiene i dati utili per la gestione di un giocatore all'interno di una Partita:
