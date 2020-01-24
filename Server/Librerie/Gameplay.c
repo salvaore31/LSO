@@ -24,7 +24,6 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     if(result<0)
       strcat(matrix,"\a");
     sendMsg(sockfd,matrix,msg);
-    printf("%s\n",msg );
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
     pthread_mutex_unlock(&serverLog->sem);
@@ -211,7 +210,6 @@ void setPermessi(int x, int y, int giocatore, GameGrid ** grid){
       grid[y][x].p7 = 1;
       break;
     default:
-      printf("this should not be reachable.\n");
       break;
   }
   return;
@@ -236,7 +234,7 @@ int createGameGrid(Game *g){
       do {
         y=rand()%MAX_GRID_SIZE_H;
         x=rand()%MAX_GRID_SIZE_L;
-      } while(p[y][x].giocatore);
+      } while(p[y][x].giocatore || p[y][x].pacco);
       p[y][x].pacco=1;
       p[y][x].p0=1;
       p[y][x].p1=1;
@@ -252,7 +250,7 @@ int createGameGrid(Game *g){
       do {
         y=rand()%MAX_GRID_SIZE_H;
         x=rand()%MAX_GRID_SIZE_L;
-      } while(p[y][x].giocatore || p[y][x].pacco);
+      } while(p[y][x].giocatore || p[y][x].pacco || p[y][x].locazione);
       p[y][x].locazione=1;
       p[y][x].p0=1;
       p[y][x].p1=1;

@@ -1,9 +1,0 @@
-Tue Jan 21 15:56:01 2020: iniziata nuova sessione Server.
-Tue Jan 21 15:56:20 2020: a si è connesso al Server.
-Tue Jan 21 15:56:22 2020: iniziata nuova partita con ID 5093.
-Tue Jan 21 15:56:22 2020: l'utente a si è unito alla partita con ID 5093.
-Tue Jan 21 15:56:24 2020: in partita con ID 5093 a è andato da  da [13,1] a [13,2].
-Tue Jan 21 15:56:24 2020: in partita con ID 5093 a è andato da  da [13,2] a [13,3].
-Tue Jan 21 15:56:37 2020: finita partita con ID 5093.
-Tue Jan 21 15:57:37 2020: finita sessione Server.
-Tue Jan 21 15:57:37 2020: finita sessione Server.
