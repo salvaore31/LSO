@@ -17,6 +17,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   int n_b_r;
   int result=0;
   char msg[100], matrix[4000];
+  GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
   sendMsg(sockfd,matrix,msg);
   while(1){
     pthread_mutex_lock(&serverLog->sem);
