@@ -17,22 +17,23 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   int n_b_r;
   int result=0;
   char msg[100], matrix[4000];
+  sendMsg(sockfd,matrix,msg);
   while(1){
+    pthread_mutex_lock(&serverLog->sem);
+    result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
+    pthread_mutex_unlock(&serverLog->sem);
     pthread_mutex_lock(&game->sem);
     GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
+    if(result<0){
+      strcat(matrix,"\a");
+    }
     pthread_mutex_unlock(&game->sem);
     if(result == PLAYER_EXITS){
       /*
         Qua mandi segnale a cliente per chiudere e dopodiché ammazzi thread;
         */
     }
-    if(result<0){
-      strcat(matrix,"\a");
-    }
     sendMsg(sockfd,matrix,msg);
-    pthread_mutex_lock(&serverLog->sem);
-    result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
-    pthread_mutex_unlock(&serverLog->sem);
 
   }
   return 0;
@@ -356,9 +357,12 @@ void spawnNewPlayer(Game* g, char* username,int sockfd,LogFile* serverLog){
     }while(p[y][x].giocatore || p[y][x].pacco || p[y][x].locazione || p[y][x].ostacolo);
     p[y][x].giocatore = 1;
     p[y][x].codiceGiocatore = i;
+    g->giocatori[i].posx = x;
+    g->giocatori[i].posy = y;
     if(i == MAX_PLAYER_N-1){
       g->piena = 1;
     }
+
     setPermessi(x, y, i, p);
     pthread_mutex_lock(&serverLog->sem);
     LogPlayerJoin(&serverLog->fd,g->gameId,username);

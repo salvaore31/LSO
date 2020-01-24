@@ -49,260 +49,229 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore, player * gamer){
     for(j=0;j<MAX_GRID_SIZE_L;j++){
       switch(giocatore){
         case 0:
-        if(p[i][j].p0==0)
-          strcat(msg,"?   ");
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p0==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].ostacolo) {
+            if (p[i][j].ostacolo)
               strcat(msg,"\033[91mX   \033[0m");
-            }
             else{
-              if (p[i][j].giocatore) {
-                if (p[i][j].codiceGiocatore==giocatore) {
-                  strcat(msg,"\033[92mME  \033[0m");
-                }else{
-                  strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-                }
-              }else{
-                if (p[i][j].pacco) {
-                  strcat(msg,"\033[93mP   \033[0m");
-                } else {
-                  if(p[i][j].locazione){
-                    if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
-                      strcat(msg,"\033[92mL   \033[0m");
-                    }else{
-                      strcat(msg,"\033[96mL   \033[0m");
-                    }
-                  }else{
-                    strcat(msg,"[]  ");
-                  }
-                }
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
+                if(p[i][j].locazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
+                    strcat(msg,"\033[92mL   \033[0m");
+                  else
+                    strcat(msg,"\033[96mL   \033[0m");
+                }else
+                  strcat(msg,"[]  ");
               }
             }
           }
+        }
         break;
         case 1:
-        if(p[i][j].p1==0)
-        strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p1==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
         break;
         case 2:
-        if(p[i][j].p2==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p2==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
         break;
         case 3:
-        if(p[i][j].p3==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p3==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
         break;
         case 4:
-        if(p[i][j].p4==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p4==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
         break;
         case 5:
-        if(p[i][j].p5==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p5==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
         break;
         case 6:
-        if(p[i][j].p6==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p6==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
         break;
         case 7:
-        if(p[i][j].p7==0)
-          strcat(msg,"?   ");
-        else{
-          if (p[i][j].ostacolo) {
-            strcat(msg,"\033[91m\033[91mX   \033[0m");
-          }
+        if (p[i][j].giocatore) {
+          if (p[i][j].codiceGiocatore==giocatore)
+            strcat(msg,"\033[92mME  \033[0m");
+          else
+            strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
+        }else{
+          if(p[i][j].p7==0)
+            strcat(msg,"?   ");
           else{
-            if (p[i][j].giocatore) {
-              if (p[i][j].codiceGiocatore==giocatore) {
-                strcat(msg,"\033[92m\033[92mME  \033[0m");
-              }else{
-                strcat(msg,"\033[92m\x1b[35mEN  \033[0m");
-              }
-            }else{
-              if (p[i][j].pacco) {
-                strcat(msg,"\033[93m\033[93mP   \033[0m");
-              } else {
+            if (p[i][j].ostacolo)
+              strcat(msg,"\033[91mX   \033[0m");
+            else{
+              if (p[i][j].pacco)
+                strcat(msg,"\033[93mP   \033[0m");
+              else {
                 if(p[i][j].locazione){
-                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione){
+                  if(gamer->pacco && gamer->codicePacco==p[i][j].codiceLocazione)
                     strcat(msg,"\033[92mL   \033[0m");
-                  }else{
+                  else
                     strcat(msg,"\033[96mL   \033[0m");
-                  }
-                }else{
+                }else
                   strcat(msg,"[]  ");
-                }
               }
             }
           }
         }
+        break;
       }
     }
     strcat(msg,"\n\n");
@@ -352,7 +321,7 @@ int sendMsg(int sockfd,char toSend[],char received[]){
   if (n_b_w<strlen(toSend)) {
     return ERR_SENDING_MESSAGE;
   }
-  
+
   n_b_r=read(sockfd,received,50);
   if (n_b_r<0) {
     return ERR_RECEIVING_MESSAGE;
