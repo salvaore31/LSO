@@ -108,7 +108,7 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         grid[y][x].giocatore=0;
         grid[y+1][x].giocatore=1;
         grid[y+1][x].codiceGiocatore=giocatore;
-)        player->posy=y+1;
+        player->posy=y+1;
         sprintf(dest,"[%d,%d]",player->posx,player->posy);
         LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
       }
@@ -202,18 +202,18 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         player->pacco = 0;
         player->codicePacco = 0;
       }
-      game->giocatori[giocatore] = NULL;
+      game->giocatori[giocatore].posx = -1;
       game->punteggio[giocatore] = 0;
       if(game->piena){
         game->piena = 0;
       }
       for(int i = 0; i<MAX_PLAYER_N; i++ ){
-        if(giocatori[i]!= NULL){
+        if(game->giocatori[i].posx>=0){
           empty = 0;
         }
       }
       if(empty){
-        //distruggi;
+
       }
       pthread_mutex_unlock(&game->sem);
       return PLAYER_EXITS;
@@ -330,7 +330,7 @@ int createGameGrid(Game *g){
 
 }
 
-void spawnNewPlayer(Game* g, char* username){
+void spawnNewPlayer(int g, char* username){
   srand(time(NULL));
   printf("Sono in spawn new Player.\n");
   int x, y;

@@ -3,6 +3,8 @@
 
 LogFile serverLog;
 Game *g;
+int gameId=-1;
+
 int main(int argc, char* argv[]){
 
     clear();
@@ -85,10 +87,9 @@ int main(int argc, char* argv[]){
 */
 void initializeNewGameProcess(int sockfd, char user[]){
 
-  int gameId;
-  if((gameId=fork())<0){
+/*  if((gameId=fork())<0){
     /*Gestire errore nuova partita*/
-  }else if(gameId==0){
+  //}else if(gameId==0){
     char matrix[2000];
     char msg[50];
     int n_b_r;
@@ -116,11 +117,11 @@ void initializeNewGameProcess(int sockfd, char user[]){
     }else{
       /*Gestione errore*/
     }
-  }else{
+/*  }else{
     pthread_mutex_lock(&serverLog.sem);
     LogNewGame(&serverLog.fd,gameId);
     pthread_mutex_unlock(&serverLog.sem);
-  }
+  }*/
   return;
 }
 
@@ -167,8 +168,10 @@ void * run(void *arg){
     }
   }
   read(sockfd,msg,1);
-  if(g==NULL){
+  if(gameId<0){
     initializeNewGameProcess(sockfd,user);
+  }else{
+    spawnNewPlayer(gameId,user);
   }
 }
 

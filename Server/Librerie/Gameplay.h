@@ -27,4 +27,4 @@ Game * createGame();
 
 int playGame(Game * game, int idGiocatori, int gameId,int sockfd, LogFile* serverLog);
 
-void spawnNewPlayer(Game * g, char* username);
+void spawnNewPlayer(int , char* username);
