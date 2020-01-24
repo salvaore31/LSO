@@ -20,14 +20,6 @@
 #include "Librerie/Users.c"
 #include "Librerie/Communication.c"
 
-Game* joinGame(int sockfd, char user[], int fdLog);
-
-void deleteGrid(GameGrid **g);
-
 void handleSignal(int Sig);
 
 void * run(void *arg);
-
-void * timer(void *arg);
-
-void initializaNewGame(int sockfd, char user[]);

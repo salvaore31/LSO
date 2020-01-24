@@ -28,7 +28,7 @@
 #define MAX_OBSTACLES_N 20
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
-#define MAX_TIME 1500
+#define MAX_TIME 15
 #define PLAYER_EXITS 1000
 
 /*

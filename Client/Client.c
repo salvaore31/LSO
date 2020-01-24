@@ -31,6 +31,7 @@ int main(int argc, char* argv[]){
       ingame=comunicationGame(sockfd);
     }
   }
+  printf("Arrivederci.\n");
   close(sockfd);
   return 0;
 }

@@ -88,54 +88,6 @@ int main(int argc, char* argv[]){
   pthread_mutex_unlock(&serverLog.sem);
   return 1;
 }
-/*
-  La funzione initializaNewGame si occupa di creare la fork per una nuova partita.
-*/
-void initializaNewGame(int sockfd, char user[]){
-
-
-  char matrix[2000];
-  char msg[50];
-  int n_b_r;
-
-  g=createGame();
-  strcpy(g->giocatori[0].nome,user);
-  g->giocatori[0].nome[strlen(user)]='\0';
-
-  if(createGameGrid(g) == 0){
-    pthread_mutex_lock(&g->sem);
-    g->gameId = getpid();
-
-    pthread_mutex_lock(&serverLog.sem);
-    LogNewGame(&serverLog.fd,gameId);
-    pthread_mutex_unlock(&serverLog.sem);
-    pthread_mutex_lock(&serverLog.sem);
-    LogPlayerJoin(&serverLog.fd, g->gameId, user);
-    pthread_mutex_unlock(&serverLog.sem);
-
-    pthread_mutex_unlock(&g->sem);
-
-    pthread_t tid;
-    int* thread_sd;
-    thread_sd = (int*) malloc(sizeof(int));
-    thread_sd = &sockfd;
-
-    if((pthread_create(&tid, NULL, timer, (void *) thread_sd))<0){
-        printf("%s", THREAD_CREATION_ERR_MESSAGE);
-        pthread_mutex_lock(&serverLog.sem);
-        LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
-        pthread_mutex_unlock(&serverLog.sem);
-    }
-
-
-    playGame(g,0,g->gameId,sockfd,&serverLog);
-  }else{
-    /*Gestione errore*/
-  }
-
-  return;
-}
-
 
 /*
   La funzione che esegue ogni nuovo thread;
@@ -180,21 +132,10 @@ void * run(void *arg){
   }
   read(sockfd,msg,1);
   if(g==NULL){
-    initializaNewGame(sockfd,user);
+    initializaNewGame(&g,sockfd,user,&serverLog);
   }else{
-    spawnNewPlayer(g,user, sockfd, &serverLog);
+    spawnNewPlayer(&g,user, sockfd, &serverLog);
   }
-}
-
-void * timer(void *arg){
-
-  int sockfd=*((int *)arg);
-  char mom[]="\033[91mTEMPO SCADUTO\033[0m\n";
-  sleep(MAX_TIME);
-  sendMsgNoReply(sockfd,mom);
-  pthread_mutex_lock(&serverLog.sem);
-  LogEndGame(&serverLog.fd,getpid());
-  pthread_mutex_unlock(&serverLog.sem);
 }
 
 
@@ -206,16 +147,4 @@ void handleSignal(int Sig){
     //unlink(SOCKET);
     exit(1);
   }
-}
-
-void deleteGrid(GameGrid **g){
-  int i;
-  for(i=0;i<MAX_GRID_SIZE_H;i++)
-    free(g[i]);
-  free(g);
-  return;
-}
-
-Game* joinGame(int sockfd, char user[], int fdLog){
-  return NULL;
 }
