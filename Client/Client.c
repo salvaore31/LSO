@@ -8,8 +8,8 @@ int main(int argc, char* argv[]){
   int n_b_r;
   char msg[500],input[10];
   if(argc!=3){
-    perror("Passa indirizzo e porta\n");
-    exit(-1);
+    printf("Passa indirizzo e porta\n");
+    return(0);
   }
   struct sockaddr_in server_addr;
   server_addr.sin_family=AF_INET;
@@ -28,21 +28,9 @@ int main(int argc, char* argv[]){
       scanf("%s",input);
       write(sockfd,input,strlen(input));
       clear();
-
       ingame=comunicationGame(sockfd);
-      if(ingame<0){
-        write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
-      //  clear();
-        close(sockfd);
-        exit(-1);
-      }
-      scanf("%s",input);
-      write(sockfd,input,strlen(input));
-      clear();
-
     }
   }
-  write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
   close(sockfd);
   return 0;
 }
@@ -86,12 +74,15 @@ int comunicationGame(int sockfd){
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
   while(1){
     leggi();
+    if(strcmp(msg,"GETOUT")==0){
+      break;
+    }
     read(STDIN_FILENO, input, 1);
-    printf("%s\n",input );
     write(sockfd,input,1);
     fflush(STDIN_FILENO);
     clear();
   }
+  clear();
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);
   return 0;
 }

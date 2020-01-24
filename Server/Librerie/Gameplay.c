@@ -30,9 +30,8 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     }
     pthread_mutex_unlock(&game->sem);
     if(result == PLAYER_EXITS){
-      /*
-        Qua mandi segnale a cliente per chiudere e dopodiché ammazzi thread;
-        */
+      sendMsgNoReply(sockfd,"GETOUT");
+      pthread_exit((int*)1);
     }
     sendMsg(sockfd,matrix,msg);
 

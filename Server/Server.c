@@ -4,33 +4,31 @@
 LogFile serverLog;
 Game *g;
 int gameId=-1;
-
+char loggati[MAX_PLAYER_N][MAX_SIZE_USERNAME];
 int main(int argc, char* argv[]){
 
-    clear();
-    //seed per la generazione di numeri casuali;
-    srand(time(NULL));
+  clear();
+  //seed per la generazione di numeri casuali;
+  srand(time(NULL));
+  //signal handler set;
+  signal(SIGINT, handleSignal);
+  signal(SIGHUP, handleSignal);
+  signal(SIGQUIT, handleSignal);
+  signal(SIGTERM, handleSignal);
+  signal(SIGKILL, handleSignal);
+  if (argc!=2) {
+    printf("Passa il numero porta\n");
+    return -1;
+  }
+  int *thread_sd, sock, sockfd,porta =atoi(argv[1]), pid;
+  pthread_t tid;
 
-    //signal handler set;
-    signal(SIGINT, handleSignal);
-    signal(SIGHUP, handleSignal);
-    signal(SIGQUIT, handleSignal);
-    signal(SIGTERM, handleSignal);
-    signal(SIGKILL, handleSignal);
-    int *thread_sd, sock, sockfd,porta =atoi(argv[1]), pid;
-    pthread_t tid;
-
-    if (argc!=2) {
-      printf("Passa il numero porta\n");
-      return -1;
-    }
-
-    struct sockaddr_in client_addr;
-    socklen_t client_len;
-    pthread_mutex_lock(&serverLog.sem);
-    LogServerStart(&serverLog.fd);
-    pthread_mutex_unlock(&serverLog.sem);
-    if((sock = creaSocket(porta))<0){
+  struct sockaddr_in client_addr;
+  socklen_t client_len;
+  pthread_mutex_lock(&serverLog.sem);
+  LogServerStart(&serverLog.fd);
+  pthread_mutex_unlock(&serverLog.sem);
+  if((sock = creaSocket(porta))<0){
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);
         pthread_mutex_lock(&serverLog.sem);
@@ -47,26 +45,21 @@ int main(int argc, char* argv[]){
         LogErrorMessage(&serverLog.fd, NOT_SURE_ERR_MESSAGE);
         pthread_mutex_unlock(&serverLog.sem);
       }
-    }else{
-      if((listen(sock,MAXIMUM_SOCKET_BACKLOG))<0){
+  }else{
+    if((listen(sock,MAXIMUM_SOCKET_BACKLOG))<0){
         printf("%s", SOCKET_LISTEN_ERR_MESSAGE);
         pthread_mutex_lock(&serverLog.sem);
         LogErrorMessage(&serverLog.fd,SOCKET_LISTEN_ERR_MESSAGE);
         pthread_mutex_unlock(&serverLog.sem);
-      }else{
-        pid=fork();
-        if (pid<0) {
-          /* code */
-        } else if(pid>0){
-          srand(time(NULL));
-          while(1){
-            if(rand()%3000000000000000000 == 25){
-              printf("E' uscito venticinque. GIUBILIO.\n");
-            }
-          }
-        }else{
-          gameId=getpid();
-          while(1){
+    }else{
+      /*pid=fork();
+      if (pid<0) {
+        /* code */
+      /*} else if(pid>0){
+        srand(time(NULL));
+      }else{*/
+        gameId=getpid();
+        while(1){
             client_len = sizeof(client_addr);
             if((sockfd = accept(sock, NULL, NULL))<0){
               printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
@@ -86,15 +79,14 @@ int main(int argc, char* argv[]){
                 pthread_mutex_unlock(&serverLog.sem);
             }
           }
-        }
-      }
-    close(sock);
-    close(sockfd);
-    pthread_mutex_lock(&serverLog.sem);
-    LogServerClose(&serverLog.fd);
-    pthread_mutex_unlock(&serverLog.sem);
-    return 1;
+    }
   }
+  close(sock);
+  close(sockfd);
+  pthread_mutex_lock(&serverLog.sem);
+  LogServerClose(&serverLog.fd);
+  pthread_mutex_unlock(&serverLog.sem);
+  return 1;
 }
 /*
   La funzione initializaNewGame si occupa di creare la fork per una nuova partita.
