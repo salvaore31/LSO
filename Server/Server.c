@@ -19,10 +19,12 @@ int main(int argc, char* argv[]){
     signal(SIGKILL, handleSignal);
     int *thread_sd, sock, sockfd,porta =atoi(argv[1]), pid;
     pthread_t tid;
+
     if (argc!=2) {
       printf("Passa il numero porta\n");
       return -1;
     }
+
     struct sockaddr_in client_addr;
     socklen_t client_len;
     pthread_mutex_lock(&serverLog.sem);
@@ -56,7 +58,12 @@ int main(int argc, char* argv[]){
         if (pid<0) {
           /* code */
         } else if(pid>0){
-          /* code */
+          srand(time(NULL));
+          while(1){
+            if(rand()%3000000000000000000 == 25){
+              printf("E' uscito venticinque. GIUBILIO.\n");
+            }
+          }
         }else{
           gameId=getpid();
           while(1){

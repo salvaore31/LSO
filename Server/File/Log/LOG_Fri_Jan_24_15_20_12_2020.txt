@@ -1,5 +1,0 @@
-Fri Jan 24 15:20:12 2020: iniziata nuova sessione Server.
-Fri Jan 24 15:20:12 2020: finita sessione Server.
-Fri Jan 24 15:20:44 2020: a si è connesso al Server.
-Fri Jan 24 15:20:47 2020: iniziata nuova partita con ID 5275.
-Fri Jan 24 15:20:47 2020: l'utente a si è unito alla partita con ID 5275.
