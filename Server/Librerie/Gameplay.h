@@ -25,6 +25,6 @@ int createGameGrid(Game *g);
 
 Game * createGame();
 
-int playGame(Game * game, int idGiocatori, int gameId,int sockfd, LogFile* serverLog);
+int playGame(Game * game, int idGiocatore, int gameId,int sockfd, LogFile* serverLog);
 
-void spawnNewPlayer(int , char* username);
+void spawnNewPlayer(Game * , char* username, int , LogFile* );

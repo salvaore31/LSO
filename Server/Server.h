@@ -30,4 +30,4 @@ void * run(void *arg);
 
 void * timer(void *arg);
 
-void initializeNewGameProcess(int sockfd, char user[]);
+void initializaNewGame(int sockfd, char user[]);

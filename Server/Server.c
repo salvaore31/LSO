@@ -17,13 +17,12 @@ int main(int argc, char* argv[]){
     signal(SIGQUIT, handleSignal);
     signal(SIGTERM, handleSignal);
     signal(SIGKILL, handleSignal);
-    int *thread_sd, sock, sockfd;
+    int *thread_sd, sock, sockfd,porta =atoi(argv[1]), pid;
     pthread_t tid;
     if (argc!=2) {
       printf("Passa il numero porta\n");
       return -1;
     }
-    int porta =atoi(argv[1]);
     struct sockaddr_in client_addr;
     socklen_t client_len;
     pthread_mutex_lock(&serverLog.sem);
@@ -53,75 +52,88 @@ int main(int argc, char* argv[]){
         LogErrorMessage(&serverLog.fd,SOCKET_LISTEN_ERR_MESSAGE);
         pthread_mutex_unlock(&serverLog.sem);
       }else{
-        while(1){
-          client_len = sizeof(client_addr);
-          if((sockfd = accept(sock, NULL, NULL))<0){
-            printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
-            pthread_mutex_lock(&serverLog.sem);
-            LogErrorMessage(&serverLog.fd, ACCEPT_SOCKET_ERR_MESSAGE);
-            pthread_mutex_unlock(&serverLog.sem);
-            exit(-1);
-          }
-
-          int* thread_sd;
-          thread_sd = (int*) malloc(sizeof(int));
-          thread_sd = &sockfd;
-          if((pthread_create(&tid, NULL, run, (void *) thread_sd))<0){
-              printf("%s", THREAD_CREATION_ERR_MESSAGE);
+        pid=fork();
+        if (pid<0) {
+          /* code */
+        } else if(pid>0){
+          /* code */
+        }else{
+          gameId=getpid();
+          while(1){
+            client_len = sizeof(client_addr);
+            if((sockfd = accept(sock, NULL, NULL))<0){
+              printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
               pthread_mutex_lock(&serverLog.sem);
-              LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
+              LogErrorMessage(&serverLog.fd, ACCEPT_SOCKET_ERR_MESSAGE);
               pthread_mutex_unlock(&serverLog.sem);
+              exit(-1);
+            }
+
+            int* thread_sd;
+            thread_sd = (int*) malloc(sizeof(int));
+            thread_sd = &sockfd;
+            if((pthread_create(&tid, NULL, run, (void *) thread_sd))<0){
+                printf("%s", THREAD_CREATION_ERR_MESSAGE);
+                pthread_mutex_lock(&serverLog.sem);
+                LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
+                pthread_mutex_unlock(&serverLog.sem);
+            }
           }
         }
       }
-    }
     close(sock);
     close(sockfd);
     pthread_mutex_lock(&serverLog.sem);
     LogServerClose(&serverLog.fd);
     pthread_mutex_unlock(&serverLog.sem);
     return 1;
+  }
 }
 /*
-  La funzione initializeNewGameProcess si occupa di creare la fork per una nuova partita.
+  La funzione initializaNewGame si occupa di creare la fork per una nuova partita.
 */
-void initializeNewGameProcess(int sockfd, char user[]){
+void initializaNewGame(int sockfd, char user[]){
 
-/*  if((gameId=fork())<0){
-    /*Gestire errore nuova partita*/
-  //}else if(gameId==0){
-    char matrix[2000];
-    char msg[50];
-    int n_b_r;
-    g=createGame();
-    strcpy(g->giocatori[0].nome,user);
-    g->giocatori[0].nome[strlen(user)]='\0';
-    if(createGameGrid(g) == 0){
-      pthread_mutex_lock(&g->sem);
-      g->gameId = getpid();
-      pthread_mutex_lock(&serverLog.sem);
-      LogPlayerJoin(&serverLog.fd, g->gameId, user);
-      pthread_mutex_unlock(&serverLog.sem);
-      pthread_mutex_unlock(&g->sem);
-      pthread_t tid;
-      int* thread_sd;
-      thread_sd = (int*) malloc(sizeof(int));
-      thread_sd = &sockfd;
-      if((pthread_create(&tid, NULL, timer, (void *) thread_sd))<0){
-          printf("%s", THREAD_CREATION_ERR_MESSAGE);
-          pthread_mutex_lock(&serverLog.sem);
-          LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
-          pthread_mutex_unlock(&serverLog.sem);
-      }
-      playGame(g,0,g->gameId,sockfd,&serverLog);
-    }else{
-      /*Gestione errore*/
-    }
-/*  }else{
+
+  char matrix[2000];
+  char msg[50];
+  int n_b_r;
+
+  g=createGame();
+  strcpy(g->giocatori[0].nome,user);
+  g->giocatori[0].nome[strlen(user)]='\0';
+
+  if(createGameGrid(g) == 0){
+    pthread_mutex_lock(&g->sem);
+    g->gameId = getpid();
+
     pthread_mutex_lock(&serverLog.sem);
     LogNewGame(&serverLog.fd,gameId);
     pthread_mutex_unlock(&serverLog.sem);
-  }*/
+    pthread_mutex_lock(&serverLog.sem);
+    LogPlayerJoin(&serverLog.fd, g->gameId, user);
+    pthread_mutex_unlock(&serverLog.sem);
+
+    pthread_mutex_unlock(&g->sem);
+
+    pthread_t tid;
+    int* thread_sd;
+    thread_sd = (int*) malloc(sizeof(int));
+    thread_sd = &sockfd;
+
+    if((pthread_create(&tid, NULL, timer, (void *) thread_sd))<0){
+        printf("%s", THREAD_CREATION_ERR_MESSAGE);
+        pthread_mutex_lock(&serverLog.sem);
+        LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
+        pthread_mutex_unlock(&serverLog.sem);
+    }
+
+
+    playGame(g,0,g->gameId,sockfd,&serverLog);
+  }else{
+    /*Gestione errore*/
+  }
+
   return;
 }
 
@@ -168,10 +180,10 @@ void * run(void *arg){
     }
   }
   read(sockfd,msg,1);
-  if(gameId<0){
-    initializeNewGameProcess(sockfd,user);
+  if(g==NULL){
+    initializaNewGame(sockfd,user);
   }else{
-    spawnNewPlayer(gameId,user);
+    spawnNewPlayer(g,user, sockfd, &serverLog);
   }
 }
 

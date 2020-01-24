@@ -330,16 +330,17 @@ int createGameGrid(Game *g){
 
 }
 
-void spawnNewPlayer(int g, char* username){
+void spawnNewPlayer(Game* g, char* username,int sockfd,LogFile* serverLog){
+
   srand(time(NULL));
   printf("Sono in spawn new Player.\n");
-  int x, y;
-  int i = 0;
-  int done = 0;
+  int x, y, i;
   player playerToAdd;
+
   strcpy(playerToAdd.nome, username);
   playerToAdd.codicePacco = 0;
   playerToAdd.pacco = 0;
+
   pthread_mutex_lock(&g->sem);
   for(i = 0; i < MAX_PLAYER_N; i++){
     if(g->giocatori[i].posx==-1){
@@ -347,20 +348,23 @@ void spawnNewPlayer(int g, char* username){
       break;
     }
   }
-  GameGrid** p = g->grid;
-  while(!done){
-    y=rand()%MAX_GRID_SIZE_H;
-    x=rand()%MAX_GRID_SIZE_L;
-    if(!(p[y][x].giocatore && p[y][x].pacco && p[y][x].locazione && p[y][x].ostacolo)){
-      p[y][x].giocatore = 1;
-      p[y][x].codiceGiocatore = i;
-      if(i == MAX_PLAYER_N-1){
-        g->piena = 1;
-      }
-      setPermessi(x, y, i, p);
-      done = 1;
+  if (i<MAX_PLAYER_N) {
+    GameGrid** p = g->grid;
+    do{
+      y=rand()%MAX_GRID_SIZE_H;
+      x=rand()%MAX_GRID_SIZE_L;
+    }while(p[y][x].giocatore || p[y][x].pacco || p[y][x].locazione || p[y][x].ostacolo);
+    p[y][x].giocatore = 1;
+    p[y][x].codiceGiocatore = i;
+    if(i == MAX_PLAYER_N-1){
+      g->piena = 1;
     }
+    setPermessi(x, y, i, p);
+    pthread_mutex_lock(&serverLog->sem);
+    LogPlayerJoin(&serverLog->fd,g->gameId,username);
+    pthread_mutex_unlock(&serverLog->sem);
+    pthread_mutex_unlock(&g->sem);
+    playGame(g,i,g->gameId,sockfd,serverLog);
   }
-  pthread_mutex_unlock(&g->sem);
   return;
 }
