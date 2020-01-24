@@ -1,0 +1,16 @@
+Fri Jan 24 15:32:29 2020: iniziata nuova sessione Server.
+Fri Jan 24 15:32:29 2020: finita sessione Server.
+Fri Jan 24 15:32:39 2020: a si è connesso al Server.
+Fri Jan 24 15:32:41 2020: iniziata nuova partita con ID 5651.
+Fri Jan 24 15:32:41 2020: l'utente a si è unito alla partita con ID 5651.
+Fri Jan 24 15:32:45 2020: in partita con ID 5651 a è andato  da [7,1] a [8,1].
+Fri Jan 24 15:32:45 2020: in partita con ID 5651 a è andato  da [8,1] a [9,1].
+Fri Jan 24 15:32:46 2020: in partita con ID 5651 a è andato  da [9,1] a [10,1].
+Fri Jan 24 15:32:46 2020: in partita con ID 5651 a è andato  da [10,1] a [11,1].
+Fri Jan 24 15:32:47 2020: in partita con ID 5651 a è andato  da [11,1] a [12,1].
+Fri Jan 24 15:32:50 2020: in partita con ID 5651 a è andato  da [12,1] a [12,2].
+Fri Jan 24 15:32:52 2020: in partita con ID 5651 a è andato  da [12,2] a [12,1].
+Fri Jan 24 15:32:55 2020: in partita con ID 5651 a è andato  da [12,1] a [12,2].
+Fri Jan 24 15:32:56 2020: in partita con ID 5651 a è andato  da [12,2] a [13,2].
+Fri Jan 24 15:32:58 2020: in partita con ID 5651 a è andato  da [13,2] a [13,3].
+Fri Jan 24 15:33:35 2020: in partita con ID 5651 a è andato  da [13,3] a [13,2].
