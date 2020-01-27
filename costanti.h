@@ -6,7 +6,7 @@
 #define MAX_SIZE_USERNAME 15
 #define MAX_SIZE_PASSW 12
 #define USERS_FILE "File/RegisteredUser.txt"
-#define MAXIMUM_SOCKET_BACKLOG 3
+#define MAXIMUM_SOCKET_BACKLOG 10
 #define clear() printf("\033[H\033[J");
 #define leggi() n_b_r=read(sockfd,msg,6);msg[n_b_r]='\0';n_b_r=atoi(msg);write(sockfd,"1",strlen("1")) ;n_b_r=read(sockfd,msg,n_b_r);msg[n_b_r]='\0';printf("%s",msg);
 

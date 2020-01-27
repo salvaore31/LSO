@@ -333,7 +333,6 @@ void LogUserSignOut(int* fdLog, char* player){
 
 }
 
-
 void LogErrorMessage(int* fdLog, char* err){
   char ora[26];
   int n_b_w;
