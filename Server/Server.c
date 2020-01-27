@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
   signal(SIGHUP, handleSignal);
   signal(SIGQUIT, handleSignal);
   signal(SIGTERM, handleSignal);
-  signal(SIGKILL, handleSignal);
+  signal(SIGALRM, handleSignal);
   if (argc!=2) {
     printf("Passa il numero porta\n");
     return -1;
@@ -138,13 +138,18 @@ void * run(void *arg){
   }
 }
 
-
 void handleSignal(int Sig){
-  if(Sig == SIGINT){
-    pthread_mutex_lock(&serverLog.sem);
-    LogServerClose(&serverLog.fd);
-    pthread_mutex_unlock(&serverLog.sem);
-    //unlink(SOCKET);
-    exit(1);
+  switch (Sig) {
+    case SIGINT:
+      pthread_mutex_lock(&serverLog.sem);
+      LogServerClose(&serverLog.fd);
+      pthread_mutex_unlock(&serverLog.sem);
+      exit(1);
+    break;
+    case SIGALRM:
+      pthread_mutex_lock(&g->sem);
+      g->timeOver = 1;
+      pthread_mutex_unlock(&g->sem);
+    break;
   }
 }

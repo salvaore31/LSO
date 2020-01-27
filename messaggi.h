@@ -34,11 +34,10 @@
 /*
  * Messaggi relativi al gioco.
  */
-#define VICTORY_MESSAGE       "To the victor the spoils!\n"
-#define OBSTACLE_MESSAGE      "You choose poorly.\n"
+#define VICTORY_MESSAGE       "\033[34;47m\t\t\tComplimenti hai vinto!\t\t\t\033[0m\n"
+#define LOSS_MESSAGE          "\033[91;107m\t\t\tSei stato sconfitto.\t\t\t\033[0m\n"
 #define COLLISION_MESSAGE     "Vedi che è occupata.\n"
-#define TIME_OVER_MESSAGE     "Il gioco finisce e nessuno vince.\n"
-#define LOSS_MESSAGE          "... Sarà per un'altra volta.\n"
+#define TIME_OVER_MESSAGE     "\033[91mTEMPO SCADUTO\033[0m\n"
 #define USER_LOG_OUT "No Utente\n"
 
 /*

@@ -14,12 +14,13 @@ Game *createGame(){
 
 int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *serverLog){
 
-  int n_b_r;
-  int result=0;
+  int n_b_r, result=0;
   char msg[100], matrix[4000];
+
   GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
   sendMsg(sockfd,matrix,msg);
-  while(1){
+
+  while(!(game->timeOver)){
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
     pthread_mutex_unlock(&serverLog->sem);
@@ -31,14 +32,16 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     pthread_mutex_unlock(&game->sem);
     if(result == PLAYER_EXITS){
       sendMsgNoReply(sockfd,"GETOUT");
-      if(isGameEmpty(game)){
-        deleteGrid(game->grid);
-        free(game);
-        return -1;
-      }
+      return PLAYER_EXITS;
     }
     sendMsg(sockfd,matrix,msg);
-
+  }
+  if(didIWin(game, idGiocatore)){
+    sendMsgNoReply(sockfd, VICTORY_MESSAGE);
+    return GAME_END_FOR_TIME;
+  }else{
+    sendMsgNoReply(sockfd, LOSS_MESSAGE);
+    return GAME_END_FOR_TIME;
   }
   return 0;
 }
@@ -308,9 +311,9 @@ int createGameGrid(Game *g){
 void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
 
   srand(time(NULL));
-  printf("Sono in spawn new Player.\n");
-  int x, y, i;
+  int x, y, i, time;
   player playerToAdd;
+  int result;
   Game *g=*game;
   strcpy(playerToAdd.nome, username);
   playerToAdd.codicePacco = 0;
@@ -342,9 +345,34 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
     LogPlayerJoin(&serverLog->fd,g->gameId,username);
     pthread_mutex_unlock(&serverLog->sem);
     pthread_mutex_unlock(&g->sem);
-    if(playGame(g,i,g->gameId,sockfd,serverLog)==-1){
-      *game=NULL;
-      pthread_exit((int*)1);
+
+
+
+    if(result =(playGame(g,i,g->gameId,sockfd,serverLog))){
+      switch(result){
+        case PLAYER_EXITS:
+          if(isGameEmpty(g)){
+            pthread_mutex_lock(&g->sem);
+            deleteGrid(g->grid);
+            Game * tmp = g;
+            pthread_mutex_unlock(&g->sem);
+            g = NULL;
+            free(tmp);
+          }
+          pthread_exit((int *) 1);
+        break;
+        case GAME_END_FOR_TIME:
+          if(g!= NULL){
+            pthread_mutex_lock(&g->sem);
+            deleteGrid(g->grid);
+            Game * tmp = g;
+            pthread_mutex_unlock(&g->sem);
+            g = NULL;
+            free(tmp);
+          }
+          pthread_exit((int * ) 1);
+        break;
+      }
     }
   }
   return;
@@ -355,6 +383,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
   LogFile serverLog= *toLog;
   char matrix[2000];
   char msg[50];
+  int result;
   int n_b_r;
   Game *g;
   *game=createGame();
@@ -374,22 +403,37 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
     pthread_mutex_unlock(&serverLog.sem);
 
     pthread_mutex_unlock(&g->sem);
-
-    pthread_t tid;
-    int* thread_sd;
-    thread_sd = (void*) malloc(sizeof(void*));
-    thread_sd = &sockfd;
-    if((pthread_create(&tid, NULL, timer, (void *) thread_sd))<0){
-        printf("%s", THREAD_CREATION_ERR_MESSAGE);
-        pthread_mutex_lock(&serverLog.sem);
-        LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
-        pthread_mutex_unlock(&serverLog.sem);
+    //Set timer
+    if(alarm(MAX_TIME)>0){
+      alarm(0);
+      alarm(MAX_TIME);
     }
 
-    printf("%d\n",sockfd );
-    if(playGame(g,0,g->gameId,sockfd,&serverLog)==-1){
-      *game=NULL;
-      pthread_exit((int*)1);
+    if(result =(playGame(g,0,g->gameId,sockfd,toLog))){
+      switch(result){
+        case PLAYER_EXITS:
+          if(isGameEmpty(g)){
+            pthread_mutex_lock(&g->sem);
+            deleteGrid(g->grid);
+            Game * tmp = g;
+            pthread_mutex_unlock(&g->sem);
+            g = NULL;
+            free(tmp);
+          }
+          pthread_exit((int *) 1);
+        break;
+        case GAME_END_FOR_TIME:
+          if(g!= NULL){
+            pthread_mutex_lock(&g->sem);
+            deleteGrid(g->grid);
+            Game * tmp = g;
+            pthread_mutex_unlock(&g->sem);
+            g = NULL;
+            free(tmp);
+          }
+          pthread_exit((int * ) 1);
+        break;
+      }
     }
   }else{
     /*Gestione errore*/
@@ -398,18 +442,23 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
   return;
 }
 
-void * timer(void *arg){
-
-  int sockfd=*((int*) arg);
-  char mom[]="\033[91mTEMPO SCADUTO\033[0m\n";
-  sleep(MAX_TIME);
-  sendMsgNoReply(sockfd,mom);
-}
-
 void deleteGrid(GameGrid **g){
   int i;
   for(i=0;i<MAX_GRID_SIZE_H;i++)
     free(g[i]);
   free(g);
   return;
+}
+
+int didIWin(Game * g, int idGiocatore){
+  int i = 0, max;
+  max = g->punteggio[0];
+
+  for(i = 1; i< MAX_PLAYER_N; i++){
+    if(g->punteggio[i]>max){
+      max = g->punteggio[i];
+    }
+  }
+
+  return ((max == g->punteggio[idGiocatore]) && max>0);
 }

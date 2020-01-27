@@ -28,8 +28,9 @@
 #define MAX_OBSTACLES_N 20
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
-#define MAX_TIME 15
+#define MAX_TIME 20
 #define PLAYER_EXITS 1000
+#define GAME_END_FOR_TIME 1001
 
 /*
   La struttura seguente contiene i dati utili per la gestione di un giocatore all'interno di una Partita:
@@ -58,7 +59,7 @@ typedef struct {
     - codiceLocazione, 4 bit, è un intero. Viene utilizzato per rappresentare una delle 16 locazioni disponibili. Contiene lo stesso valore
         del pacco associato a quella locazione;
     - I restanti 8 bit vengono usati come codifica one hot della visibilità. Ogni qual volta un giocatore scopre una casella il bit corrispondente
-        al suo codiceGiocatore(quindi p0 per il giocatore con codiceGiocatore 0 etc etc) viene settato ad 1.
+        al suo codiceGiocatore.
 */
 typedef struct {
   unsigned int ostacolo:1;
@@ -89,6 +90,7 @@ typedef struct {
   player  giocatori[MAX_PLAYER_N];
   unsigned int piena:1;
   pthread_mutex_t sem;
+  unsigned int timeOver : 1;
   int punteggio[MAX_PLAYER_N];
   int locazioneXPacchi[MAX_PACCHI];
   int locazioneYPacchi[MAX_PACCHI];

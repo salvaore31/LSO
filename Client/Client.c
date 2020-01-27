@@ -77,6 +77,11 @@ int comunicationGame(int sockfd){
     leggi();
     if(strcmp(msg,"GETOUT")==0){
       break;
+    }else if((strcmp(msg, VICTORY_MESSAGE)==0) || (strcmp(msg, LOSS_MESSAGE)==0)){
+      clear();
+      printf("%s", msg);
+      sleep(4);
+      break;
     }
     read(STDIN_FILENO, input, 1);
     write(sockfd,input,1);
