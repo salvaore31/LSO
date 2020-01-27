@@ -44,14 +44,14 @@
 /*
  * Messaggi di errore relativi al server.
  */
-#define NO_CONNECTION_ERR_MESSAGE     "Impossibile connettersi al server.\nL'applicazione verrà chiusa"
-#define SOCKET_CREATION_ERR_MESSAGE   "Impossibile creare la socket."
-#define SOCKET_LISTEN_ERR_MESSAGE     "Impossibile settare la socket in ascolto."
-#define SOCKET_BINDING_ERR_MESSAGE    "Impossibile collegarsi alla socket."
-#define SOCKET_RECEIVE_DATA_ERR_MESSAGE     "Impossibile ricevere dati dalla socket."
-#define NOT_SURE_ERR_MESSAGE "Qualcosa è andato storto."
-#define ACCEPT_SOCKET_ERR_MESSAGE "Errore nella funzione accept."
-#define MAP_FAILED_ERR_MESSAGE "Impossibile allocare memoria.\nL'applicazione verrà chiusa."
+#define NO_CONNECTION_ERR_MESSAGE     "Impossibile connettersi al server\nL'applicazione verrà chiusa"
+#define SOCKET_CREATION_ERR_MESSAGE   "Impossibile creare la socket"
+#define SOCKET_LISTEN_ERR_MESSAGE     "Impossibile settare la socket in ascolto"
+#define SOCKET_BINDING_ERR_MESSAGE    "Impossibile collegarsi alla socket"
+#define SOCKET_RECEIVE_DATA_ERR_MESSAGE     "Impossibile ricevere dati dalla socket"
+#define NOT_SURE_ERR_MESSAGE "Qualcosa è andato storto"
+#define ACCEPT_SOCKET_ERR_MESSAGE "Errore nella funzione accept"
+#define MAP_FAILED_ERR_MESSAGE "Impossibile allocare memoria\nL'applicazione verrà chiusa"
 /*
  * Messaggi di errore relativi al gioco stesso
  */

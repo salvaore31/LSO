@@ -15,9 +15,14 @@
 int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fdLog);
 
 /*
-  Setta i permessi per la visibilità delle caselle in accordo con le mosse del giocatore.
+  Setta i permessi per la visibilità di una casella in accordo con le mosse di un giocatore.
 */
 void setPermessi(int x, int y, int giocatore, GameGrid ** grid);
+
+/*
+  Setta i permessi per la visibilità di una casella per ogni giocatore.
+*/
+void setPermessiToAll(int x, int y, GameGrid ** grid);
 
 void * timer(void *arg);
 

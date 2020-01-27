@@ -68,14 +68,7 @@ typedef struct {
   unsigned int codiceGiocatore:3;
   unsigned int codicePacco:4;
   unsigned int codiceLocazione:4;
-  unsigned int p0:1;
-  unsigned int p1:1;
-  unsigned int p2:1;
-  unsigned int p3:1;
-  unsigned int p4:1;
-  unsigned int p5:1;
-  unsigned int p6:1;
-  unsigned int p7:1;
+  unsigned int permessi[MAX_PLAYER_N];
 } GameGrid;
 
 /*

@@ -13,3 +13,5 @@ int GameGridToText(GameGrid **p, char msg[], int giocatore, player*);
 int sendMsg(int , char [], char []);
 
 int sendMsgNoReply(int, char []);
+
+void printCellForPlayer(GameGrid **p, char msg[], int giocatore, player * gamer, int i, int j);

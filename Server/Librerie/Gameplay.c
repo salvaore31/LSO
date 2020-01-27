@@ -234,33 +234,14 @@ int isGameEmpty(Game* game){
 }
 
 void setPermessi(int x, int y, int giocatore, GameGrid ** grid){
-  switch (giocatore) {
-    case 0:
-      grid[y][x].p0 = 1;
-      break;
-    case 1:
-      grid[y][x].p1 = 1;
-      break;
-    case 2:
-      grid[y][x].p2 = 1;
-      break;
-    case 3:
-      grid[y][x].p3 = 1;
-      break;
-    case 4:
-      grid[y][x].p4 = 1;
-      break;
-    case 5:
-      grid[y][x].p5 = 1;
-      break;
-    case 6:
-      grid[y][x].p6 = 1;
-      break;
-    case 7:
-      grid[y][x].p7 = 1;
-      break;
-    default:
-      break;
+  grid[y][x].permessi[giocatore] = 1;
+  return;
+}
+
+void setPermessiToAll(int x, int y, GameGrid ** grid){
+  int i;
+  for(i=0; i<MAX_PLAYER_N; i++){
+    grid[y][x].permessi[i]=1;
   }
   return;
 }
@@ -276,8 +257,8 @@ int createGameGrid(Game *g){
     y=rand()%MAX_GRID_SIZE_H;
     x=rand()%MAX_GRID_SIZE_L;
     p[y][x].giocatore=1;
-    p[y][x].p0=1;
     p[y][x].codiceGiocatore=0;
+    setPermessi(x, y, 0, p);
     g->giocatori[0].posx=x;
     g->giocatori[0].posy=y;
     for (i=0; i < MAX_PACCHI; i++) {
@@ -286,14 +267,7 @@ int createGameGrid(Game *g){
         x=rand()%MAX_GRID_SIZE_L;
       } while(p[y][x].giocatore || p[y][x].pacco);
       p[y][x].pacco=1;
-      p[y][x].p0=1;
-      p[y][x].p1=1;
-      p[y][x].p2=1;
-      p[y][x].p3=1;
-      p[y][x].p4=1;
-      p[y][x].p5=1;
-      p[y][x].p6=1;
-      p[y][x].p7=1;
+      setPermessiToAll(x, y, p);
       p[y][x].codicePacco=i;
     }
     for (i=0; i < MAX_PACCHI; i++) {
@@ -302,14 +276,7 @@ int createGameGrid(Game *g){
         x=rand()%MAX_GRID_SIZE_L;
       } while(p[y][x].giocatore || p[y][x].pacco || p[y][x].locazione);
       p[y][x].locazione=1;
-      p[y][x].p0=1;
-      p[y][x].p1=1;
-      p[y][x].p2=1;
-      p[y][x].p3=1;
-      p[y][x].p4=1;
-      p[y][x].p5=1;
-      p[y][x].p6=1;
-      p[y][x].p7=1;
+      setPermessiToAll(x, y, p);
       p[y][x].codiceLocazione=i;
       g->locazioneXPacchi[i]=x;
       g->locazioneYPacchi[i]=y;
@@ -438,8 +405,6 @@ void * timer(void *arg){
   sleep(MAX_TIME);
   sendMsgNoReply(sockfd,mom);
 }
-
-
 
 void deleteGrid(GameGrid **g){
   int i;
