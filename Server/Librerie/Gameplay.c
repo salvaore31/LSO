@@ -35,6 +35,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
       return PLAYER_EXITS;
     }
     if(sendMsg(sockfd,matrix,msg)<0){
+      azioneGiocatore(game,idGiocatore,'0',game->gameId,&serverLog->fd);
       return PLAYER_EXITS;
     }
   }
@@ -372,7 +373,7 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
             deleteGrid(g->grid);
             Game * tmp = g;
             pthread_mutex_unlock(&g->sem);
-            g = NULL;
+            *game = NULL;
             free(tmp);
           }
           pthread_exit((int * ) 1);
@@ -422,7 +423,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
             deleteGrid(g->grid);
             Game * tmp = g;
             pthread_mutex_unlock(&g->sem);
-            g = NULL;
+            *game = NULL;
             free(tmp);
           }
           pthread_mutex_lock(&serverLog.sem);
@@ -436,7 +437,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
             deleteGrid(g->grid);
             Game * tmp = g;
             pthread_mutex_unlock(&g->sem);
-            g = NULL;
+            *game = NULL;
             free(tmp);
           }
           pthread_exit((int * ) 1);
