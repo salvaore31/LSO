@@ -89,17 +89,17 @@ int sendMsg(int sockfd,char toSend[],char received[]){
       return ERR_SENDING_MESSAGE;
   }
   n_b_r=read(sockfd,msg,5);
-  if (n_b_r<0) {
-    return ERR_RECEIVING_MESSAGE;
-  }
   n_b_w=write(sockfd,toSend,strlen(toSend));
   if (n_b_w<strlen(toSend)) {
     return ERR_SENDING_MESSAGE;
   }
 
   n_b_r=read(sockfd,received,50);
-  if (n_b_r<0) {
-    return ERR_RECEIVING_MESSAGE;
+  if (n_b_r==0) {
+    pthread_exit((int*)-1);
+  }
+  if(strcmp(received,USER_LOG_OUT)==0){
+    return -1;
   }
   received[n_b_r]='\0';
   return n_b_r;

@@ -38,7 +38,7 @@
 #define LOSS_MESSAGE          "\033[91;107m\t\t\tSei stato sconfitto.\t\t\t\033[0m\n"
 #define COLLISION_MESSAGE     "Vedi che è occupata.\n"
 #define TIME_OVER_MESSAGE     "\033[91mTEMPO SCADUTO\033[0m\n"
-#define USER_LOG_OUT "No Utente\n"
+#define USER_LOG_OUT          "No Utente\n"
 
 /*
  * Messaggi di errore relativi al server.

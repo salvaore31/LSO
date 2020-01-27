@@ -101,6 +101,9 @@ void * run(void *arg){
   int baba=-1;
 
   n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
+  if(n_b_r<0){
+    pthread_exit((int*)-1);
+  }
   while(baba==-1){
     if(n_b_r==1){
       switch (msg[0]) {
@@ -121,6 +124,7 @@ void * run(void *arg){
             LogUnkownClientDisconnection(&serverLog.fd);
             pthread_mutex_unlock(&serverLog.sem);
           }
+          pthread_exit((int*)1);
           break;
         default:
           n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);

@@ -33,6 +33,8 @@ int createGameGrid(Game *g);
 
 int isGameEmpty(Game*);
 
+int didIWin(Game*, int);
+
 Game * createGame();
 
 int playGame(Game * game, int idGiocatore, int gameId,int sockfd, LogFile* serverLog);

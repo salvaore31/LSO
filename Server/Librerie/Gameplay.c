@@ -34,7 +34,9 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
       sendMsgNoReply(sockfd,"GETOUT");
       return PLAYER_EXITS;
     }
-    sendMsg(sockfd,matrix,msg);
+    if(sendMsg(sockfd,matrix,msg)<0){
+      return PLAYER_EXITS;
+    }
   }
   if(didIWin(game, idGiocatore)){
     sendMsgNoReply(sockfd, VICTORY_MESSAGE);
@@ -359,6 +361,9 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
             g = NULL;
             free(tmp);
           }
+          pthread_mutex_lock(&serverLog->sem);
+          LogUserSignOut(&serverLog->fd,username);
+          pthread_mutex_unlock(&serverLog->sem);
           pthread_exit((int *) 1);
         break;
         case GAME_END_FOR_TIME:
@@ -420,6 +425,9 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
             g = NULL;
             free(tmp);
           }
+          pthread_mutex_lock(&serverLog.sem);
+          LogUserSignOut(&serverLog.fd,user);
+          pthread_mutex_unlock(&serverLog.sem);
           pthread_exit((int *) 1);
         break;
         case GAME_END_FOR_TIME:

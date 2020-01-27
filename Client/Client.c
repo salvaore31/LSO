@@ -23,23 +23,29 @@ int main(int argc, char* argv[]){
     }else{
       logged=comunication(sockfd);
       if (logged<0) {
-        exit(-1);
+        clear();
+      }else{
+        scanf("%s",input);
+        write(sockfd,input,strlen(input));
+        clear();
+        ingame=comunicationGame(sockfd);
       }
-      scanf("%s",input);
-      write(sockfd,input,strlen(input));
-      clear();
-      ingame=comunicationGame(sockfd);
     }
   }
   printf("Arrivederci.\n");
   close(sockfd);
   return 0;
 }
+
 void handleSignal(int sig){
   if(sig==SIGINT){
-    if(logged)
-      write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
     clear();
+    printf("Arrivederci.\n");
+    if(logged==1)
+      write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
+    sleep(2);
+    close(sockfd);
+    system("reset");
     exit(-1);
   }
 }
