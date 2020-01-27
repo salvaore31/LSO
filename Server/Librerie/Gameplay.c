@@ -11,7 +11,6 @@ Game *createGame(){
   return temp;
 }
 
-
 int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *serverLog){
 
   int n_b_r, result=0;
@@ -48,7 +47,6 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   }
   return 0;
 }
-
 /*
   La funzione si occupa di determinare l'azione del giocatore all'interno di una partita.
    - game, di tipo puntatore a Game(struct definita in costanti.h) determina la partita;

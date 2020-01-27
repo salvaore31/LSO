@@ -10,6 +10,18 @@ int signInUserMenu(int sockfd, char usrn[], LogFile *log){
     while((err=registerUser(usrn, pssw)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
+        case ERR_NO_USER_FILE:
+          pthread_mutex_lock(&log->sem);
+          LogErrorMessage(&log->fd, USER_FILE_OPEN_ERR_MESSAGE);
+          pthread_mutex_unlock(&log->sem);
+          return ERR_NO_USER_FILE;
+          break;
+        case ERR_INPUT_OUTPUT:
+          pthread_mutex_lock(&log->sem);
+          LogErrorMessage(&log->fd, I_O_ERR_MESSAGE);
+          pthread_mutex_unlock(&log->sem);
+          return ERR_INPUT_OUTPUT;
+          break;
         case ERR_INVALID_USERNAME:
           n_b_r=sendMsg(sockfd,USER_ALREADY_PRESENT_SIM,usrn);
           n_b_r=sendMsg(sockfd,INSERT_PASSWORD_SIM,pssw);
@@ -29,8 +41,7 @@ int checkUsername(char* username){
   int fdUserFile, i=0, res,r=1;
   char c, str[MAX_SIZE_USERNAME];
   if((fdUserFile=open(USERS_FILE,O_RDONLY))<0){
-    printf("errore\n" );
-    //GESTIRE ERRORE APERTURA FILE
+    return ERR_NO_USER_FILE;
   }else{
     while(r>0){
       while(((r=read(fdUserFile,&c,1))>0)&&c!='%')
@@ -92,8 +103,11 @@ int logInUser(char* user, char* passw){
   char c,str[MAX_SIZE_PASSW];
   str[0]='\0';
   if((pos=checkUsername(user))<0){
-    //La funzione ritorna -2 nel caso in cui non trova l'utente tra quelli registrati;
-    return ERR_USERNAME_NOT_FOUND;
+    if(pos == ERR_NO_USER_FILE){
+      return ERR_NO_USER_FILE;
+    }else{
+      return ERR_USERNAME_NOT_FOUND;
+    }
   }else{
     if((fdUserFile=open(USERS_FILE,O_RDONLY))<0){
       //Gestire il comportamento in caso di errore apertura file
@@ -126,21 +140,35 @@ int logInUserMenu(int sockfd, char usrn[],LogFile *log){
 
   //da aggiungere controllo su effettiva lettura
     n_b_r=sendMsg(sockfd,INSERT_USERNAME_LIM,usrn);
-    while(checkUsername(usrn)<0){
+    while((err = checkUsername(usrn))<0){
+      if(err == ERR_NO_USER_FILE){
+        pthread_mutex_lock(&log->sem);
+        LogErrorMessage(&log->fd, USER_FILE_OPEN_ERR_MESSAGE);
+        pthread_mutex_unlock(&log->sem);
+        return ERR_NO_USER_FILE;
+      }
       n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
     }
     n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
     while((err=logInUser(usrn, pssw)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
+        case ERR_NO_USER_FILE:
+        pthread_mutex_lock(&log->sem);
+        LogErrorMessage(&log->fd, USER_FILE_OPEN_ERR_MESSAGE);
+        pthread_mutex_unlock(&log->sem);
+        return ERR_NO_USER_FILE;
+        case ERR_INPUT_OUTPUT:
+        pthread_mutex_lock(&log->sem);
+        LogErrorMessage(&log->fd, I_O_ERR_MESSAGE);
+        pthread_mutex_unlock(&log->sem);
+        return ERR_INPUT_OUTPUT;
         case ERR_WRONG_PASSWORD:
           n_b_r=sendMsg(sockfd,WRONG_PASSWORD_LIM,pssw);
           break;
         case ERR_USERNAME_NOT_FOUND:
           n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
           n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
-          break;
-        case ERR_INPUT_OUTPUT:
           break;
         default:
           break;
