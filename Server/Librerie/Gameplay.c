@@ -358,6 +358,9 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
             pthread_mutex_lock(&g->sem);
             deleteGrid(g->grid);
             Game * tmp = g;
+            pthread_mutex_lock(&serverLog->sem);
+            LogEndGame(&serverLog->fd,g->gameId);
+            pthread_mutex_unlock(&serverLog->sem);
             pthread_mutex_unlock(&g->sem);
             g = NULL;
             free(tmp);
@@ -365,6 +368,7 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
           pthread_mutex_lock(&serverLog->sem);
           LogUserSignOut(&serverLog->fd,username);
           pthread_mutex_unlock(&serverLog->sem);
+          close(sockfd);
           pthread_exit((int *) 1);
         break;
         case GAME_END_FOR_TIME:
@@ -372,10 +376,14 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
             pthread_mutex_lock(&g->sem);
             deleteGrid(g->grid);
             Game * tmp = g;
+            pthread_mutex_lock(&serverLog->sem);
+            LogEndGame(&serverLog->fd,g->gameId);
+            pthread_mutex_unlock(&serverLog->sem);
             pthread_mutex_unlock(&g->sem);
             *game = NULL;
             free(tmp);
           }
+          close(sockfd);
           pthread_exit((int * ) 1);
         break;
       }
@@ -399,7 +407,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
 
   if(createGameGrid(g) == 0){
     pthread_mutex_lock(&g->sem);
-    g->gameId = getpid();
+    g->gameId = (int)g%10000;
 
     pthread_mutex_lock(&serverLog.sem);
     LogNewGame(&serverLog.fd,g->gameId);
@@ -422,6 +430,9 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
             pthread_mutex_lock(&g->sem);
             deleteGrid(g->grid);
             Game * tmp = g;
+            pthread_mutex_lock(&serverLog.sem);
+            LogEndGame(&serverLog.fd,g->gameId);
+            pthread_mutex_unlock(&serverLog.sem);
             pthread_mutex_unlock(&g->sem);
             *game = NULL;
             free(tmp);
@@ -429,6 +440,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
           pthread_mutex_lock(&serverLog.sem);
           LogUserSignOut(&serverLog.fd,user);
           pthread_mutex_unlock(&serverLog.sem);
+          close(sockfd);
           pthread_exit((int *) 1);
         break;
         case GAME_END_FOR_TIME:
@@ -436,10 +448,14 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
             pthread_mutex_lock(&g->sem);
             deleteGrid(g->grid);
             Game * tmp = g;
+            pthread_mutex_lock(&serverLog.sem);
+            LogEndGame(&serverLog.fd,g->gameId);
+            pthread_mutex_unlock(&serverLog.sem);
             pthread_mutex_unlock(&g->sem);
             *game = NULL;
             free(tmp);
           }
+          close(sockfd);
           pthread_exit((int * ) 1);
         break;
       }
@@ -460,6 +476,7 @@ void deleteGrid(GameGrid **g){
 }
 
 int didIWin(Game * g, int idGiocatore){
+
   int i = 0, max;
   max = g->punteggio[0];
 
