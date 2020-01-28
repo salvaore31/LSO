@@ -17,6 +17,7 @@ int main(int argc, char* argv[]){
   signal(SIGQUIT, handleSignal);
   signal(SIGTERM, handleSignal);
   signal(SIGALRM, handleSignal);
+  signal(SIGSEGV, handleSignal);
 
   if (argc!=2) {
     printf("Passa il numero della porta.\n");
@@ -166,6 +167,13 @@ void * run(void *arg){
 
 void handleSignal(int Sig){
   switch (Sig) {
+    case SIGSEGV:
+      free(g);
+      g=NULL;
+      initializaLoggedUser(&loggati);
+      printf("%d\n",errno);
+      printf("%s\n","dovrebbe essere sigsegv ma invece no" );
+    break;
     case SIGINT:
       pthread_mutex_lock(&serverLog.sem);
       LogServerClose(&serverLog.fd);

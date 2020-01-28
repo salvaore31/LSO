@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <string.h>
+#include <errno.h>
 #include <signal.h>
 #include <sys/mman.h>
 #include "../costanti.h"

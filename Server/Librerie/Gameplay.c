@@ -14,7 +14,7 @@ Game *createGame(){
 int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *serverLog){
 
   int n_b_r, result=0;
-  char msg[100], matrix[4000];
+  char msg[100], matrix[5000];
 
   GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
   sendMsg(sockfd,matrix,msg);
@@ -408,7 +408,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog, lo
 
   if(createGameGrid(g) == 0){
     pthread_mutex_lock(&g->sem);
-    g->gameId = (int)g%10000;
+    g->gameId = rand()%10000;
 
     pthread_mutex_lock(&serverLog.sem);
     LogNewGame(&serverLog.fd,g->gameId);
