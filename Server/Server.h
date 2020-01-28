@@ -24,3 +24,5 @@
 void handleSignal(int Sig);
 
 void * run(void *arg);
+
+void * endGameManagement(void *arg);

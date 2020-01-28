@@ -5,8 +5,16 @@ LogFile serverLog;
 Game *g;
 int gameId=-1;
 loggedUser loggati;
+pthread_t clientsId[MAX_PLAYER_N];
+int gameEnded = 0;
 
 int main(int argc, char* argv[]){
+
+  int i = 0;
+  for(i = 0; i<MAX_PLAYER_N; i++){
+    clientsId[i] = 0;
+  }
+  i = 0;
 
   clear();
   //seed per la generazione di numeri casuali;
@@ -58,8 +66,8 @@ int main(int argc, char* argv[]){
         LogErrorMessage(&serverLog.fd,SOCKET_LISTEN_ERR_MESSAGE);
         pthread_mutex_unlock(&serverLog.sem);
     }else{
-        gameId=getpid();
         while(1){
+          while(!gameEnded){
             client_len = sizeof(client_addr);
             if((sockfd = accept(sock, NULL, NULL))<0){
               printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
@@ -78,9 +86,14 @@ int main(int argc, char* argv[]){
                 LogErrorMessage(&serverLog.fd, THREAD_CREATION_ERR_MESSAGE);
                 pthread_mutex_unlock(&serverLog.sem);
             }
+            clientsId[i]=tid;
+            i++;
           }
+          pthread_create(&tid, NULL, endGameManagement, NULL);
+          pthread_join(tid, NULL);
+        }
+      }
     }
-  }
   close(sock);
   close(sockfd);
   pthread_mutex_lock(&serverLog.sem);
@@ -90,7 +103,8 @@ int main(int argc, char* argv[]){
 }
 
 /*
-  La funzione che esegue ogni nuovo thread;
+  La funzione che esegue ogni nuovo thread;}
+
 */
 void * run(void *arg){
   char msg[1000];
@@ -168,11 +182,14 @@ void * run(void *arg){
 void handleSignal(int Sig){
   switch (Sig) {
     case SIGSEGV:
-      free(g);
-      g=NULL;
+      if(g!= NULL){
+        free(g);
+        g=NULL;
+      }
       initializaLoggedUser(&loggati);
       printf("%d\n",errno);
       printf("%s\n","dovrebbe essere sigsegv ma invece no" );
+      exit(1);
     break;
     case SIGINT:
       pthread_mutex_lock(&serverLog.sem);
@@ -183,7 +200,30 @@ void handleSignal(int Sig){
     case SIGALRM:
       pthread_mutex_lock(&g->sem);
       g->timeOver = 1;
+      gameEnded = 1;
       pthread_mutex_unlock(&g->sem);
     break;
   }
+}
+
+void * endGameManagement(void * arg){
+
+  for(int i = 0; i<0; i++){
+    if(clientsId[i]!=0){
+      pthread_join(clientsId[i], NULL);
+    }
+  }
+  if(g!= NULL){
+    pthread_mutex_lock(&g->sem);
+    deleteGrid(g->grid);
+    Game * tmp = g;
+    pthread_mutex_lock(&serverLog.sem);
+    LogEndGame(&serverLog.fd,g->gameId);
+    pthread_mutex_unlock(&serverLog.sem);
+    pthread_mutex_unlock(&g->sem);
+    g = NULL;
+    free(tmp);
+  }
+  gameEnded = 0;
+  pthread_exit((int *) 1);
 }

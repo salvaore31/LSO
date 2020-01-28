@@ -65,39 +65,19 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
   int x=player->posx,y=player->posy;
   int destx;
   int desty;
-  switch (action) {
-    case 'w': case 'W':
-    if(y>0){
-      setPermessi(x,y-1,giocatore,grid);
-      if(grid[y-1][x].ostacolo || grid[y-1][x].giocatore){
-        pthread_mutex_unlock(&game->sem);
-        return -1;
-      }else{
-        sprintf(src,"[%d,%d]",player->posx,player->posy);
-        grid[y][x].giocatore=0;
-        grid[y-1][x].giocatore=1;
-        grid[y-1][x].codiceGiocatore=giocatore;
-        player->posy=y-1;
-        sprintf(dest,"[%d,%d]",player->posx,player->posy);
-        LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
-      }
-    }else{
-      pthread_mutex_unlock(&game->sem);
-      return -1;
-    }
-    break;
-    case 'a': case 'A':
-      if(x>0){
-        setPermessi(x-1,y,giocatore,grid);
-        if(grid[y][x-1].ostacolo || grid[y][x-1].giocatore){
+{    switch (action) {
+      case 'w': case 'W':
+      if(y>0){
+        setPermessi(x,y-1,giocatore,grid);
+        if(grid[y-1][x].ostacolo || grid[y-1][x].giocatore){
           pthread_mutex_unlock(&game->sem);
           return -1;
         }else{
           sprintf(src,"[%d,%d]",player->posx,player->posy);
           grid[y][x].giocatore=0;
-          grid[y][x-1].giocatore=1;
-          grid[y][x-1].codiceGiocatore=giocatore;
-          player->posx=x-1;
+          grid[y-1][x].giocatore=1;
+          grid[y-1][x].codiceGiocatore=giocatore;
+          player->posy=y-1;
           sprintf(dest,"[%d,%d]",player->posx,player->posy);
           LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
         }
@@ -105,123 +85,143 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         pthread_mutex_unlock(&game->sem);
         return -1;
       }
-    break;
-    case 's': case 'S':
-    if(y<MAX_GRID_SIZE_H-1){
-      setPermessi(x,y+1,giocatore,grid);
-      if(grid[y+1][x].ostacolo || grid[y+1][x].giocatore){
-        pthread_mutex_unlock(&game->sem);
-        return -1;
-      }else{
-        sprintf(src,"[%d,%d]",player->posx,player->posy);
-        grid[y][x].giocatore=0;
-        grid[y+1][x].giocatore=1;
-        grid[y+1][x].codiceGiocatore=giocatore;
-        player->posy=y+1;
-        sprintf(dest,"[%d,%d]",player->posx,player->posy);
-        LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
-      }
-    }else{
-      pthread_mutex_unlock(&game->sem);
-      return -1;
-    }
-    break;
-    case 'd': case 'D':
-      if(x<MAX_GRID_SIZE_L-1){
-        setPermessi(x+1,y,giocatore,grid);
-        if(grid[y][x+1].ostacolo || grid[y][x+1].giocatore){
-          pthread_mutex_unlock(&game->sem);
-          return -1;
-        }else{
-          sprintf(src,"[%d,%d]",player->posx,player->posy);
-          grid[y][x].giocatore=0;
-          grid[y][x+1].giocatore=1;
-          grid[y][x+1].codiceGiocatore=giocatore;
-          player->posx=x+1;
-          sprintf(dest,"[%d,%d]",player->posx,player->posy);
-          LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
-        }
-      }else{
-        pthread_mutex_unlock(&game->sem);
-        return -1;
-      }
-    break;
-    case 'q': case 'Q':
-      if(grid[y][x].pacco){
-        player->pacco = 1;
-        player->codicePacco = grid[y][x].codicePacco;
-        grid[y][x].codicePacco = 0;
-        grid[y][x].pacco = 0;
-        sprintf(dest,"[%d,%d]",player->posx,player->posy);
-        LogPlayerTakePackage(fdLog,gameId,player->nome,player->codicePacco,dest);
-      }else{
-        pthread_mutex_unlock(&game->sem);
-        return -1;
-      }
-    break;
-    case 'e': case 'E':
-      if(player->pacco){
-        if(grid[y][x].locazione){
-          //controllo se la locazione corrisponde al pacco
-          if(grid[y][x].codiceLocazione == player->codicePacco){
-            game->punteggio[giocatore]++;
-            grid[y][x].locazione = 0;
-            grid[y][x].codiceLocazione = 0;
-            player->pacco = 0;
-            player->codicePacco = 0;
-            LogPlayerMakeAPoint(fdLog,gameId,player->nome);
-          }else{
+      break;
+      case 'a': case 'A':
+        if(x>0){
+          setPermessi(x-1,y,giocatore,grid);
+          if(grid[y][x-1].ostacolo || grid[y][x-1].giocatore){
             pthread_mutex_unlock(&game->sem);
             return -1;
+          }else{
+            sprintf(src,"[%d,%d]",player->posx,player->posy);
+            grid[y][x].giocatore=0;
+            grid[y][x-1].giocatore=1;
+            grid[y][x-1].codiceGiocatore=giocatore;
+            player->posx=x-1;
+            sprintf(dest,"[%d,%d]",player->posx,player->posy);
+            LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
           }
         }else{
-          grid[y][x].pacco=1;
-          grid[y][x].codicePacco = player->codicePacco;
-          player->pacco = 0;
-          player->codicePacco = 0;
-          for(int i = 0; i<MAX_PLAYER_N; i++){
-            setPermessi(x, y, i, grid);
-          }
+          pthread_mutex_unlock(&game->sem);
+          return -1;
+        }
+      break;
+      case 's': case 'S':
+      if(y<MAX_GRID_SIZE_H-1){
+        setPermessi(x,y+1,giocatore,grid);
+        if(grid[y+1][x].ostacolo || grid[y+1][x].giocatore){
+          pthread_mutex_unlock(&game->sem);
+          return -1;
+        }else{
+          sprintf(src,"[%d,%d]",player->posx,player->posy);
+          grid[y][x].giocatore=0;
+          grid[y+1][x].giocatore=1;
+          grid[y+1][x].codiceGiocatore=giocatore;
+          player->posy=y+1;
           sprintf(dest,"[%d,%d]",player->posx,player->posy);
-          LogPlayerLeavePackage(fdLog,gameId,player->nome,grid[y][x].codicePacco,dest);
+          LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
         }
       }else{
         pthread_mutex_unlock(&game->sem);
         return -1;
-
       }
-    break;
-    case 'r': case 'R'://refresh
-    break;
-    case '0'://esci
-      grid[y][x].giocatore = 0;
-      if(player->pacco){
-        destx = x;
-        desty = y;
-        while(grid[desty][destx].pacco || grid[desty][destx].locazione || grid[desty][destx].giocatore || grid[desty][destx].ostacolo ){
-          destx = rand()%MAX_GRID_SIZE_L;
-          desty = rand()%MAX_GRID_SIZE_L;
+      break;
+      case 'd': case 'D':
+        if(x<MAX_GRID_SIZE_L-1){
+          setPermessi(x+1,y,giocatore,grid);
+          if(grid[y][x+1].ostacolo || grid[y][x+1].giocatore){
+            pthread_mutex_unlock(&game->sem);
+            return -1;
+          }else{
+            sprintf(src,"[%d,%d]",player->posx,player->posy);
+            grid[y][x].giocatore=0;
+            grid[y][x+1].giocatore=1;
+            grid[y][x+1].codiceGiocatore=giocatore;
+            player->posx=x+1;
+            sprintf(dest,"[%d,%d]",player->posx,player->posy);
+            LogPlayerMoves(fdLog,gameId,player->nome,src,dest);
+          }
+        }else{
+          pthread_mutex_unlock(&game->sem);
+          return -1;
         }
-        grid[desty][destx].pacco=1;
-        grid[desty][destx].codicePacco = player->codicePacco;
-        for(int i = 0; i<MAX_PLAYER_N; i++){
-          setPermessi(destx, desty, i, grid);
+      break;
+      case 'q': case 'Q':
+        if(grid[y][x].pacco){
+          player->pacco = 1;
+          player->codicePacco = grid[y][x].codicePacco;
+          grid[y][x].codicePacco = 0;
+          grid[y][x].pacco = 0;
+          sprintf(dest,"[%d,%d]",player->posx,player->posy);
+          LogPlayerTakePackage(fdLog,gameId,player->nome,player->codicePacco,dest);
+        }else{
+          pthread_mutex_unlock(&game->sem);
+          return -1;
         }
-        player->pacco = 0;
-        player->codicePacco = 0;
-      }
-      game->giocatori[giocatore].posx = -1;
-      game->punteggio[giocatore] = 0;
-      if(game->piena){
-        game->piena = 0;
-      }
+      break;
+      case 'e': case 'E':
+        if(player->pacco){
+          if(grid[y][x].locazione){
+            //controllo se la locazione corrisponde al pacco
+            if(grid[y][x].codiceLocazione == player->codicePacco){
+              game->punteggio[giocatore]++;
+              grid[y][x].locazione = 0;
+              grid[y][x].codiceLocazione = 0;
+              player->pacco = 0;
+              player->codicePacco = 0;
+              LogPlayerMakeAPoint(fdLog,gameId,player->nome);
+            }else{
+              pthread_mutex_unlock(&game->sem);
+              return -1;
+            }
+          }else{
+            grid[y][x].pacco=1;
+            grid[y][x].codicePacco = player->codicePacco;
+            player->pacco = 0;
+            player->codicePacco = 0;
+            for(int i = 0; i<MAX_PLAYER_N; i++){
+              setPermessi(x, y, i, grid);
+            }
+            sprintf(dest,"[%d,%d]",player->posx,player->posy);
+            LogPlayerLeavePackage(fdLog,gameId,player->nome,grid[y][x].codicePacco,dest);
+          }
+        }else{
+          pthread_mutex_unlock(&game->sem);
+          return -1;
 
-      pthread_mutex_unlock(&game->sem);
-      return PLAYER_EXITS;
-    break;
-    default:
-    break;
-  }
+        }
+      break;
+      case 'r': case 'R'://refresh
+      break;
+      case '0'://esci
+        grid[y][x].giocatore = 0;
+        if(player->pacco){
+          destx = x;
+          desty = y;
+          while(grid[desty][destx].pacco || grid[desty][destx].locazione || grid[desty][destx].giocatore || grid[desty][destx].ostacolo ){
+            destx = rand()%MAX_GRID_SIZE_L;
+            desty = rand()%MAX_GRID_SIZE_L;
+          }
+          grid[desty][destx].pacco=1;
+          grid[desty][destx].codicePacco = player->codicePacco;
+          for(int i = 0; i<MAX_PLAYER_N; i++){
+            setPermessi(destx, desty, i, grid);
+          }
+          player->pacco = 0;
+          player->codicePacco = 0;
+        }
+        game->giocatori[giocatore].posx = -1;
+        game->punteggio[giocatore] = 0;
+        if(game->piena){
+          game->piena = 0;
+        }
+
+        pthread_mutex_unlock(&game->sem);
+        return PLAYER_EXITS;
+      break;
+      default:
+      break;
+    }}
   pthread_mutex_unlock(&game->sem);
   return 0;
 }
@@ -350,17 +350,6 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog, l
     if(result =(playGame(g,i,g->gameId,sockfd,serverLog))){
       switch(result){
         case PLAYER_EXITS:
-          if(isGameEmpty(g)){
-            pthread_mutex_lock(&g->sem);
-            deleteGrid(g->grid);
-            Game * tmp = g;
-            pthread_mutex_lock(&serverLog->sem);
-            LogEndGame(&serverLog->fd,g->gameId);
-            pthread_mutex_unlock(&serverLog->sem);
-            pthread_mutex_unlock(&g->sem);
-            g = NULL;
-            free(tmp);
-          }
           pthread_mutex_lock(&serverLog->sem);
           LogUserSignOut(&serverLog->fd,username);
           pthread_mutex_unlock(&serverLog->sem);
@@ -369,17 +358,6 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog, l
           pthread_exit((int *) 1);
         break;
         case GAME_END_FOR_TIME:
-          if(g!= NULL){
-            pthread_mutex_lock(&g->sem);
-            deleteGrid(g->grid);
-            Game * tmp = g;
-            pthread_mutex_lock(&serverLog->sem);
-            LogEndGame(&serverLog->fd,g->gameId);
-            pthread_mutex_unlock(&serverLog->sem);
-            pthread_mutex_unlock(&g->sem);
-            *game = NULL;
-            free(tmp);
-          }
           pthread_mutex_lock(&serverLog->sem);
           LogUserSignOut(&serverLog->fd,username);
           pthread_mutex_unlock(&serverLog->sem);
@@ -426,42 +404,20 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog, lo
     if(result =(playGame(g,0,g->gameId,sockfd,toLog))){
       switch(result){
         case PLAYER_EXITS:
-          if(isGameEmpty(g)){
-            pthread_mutex_lock(&g->sem);
-            deleteGrid(g->grid);
-            Game * tmp = g;
-            pthread_mutex_lock(&serverLog.sem);
-            LogEndGame(&serverLog.fd,g->gameId);
-            pthread_mutex_unlock(&serverLog.sem);
-            pthread_mutex_unlock(&g->sem);
-            *game = NULL;
-            free(tmp);
-          }
-          pthread_mutex_lock(&serverLog.sem);
-          LogUserSignOut(&serverLog.fd,user);
-          pthread_mutex_unlock(&serverLog.sem);
-          deleteLoggedUser(user,loggati);
-          close(sockfd);
-          pthread_exit((int *) 1);
+        pthread_mutex_lock(&serverLog.sem);
+        LogUserSignOut(&serverLog.fd,user);
+        pthread_mutex_unlock(&serverLog.sem);
+        deleteLoggedUser(user,loggati);
+        close(sockfd);
+        pthread_exit((int * ) 1);
         break;
         case GAME_END_FOR_TIME:
-          if(g!= NULL){
-            pthread_mutex_lock(&g->sem);
-            deleteGrid(g->grid);
-            Game * tmp = g;
-            pthread_mutex_lock(&serverLog.sem);
-            LogEndGame(&serverLog.fd,g->gameId);
-            pthread_mutex_unlock(&serverLog.sem);
-            pthread_mutex_unlock(&g->sem);
-            *game = NULL;
-            free(tmp);
-          }
-          pthread_mutex_lock(&serverLog.sem);
-          LogUserSignOut(&serverLog.fd,user);
-          pthread_mutex_unlock(&serverLog.sem);
-          deleteLoggedUser(user,loggati);
-          close(sockfd);
-          pthread_exit((int * ) 1);
+        pthread_mutex_lock(&serverLog.sem);
+        LogUserSignOut(&serverLog.fd,user);
+        pthread_mutex_unlock(&serverLog.sem);
+        deleteLoggedUser(user,loggati);
+        close(sockfd);
+        pthread_exit((int * ) 1);
         break;
       }
     }

@@ -94,10 +94,8 @@ int sendMsg(int sockfd,char toSend[],char received[]){
     return ERR_SENDING_MESSAGE;
   }
 
+
   n_b_r=read(sockfd,received,50);
-  if (n_b_r==0) {
-    pthread_exit((int*)-1);
-  }
   if(strcmp(received,USER_LOG_OUT)==0){
     return -1;
   }
