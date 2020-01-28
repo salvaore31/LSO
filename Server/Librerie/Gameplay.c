@@ -309,7 +309,7 @@ int createGameGrid(Game *g){
 
 }
 
-void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
+void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog, loggedUser *loggati){
 
   srand(time(NULL));
   int x, y, i, time;
@@ -347,8 +347,6 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
     pthread_mutex_unlock(&serverLog->sem);
     pthread_mutex_unlock(&g->sem);
 
-
-
     if(result =(playGame(g,i,g->gameId,sockfd,serverLog))){
       switch(result){
         case PLAYER_EXITS:
@@ -366,6 +364,9 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
           pthread_mutex_lock(&serverLog->sem);
           LogUserSignOut(&serverLog->fd,username);
           pthread_mutex_unlock(&serverLog->sem);
+          pthread_mutex_lock(&loggati->sem);
+          deleteLoggedUser(username,loggati);
+          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int *) 1);
         break;
@@ -381,6 +382,12 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
             *game = NULL;
             free(tmp);
           }
+          pthread_mutex_lock(&serverLog->sem);
+          LogUserSignOut(&serverLog->fd,username);
+          pthread_mutex_unlock(&serverLog->sem);
+          pthread_mutex_lock(&loggati->sem);
+          deleteLoggedUser(username,loggati);
+          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int * ) 1);
         break;
@@ -390,7 +397,7 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog){
   return;
 }
 
-void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
+void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog, loggedUser *loggati){
 
   LogFile serverLog= *toLog;
   char matrix[2000];
@@ -413,7 +420,6 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
     pthread_mutex_lock(&serverLog.sem);
     LogPlayerJoin(&serverLog.fd, g->gameId, user);
     pthread_mutex_unlock(&serverLog.sem);
-
     pthread_mutex_unlock(&g->sem);
     //Set timer
     if(alarm(MAX_TIME)>0){
@@ -438,6 +444,9 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
           pthread_mutex_lock(&serverLog.sem);
           LogUserSignOut(&serverLog.fd,user);
           pthread_mutex_unlock(&serverLog.sem);
+          pthread_mutex_lock(&loggati->sem);
+          deleteLoggedUser(user,loggati);
+          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int *) 1);
         break;
@@ -453,6 +462,12 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog){
             *game = NULL;
             free(tmp);
           }
+          pthread_mutex_lock(&serverLog.sem);
+          LogUserSignOut(&serverLog.fd,user);
+          pthread_mutex_unlock(&serverLog.sem);
+          pthread_mutex_lock(&loggati->sem);
+          deleteLoggedUser(user,loggati);
+          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int * ) 1);
         break;

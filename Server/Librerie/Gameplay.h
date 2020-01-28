@@ -2,7 +2,7 @@
 #include "../../messaggi.h"
 #include "../../costanti.h"
 #include "Communication.h"
-
+#include "Users.h"
 /*
   La funzione modifica la griglia di gioco in accordo con le mosse del giocatore.
     Il parametro di tipo Game game è un puntatore alla partita specifica;
@@ -39,8 +39,8 @@ Game * createGame();
 
 int playGame(Game * game, int idGiocatore, int gameId,int sockfd, LogFile* serverLog);
 
-void spawnNewPlayer(Game ** , char* username, int , LogFile* );
+void spawnNewPlayer(Game ** , char* username, int , LogFile* ,loggedUser*);
 
 void deleteGrid(GameGrid **g);
 
-void initializaNewGame(Game**,int sockfd, char user[],LogFile*);
+void initializaNewGame(Game**,int sockfd, char user[],LogFile*,loggedUser*);

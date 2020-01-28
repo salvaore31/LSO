@@ -47,6 +47,11 @@ typedef struct {
   char nome[MAX_SIZE_USERNAME];
 } player;
 
+typedef struct {
+  char user[MAX_PLAYER_N][MAX_SIZE_USERNAME];
+  pthread_mutex_t sem;
+} loggedUser;
+
 /*
   La struttura GameGrid rappresenta la singola cella della matrice di gioco, contiene 23 bit suddivisi in vari campi:
     - ostacolo, 1 bit, è un flag booleano. Vale 1 se la cella contiene un ostacolo, 0 altrimenti;

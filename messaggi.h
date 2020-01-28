@@ -13,6 +13,7 @@
        #define SUCCESS_MESSAGE_LIM           "Bentornato!\nPremi qualcosa per andare avanti...\n"
        #define WRONG_USERNAME_LIM            "Il nome utente inserito non è stato trovato.\nInserisci di nuovo il tuo nome utente:\n"
        #define WRONG_PASSWORD_LIM            "Password errata.\nInserisci di nuovo la tua password:\n"
+       #define USER_ALREADY_LOGGED           "L'utente selezionato è gia connesso.\nInserisci un nome utente valido.\n"
 
       /*
        * Stringhe per la generazione della schermata di Sign In.

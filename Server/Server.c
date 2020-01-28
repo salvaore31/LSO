@@ -4,7 +4,7 @@
 LogFile serverLog;
 Game *g;
 int gameId=-1;
-char loggati[MAX_PLAYER_N][MAX_SIZE_USERNAME];
+loggedUser loggati;
 
 int main(int argc, char* argv[]){
 
@@ -106,7 +106,7 @@ void * run(void *arg){
     if(n_b_r==1){
       switch (msg[0]) {
         case 'l': case 'L':
-          result = logInUserMenu(sockfd,user,&serverLog);
+          result = logInUserMenu(sockfd,user,&serverLog,&loggati);
           if(result == ERR_NO_USER_FILE || result == ERR_INPUT_OUTPUT){
             clear();
             write(sockfd,"-1", strlen("-1"));
@@ -122,7 +122,7 @@ void * run(void *arg){
           done = 1;
           break;
         case 'r': case 'R':
-          result = signInUserMenu(sockfd,user,&serverLog);
+          result = signInUserMenu(sockfd,user,&serverLog,&loggati);
           if(result == ERR_NO_USER_FILE || result == ERR_INPUT_OUTPUT){
             clear();
             write(sockfd,"-1", strlen("-1"));
@@ -158,9 +158,9 @@ void * run(void *arg){
   }
   read(sockfd,msg,1);
   if(g==NULL){
-    initializaNewGame(&g,sockfd,user,&serverLog);
+    initializaNewGame(&g,sockfd,user,&serverLog,&loggati);
   }else{
-    spawnNewPlayer(&g,user, sockfd, &serverLog);
+    spawnNewPlayer(&g,user, sockfd, &serverLog,&loggati);
   }
 }
 

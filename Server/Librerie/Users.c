@@ -1,13 +1,13 @@
 #include "Users.h"
 
-int signInUserMenu(int sockfd, char usrn[], LogFile *log){
+int signInUserMenu(int sockfd, char usrn[], LogFile *log, loggedUser *loggati){
   int n_b_r;
   char pssw[50],msg[100];
   int err;
   //da aggiungere controllo su effettiva lettura
     n_b_r=sendMsg(sockfd,INSERT_USERNAME_SIM,usrn);
     n_b_r=sendMsg(sockfd,INSERT_PASSWORD_SIM,pssw);
-    while((err=registerUser(usrn, pssw)) != 0){
+    while((err=registerUser(usrn, pssw, loggati)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
         case ERR_NO_USER_FILE:
@@ -37,7 +37,7 @@ int signInUserMenu(int sockfd, char usrn[], LogFile *log){
     return 1;
   }
 //checkUsername FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO IN CASO DI ERRORE NELL' APERTURA
-int checkUsername(char* username){
+int checkUsername(char* username, loggedUser *loggati){
   int fdUserFile, i=0, res,r=1;
   char c, str[MAX_SIZE_USERNAME];
   if((fdUserFile=open(USERS_FILE,O_RDONLY))<0){
@@ -48,6 +48,10 @@ int checkUsername(char* username){
         str[i++]=c;
       str[i++]='\0';
       if(strcmp(str,username)==0){
+        if(isLogged(username,loggati)){
+          close(fdUserFile);
+          return ERR_USER_ALREADY_LOGGED;
+        }
         res=lseek(fdUserFile,0,SEEK_CUR);
         close(fdUserFile);
         return res;
@@ -57,19 +61,19 @@ int checkUsername(char* username){
     }
     close(fdUserFile);
   }
-  return -1;
+  return ERR_USERNAME_NOT_FOUND;
 }
 //registerUser FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO NEI VARI CASI DI ERRORE
-int registerUser(char* newuser, char* newpassw){
+int registerUser(char* newuser, char* newpassw,loggedUser *loggati){
 
-  int fdUserFile,n_b_w,lenght_user,lenght_passw;
+  int res,fdUserFile,n_b_w,lenght_user,lenght_passw;
   lenght_user=strlen(newuser);
   lenght_passw=strlen(newpassw);
 
   if( lenght_user > MAX_SIZE_USERNAME || lenght_passw > MAX_SIZE_PASSW ){
     return ERR_INVALID_USERNAME;
   }else{
-    if(checkUsername(newuser) < 0){// Se checkUsername ritorna un valore minore di 0 vuol dire che quel username non è presente nel file ed è quindi disponibile
+    if((res=checkUsername(newuser,loggati)) == ERR_USERNAME_NOT_FOUND){// Se checkUsername ritorna un valore minore di 0 vuol dire che quel username non è presente nel file ed è quindi disponibile
       if((fdUserFile = open(USERS_FILE,O_WRONLY|O_APPEND,S_IRWXU))<0){
         return ERR_NO_USER_FILE;
         /*Gestire cosa succede se non si riesce ad aprire il file*/
@@ -92,22 +96,18 @@ int registerUser(char* newuser, char* newpassw){
         }
       }
     }else{
-      return ERR_INVALID_USERNAME;
+      return res;
     }
   }
 }
 //Non avendo ancora deciso di preciso cosa deve fare intanto ritorna 0 se l'utente e la password inseriti sono validi
-int logInUser(char* user, char* passw){
+int logInUser(char* user, char* passw, loggedUser *loggati){
 
-  int fdUserFile, pos, n_b_r,i=0;
+  int fdUserFile, pos, err,n_b_r,i=0;
   char c,str[MAX_SIZE_PASSW];
   str[0]='\0';
-  if((pos=checkUsername(user))<0){
-    if(pos == ERR_NO_USER_FILE){
-      return ERR_NO_USER_FILE;
-    }else{
-      return ERR_USERNAME_NOT_FOUND;
-    }
+  if((pos=checkUsername(user,loggati))<0){
+    return pos;
   }else{
     if((fdUserFile=open(USERS_FILE,O_RDONLY))<0){
       //Gestire il comportamento in caso di errore apertura file
@@ -121,7 +121,11 @@ int logInUser(char* user, char* passw){
           str[i++]=c;
         str[i]='\0';
         if(strcmp(passw,str)==0){
-          return 0;
+          if(err=insertLoggedUser(user,loggati)<0){
+            return ERR_INSERT_LOGGED_USER;
+          }else{
+            return 0;
+          }
         }else{
           return ERR_WRONG_PASSWORD;
           //Gestire il comportamento in caso in cui la password inserita non è corretta
@@ -132,7 +136,7 @@ int logInUser(char* user, char* passw){
   return -1;
 }
 //logInUserMenu gesitsce la comunicazione con il client per quanto riguarda il logIn
-int logInUserMenu(int sockfd, char usrn[],LogFile *log){
+int logInUserMenu(int sockfd, char usrn[],LogFile *log, loggedUser *loggati){
 
   int n_b_r;
   char pssw[50],msg[100];
@@ -140,17 +144,24 @@ int logInUserMenu(int sockfd, char usrn[],LogFile *log){
 
   //da aggiungere controllo su effettiva lettura
     n_b_r=sendMsg(sockfd,INSERT_USERNAME_LIM,usrn);
-    while((err = checkUsername(usrn))<0){
+    while((err = checkUsername(usrn, loggati))<0){
       if(err == ERR_NO_USER_FILE){
         pthread_mutex_lock(&log->sem);
         LogErrorMessage(&log->fd, USER_FILE_OPEN_ERR_MESSAGE);
         pthread_mutex_unlock(&log->sem);
         return ERR_NO_USER_FILE;
       }
-      n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
+      if(err == ERR_USER_ALREADY_LOGGED){
+        pthread_mutex_lock(&log->sem);
+        LogErrorMessage(&log->fd, USER_FILE_OPEN_ERR_MESSAGE);
+        pthread_mutex_unlock(&log->sem);
+        n_b_r=sendMsg(sockfd,USER_ALREADY_LOGGED,usrn);
+      }else{
+        n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
+      }
     }
     n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
-    while((err=logInUser(usrn, pssw)) != 0){
+    while((err=logInUser(usrn, pssw, loggati)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
         case ERR_NO_USER_FILE:
@@ -179,4 +190,49 @@ int logInUserMenu(int sockfd, char usrn[],LogFile *log){
     pthread_mutex_unlock(&log->sem);
     n_b_r=sendMsgNoReply(sockfd,SUCCESS_MESSAGE_LIM);
     return 1;
+}
+
+int deleteLoggedUser(char user[], loggedUser* loggati){
+
+  int i, res=0;
+
+  pthread_mutex_lock(&loggati->sem);
+  for(i=0;i<MAX_PLAYER_N;i++){
+    if(strcmp(user,loggati->user[i])==0){
+      strcpy(loggati->user[i],"");
+      res=1;
+      break;
+    }
+  }
+  pthread_mutex_unlock(&loggati->sem);
+  return res;
+}
+
+int insertLoggedUser(char user[],loggedUser *loggati){
+
+  int i, res=0;
+  pthread_mutex_lock(&loggati->sem);
+  for(i=0;i<MAX_PLAYER_N;i++){
+    if(strcmp(loggati->user[i],"")==0){
+      strcpy(loggati->user[i],user);
+      res=1;
+      break;
+    }
+  }
+  pthread_mutex_unlock(&loggati->sem);
+  return res;
+}
+
+int isLogged(char user[], loggedUser *loggati){
+
+  int i,res=0;
+  pthread_mutex_lock(&loggati->sem);
+  for(i=0;i<MAX_PLAYER_N; i++){
+    if(strcmp(user,loggati->user[i])==0){
+      res=1;
+      break;
+    }
+  }
+  pthread_mutex_unlock(&loggati->sem);
+  return res;
 }

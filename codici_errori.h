@@ -25,6 +25,8 @@
 #define ERR_NO_USER_FILE -2001
 #define ERR_USERNAME_NOT_FOUND -2002
 #define ERR_WRONG_PASSWORD -2003
+#define ERR_INSERT_LOGGED_USER -2004
+#define ERR_USER_ALREADY_LOGGED -2005
 
 /*
   Codici di errore relativi a problemi su operazioni di log
