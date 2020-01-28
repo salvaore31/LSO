@@ -23,3 +23,5 @@ int isLogged(char [], loggedUser*);
 int insertLoggedUser(char [], loggedUser*);
 
 int deleteLoggedUser(char [], loggedUser*);
+
+void initializaLoggedUser(loggedUser*);

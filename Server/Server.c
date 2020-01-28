@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
   pthread_mutex_lock(&serverLog.sem);
   LogServerStart(&serverLog.fd);
   pthread_mutex_unlock(&serverLog.sem);
-
+  initializaLoggedUser(&loggati);
   if((sock = creaSocket(porta))<0){
       if(sock == ERR_SOCKET_CREATION){
         printf("%s", SOCKET_CREATION_ERR_MESSAGE);

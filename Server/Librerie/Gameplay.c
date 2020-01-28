@@ -364,9 +364,7 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog, l
           pthread_mutex_lock(&serverLog->sem);
           LogUserSignOut(&serverLog->fd,username);
           pthread_mutex_unlock(&serverLog->sem);
-          pthread_mutex_lock(&loggati->sem);
           deleteLoggedUser(username,loggati);
-          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int *) 1);
         break;
@@ -385,9 +383,7 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog, l
           pthread_mutex_lock(&serverLog->sem);
           LogUserSignOut(&serverLog->fd,username);
           pthread_mutex_unlock(&serverLog->sem);
-          pthread_mutex_lock(&loggati->sem);
           deleteLoggedUser(username,loggati);
-          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int * ) 1);
         break;
@@ -444,9 +440,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog, lo
           pthread_mutex_lock(&serverLog.sem);
           LogUserSignOut(&serverLog.fd,user);
           pthread_mutex_unlock(&serverLog.sem);
-          pthread_mutex_lock(&loggati->sem);
           deleteLoggedUser(user,loggati);
-          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int *) 1);
         break;
@@ -465,9 +459,7 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog, lo
           pthread_mutex_lock(&serverLog.sem);
           LogUserSignOut(&serverLog.fd,user);
           pthread_mutex_unlock(&serverLog.sem);
-          pthread_mutex_lock(&loggati->sem);
           deleteLoggedUser(user,loggati);
-          pthread_mutex_unlock(&loggati->sem);
           close(sockfd);
           pthread_exit((int * ) 1);
         break;

@@ -66,7 +66,7 @@ int checkUsername(char* username, loggedUser *loggati){
 //registerUser FUNZIONA BISOGNA GESTIRE IL COMPORTAMENTO NEI VARI CASI DI ERRORE
 int registerUser(char* newuser, char* newpassw,loggedUser *loggati){
 
-  int res,fdUserFile,n_b_w,lenght_user,lenght_passw;
+  int res,err,fdUserFile,n_b_w,lenght_user,lenght_passw;
   lenght_user=strlen(newuser);
   lenght_passw=strlen(newpassw);
 
@@ -90,8 +90,12 @@ int registerUser(char* newuser, char* newpassw,loggedUser *loggati){
             return ERR_INPUT_OUTPUT;
           }else{
             write(fdUserFile,"\n",1);
-            close(fdUserFile);
-            return 0;
+            if(err=insertLoggedUser(newuser,loggati)<0){
+              return ERR_INSERT_LOGGED_USER;
+            }else{
+              close(fdUserFile);
+              return 0;
+            }
           }
         }
       }
@@ -235,4 +239,13 @@ int isLogged(char user[], loggedUser *loggati){
   }
   pthread_mutex_unlock(&loggati->sem);
   return res;
+}
+
+void initializaLoggedUser(loggedUser *loggati){
+  int i;
+  pthread_mutex_lock(&loggati->sem);
+  for(i=0;i<MAX_PLAYER_N;i++){
+    strcpy(loggati->user[i],"");
+  }
+  pthread_mutex_unlock(&loggati->sem);
 }
