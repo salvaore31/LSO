@@ -6,7 +6,7 @@ int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
   clear();
   int n_b_r;
-  char msg[500],input[10];
+  char msg[500],input[10],c;
   if(argc!=3){
     printf("Passa indirizzo e porta\n");
     return(0);
@@ -26,8 +26,7 @@ int main(int argc, char* argv[]){
         clear();
         printf("Al momento risulta impossibile eseguire operazione di Log-In e Sign-In.\nRiprova tra poco.\n");
       }else{
-        scanf("%s",input);
-        write(sockfd,input,strlen(input));
+        sleep(1);
         clear();
         ingame=comunicationGame(sockfd);
       }
@@ -41,10 +40,13 @@ int main(int argc, char* argv[]){
 void handleSignal(int sig){
   if(sig==SIGINT){
     clear();
+    fflush(STDIN_FILENO);
     printf("Arrivederci.\n");
     if(logged==1)
       write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
-    sleep(2);
+    else
+      write(sockfd,CLIENT_GONE,strlen(CLIENT_GONE));
+    sleep(1);
     close(sockfd);
     system("reset");
     exit(-1);
@@ -59,7 +61,7 @@ int comunication(int sockfd){
     if(goOn(msg)){
       return 1;
     }else{
-      if((strcmp(msg, "-1")==0)){
+      if((strcmp(msg, "-1")==0) || strcmp()){
         return -1;
       }else{
         scanf("%s",input);
@@ -99,8 +101,6 @@ int comunicationGame(int sockfd){
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);
   return 0;
 }
-
-
 
 int goOn(char msg[]){
   return ((strcmp(msg,SUCCESS_MESSAGE_LIM)==0) || (strcmp(msg,SUCCESS_MESSAGE_SIM)==0));

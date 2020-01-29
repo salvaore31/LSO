@@ -164,14 +164,13 @@ void * run(void *arg){
           pthread_exit((int*)1);
           break;
         default:
-          n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
+          n_b_r=sendMsgNoReply(sockfd,WELCOME_MESSAGE);
           break;
       }
     }else{
-          n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
+          n_b_r=sendMsgNoReply(sockfd,WELCOME_MESSAGE);
     }
   }
-  read(sockfd,msg,1);
   if(g==NULL){
     initializaNewGame(&g,sockfd,user,&serverLog,&loggati);
   }else{

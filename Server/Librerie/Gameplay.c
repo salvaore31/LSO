@@ -17,8 +17,10 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   char msg[100], matrix[5000];
 
   GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
-  sendMsg(sockfd,matrix,msg);
-
+  if(sendMsg(sockfd,matrix,msg)<0){
+    azioneGiocatore(game,idGiocatore,'0',game->gameId,&serverLog->fd);
+    return PLAYER_EXITS;
+  }
   while(!(game->timeOver)){
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
@@ -147,13 +149,18 @@ int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fd
         }
       break;
       case 'q': case 'Q':
-        if(grid[y][x].pacco){
+        if(player->pacco==0){
+          if(grid[y][x].pacco){
           player->pacco = 1;
           player->codicePacco = grid[y][x].codicePacco;
           grid[y][x].codicePacco = 0;
           grid[y][x].pacco = 0;
           sprintf(dest,"[%d,%d]",player->posx,player->posy);
           LogPlayerTakePackage(fdLog,gameId,player->nome,player->codicePacco,dest);
+          }else{
+            pthread_mutex_unlock(&game->sem);
+            return -1;
+          }
         }else{
           pthread_mutex_unlock(&game->sem);
           return -1;
@@ -355,6 +362,8 @@ void spawnNewPlayer(Game** game, char* username,int sockfd,LogFile* serverLog, l
           pthread_mutex_unlock(&serverLog->sem);
           deleteLoggedUser(username,loggati);
           close(sockfd);
+          if(isGameEmpty(g))
+            raise(SIGALRM);
           pthread_exit((int *) 1);
         break;
         case GAME_END_FOR_TIME:
@@ -409,6 +418,8 @@ void initializaNewGame(Game ** game, int sockfd, char user[], LogFile *toLog, lo
         pthread_mutex_unlock(&serverLog.sem);
         deleteLoggedUser(user,loggati);
         close(sockfd);
+        if(isGameEmpty(g))
+          raise(SIGALRM);
         pthread_exit((int * ) 1);
         break;
         case GAME_END_FOR_TIME:

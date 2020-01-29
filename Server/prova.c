@@ -4,16 +4,11 @@
 
 int main(int argc, char const *argv[]) {
 
-  loggedUser a;
-  initializaLoggedUser(&a);
-  insertLoggedUser("capo",&a);
-  printf("%s\n","inserimento");
-  printf("%s\n",a.user[0]);
-  insertLoggedUser("giangiorgio",&a);
-  printf("%s\n",a.user[1]);
-  deleteLoggedUser("capo",&a);
-  deleteLoggedUser("giangiorgio",&a);
-  printf("%s\n","cancellazione");
-  printf("%s\n",a.user[0] );
+  char ci[3];
+  int n_b_r;
+  n_b_r=read(STDIN_FILENO,ci,10);
+  ci[n_b_r]='\0';
+  printf("%s\n%d\n",ci,strlen(ci) );
+  fflush(STDIN_FILENO);
   return 0;
 }

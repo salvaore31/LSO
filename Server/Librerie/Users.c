@@ -6,7 +6,19 @@ int signInUserMenu(int sockfd, char usrn[], LogFile *log, loggedUser *loggati){
   int err;
   //da aggiungere controllo su effettiva lettura
     n_b_r=sendMsg(sockfd,INSERT_USERNAME_SIM,usrn);
+    if(n_b_r<0){
+      pthread_mutex_lock(&log->sem);
+      LogUnkownClientDisconnection(&log->fd);
+      pthread_mutex_unlock(&log->sem);
+      pthread_exit((int*)1);
+    }
     n_b_r=sendMsg(sockfd,INSERT_PASSWORD_SIM,pssw);
+    if(n_b_r<0){
+      pthread_mutex_lock(&log->sem);
+      LogUnkownClientDisconnection(&log->fd);
+      pthread_mutex_unlock(&log->sem);
+      pthread_exit((int*)1);
+    }
     while((err=registerUser(usrn, pssw, loggati)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
@@ -24,7 +36,19 @@ int signInUserMenu(int sockfd, char usrn[], LogFile *log, loggedUser *loggati){
           break;
         case ERR_INVALID_USERNAME:
           n_b_r=sendMsg(sockfd,USER_ALREADY_PRESENT_SIM,usrn);
+          if(n_b_r<0){
+            pthread_mutex_lock(&log->sem);
+            LogUnkownClientDisconnection(&log->fd);
+            pthread_mutex_unlock(&log->sem);
+            pthread_exit((int*)1);
+          }
           n_b_r=sendMsg(sockfd,INSERT_PASSWORD_SIM,pssw);
+          if(n_b_r<0){
+            pthread_mutex_lock(&log->sem);
+            LogUnkownClientDisconnection(&log->fd);
+            pthread_mutex_unlock(&log->sem);
+            pthread_exit((int*)1);
+          }
           break;
         default:
           break;
@@ -148,6 +172,12 @@ int logInUserMenu(int sockfd, char usrn[],LogFile *log, loggedUser *loggati){
 
   //da aggiungere controllo su effettiva lettura
     n_b_r=sendMsg(sockfd,INSERT_USERNAME_LIM,usrn);
+    if(n_b_r<0){
+      pthread_mutex_lock(&log->sem);
+      LogUnkownClientDisconnection(&log->fd);
+      pthread_mutex_unlock(&log->sem);
+      pthread_exit((int*)1);
+    }
     while((err = checkUsername(usrn, loggati))<0){
       if(err == ERR_NO_USER_FILE){
         pthread_mutex_lock(&log->sem);
@@ -160,11 +190,29 @@ int logInUserMenu(int sockfd, char usrn[],LogFile *log, loggedUser *loggati){
         LogErrorMessage(&log->fd, USER_FILE_OPEN_ERR_MESSAGE);
         pthread_mutex_unlock(&log->sem);
         n_b_r=sendMsg(sockfd,USER_ALREADY_LOGGED,usrn);
+        if(n_b_r<0){
+          pthread_mutex_lock(&log->sem);
+          LogUnkownClientDisconnection(&log->fd);
+          pthread_mutex_unlock(&log->sem);
+          pthread_exit((int*)1);
+        }
       }else{
         n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
+        if(n_b_r<0){
+          pthread_mutex_lock(&log->sem);
+          LogUnkownClientDisconnection(&log->fd);
+          pthread_mutex_unlock(&log->sem);
+          pthread_exit((int*)1);
+        }
       }
     }
     n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
+    if(n_b_r<0){
+      pthread_mutex_lock(&log->sem);
+      LogUnkownClientDisconnection(&log->fd);
+      pthread_mutex_unlock(&log->sem);
+      pthread_exit((int*)1);
+    }
     while((err=logInUser(usrn, pssw, loggati)) != 0){
       //l'utente non è stato trovato tra quelli registrati
       switch(err){
@@ -180,10 +228,28 @@ int logInUserMenu(int sockfd, char usrn[],LogFile *log, loggedUser *loggati){
         return ERR_INPUT_OUTPUT;
         case ERR_WRONG_PASSWORD:
           n_b_r=sendMsg(sockfd,WRONG_PASSWORD_LIM,pssw);
+          if(n_b_r<0){
+            pthread_mutex_lock(&log->sem);
+            LogUnkownClientDisconnection(&log->fd);
+            pthread_mutex_unlock(&log->sem);
+            pthread_exit((int*)1);
+          }
           break;
         case ERR_USERNAME_NOT_FOUND:
           n_b_r=sendMsg(sockfd,WRONG_USERNAME_LIM,usrn);
+          if(n_b_r<0){
+            pthread_mutex_lock(&log->sem);
+            LogUnkownClientDisconnection(&log->fd);
+            pthread_mutex_unlock(&log->sem);
+            pthread_exit((int*)1);
+          }
           n_b_r=sendMsg(sockfd,INSERT_PASSWORD_LIM,pssw);
+          if(n_b_r<0){
+            pthread_mutex_lock(&log->sem);
+            LogUnkownClientDisconnection(&log->fd);
+            pthread_mutex_unlock(&log->sem);
+            pthread_exit((int*)1);
+          }
           break;
         default:
           break;

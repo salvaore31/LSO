@@ -93,10 +93,8 @@ int sendMsg(int sockfd,char toSend[],char received[]){
   if (n_b_w<strlen(toSend)) {
     return ERR_SENDING_MESSAGE;
   }
-
-
   n_b_r=read(sockfd,received,50);
-  if(strcmp(received,USER_LOG_OUT)==0){
+  if( (strcmp(received,USER_LOG_OUT)==0) || (strcmp(received,CLIENT_GONE)==0) ){
     return -1;
   }
   received[n_b_r]='\0';
