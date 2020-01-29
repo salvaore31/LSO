@@ -24,6 +24,8 @@ void setPermessi(int x, int y, int giocatore, GameGrid ** grid);
 */
 void setPermessiToAll(int x, int y, GameGrid ** grid);
 
+int gameHasToEnd(Game *,int);
+
 void * timer(void *arg);
 
 /*

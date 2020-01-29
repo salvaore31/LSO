@@ -26,7 +26,6 @@ int main(int argc, char* argv[]){
         clear();
         printf("Al momento risulta impossibile eseguire operazione di Log-In e Sign-In.\nRiprova tra poco.\n");
       }else{
-        sleep(1);
         clear();
         ingame=comunicationGame(sockfd);
       }
@@ -41,7 +40,6 @@ void handleSignal(int sig){
   if(sig==SIGINT){
     clear();
     fflush(STDIN_FILENO);
-    printf("Arrivederci.\n");
     if(logged==1)
       write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
     else
@@ -49,6 +47,7 @@ void handleSignal(int sig){
     sleep(1);
     close(sockfd);
     system("reset");
+    printf("Arrivederci.\n");
     exit(-1);
   }
 }
@@ -61,7 +60,7 @@ int comunication(int sockfd){
     if(goOn(msg)){
       return 1;
     }else{
-      if((strcmp(msg, "-1")==0) || strcmp()){
+      if( (strcmp(msg, "-1")==0) ){
         return -1;
       }else{
         scanf("%s",input);

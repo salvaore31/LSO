@@ -28,10 +28,10 @@
 #define MAX_OBSTACLES_N 20
 #define MAX_GRID_SIZE_L 15
 #define MAX_GRID_SIZE_H 10
-#define MAX_TIME 20
+#define MAX_TIME 200
 #define PLAYER_EXITS 1000
 #define GAME_END_FOR_TIME 1001
-
+#define PLAYER_MAKE_A_POINT 1002
 /*
   La struttura seguente contiene i dati utili per la gestione di un giocatore all'interno di una Partita:
     -(posx, posy) rappresentano la sua posizione all'interno della griglia di gioco;
