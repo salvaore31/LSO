@@ -1,2 +1,0 @@
-drwxrwxr-x 2 salvatore salvatore 4096 lug 11 16:30 aba
--rwxrwxr-x 1 salvatore salvatore  256 lug 11 14:56 script.sh
