@@ -15,26 +15,10 @@
 #include "../costanti.h"
 #include "../messaggi.h"
 
-void printGameGrid(GameGrid grid);
-
-int logInRequest(char* username, char * password);
-
-int signInRequest(char* username, char* password);
-
 int comunication(int);
 
 int comunicationGame(int);
 
-int newGame();
-
-int joinGame();
-
-int movementRequest();
-
 void handleSignal(int);
 
-int selectGame(int);
-
 int goOn(char []);
-
-int goOut(char []);
