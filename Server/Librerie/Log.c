@@ -20,7 +20,7 @@ void oraEsatta(char s[]){
 
 void LogServerStart(int *fdLog){
 
-  char ora[26];
+  char ora[80];
   char fileName[45]="File/Log/LOG_";
   int n_b_w;
 
@@ -46,7 +46,7 @@ void LogServerStart(int *fdLog){
 
 void LogServerClose(int*fdLog){
 
-  char ora[26];
+  char ora[80];
   int n_b_w;
 
   oraEsatta(ora);
@@ -63,7 +63,7 @@ void LogServerClose(int*fdLog){
 
 void LogNewGame(int* fdLog, int gameId){
 
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -81,7 +81,7 @@ void LogNewGame(int* fdLog, int gameId){
 }
 
 void LogEndGame(int* fdLog, int gameId){
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -99,7 +99,7 @@ void LogEndGame(int* fdLog, int gameId){
 }
 
 void LogPlayerJoin(int* fdLog, int gameId, char* player){
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -117,7 +117,7 @@ void LogPlayerJoin(int* fdLog, int gameId, char* player){
 }
 
 void LogPlayerMoves(int* fdLog, int gameId, char* player, char* src, char *dst ){
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -136,7 +136,7 @@ void LogPlayerMoves(int* fdLog, int gameId, char* player, char* src, char *dst )
 
 void LogPlayerTakePackage(int* fdLog,int gameId,char player[], int pacco, char loc[]){
 
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -155,7 +155,7 @@ void LogPlayerTakePackage(int* fdLog,int gameId,char player[], int pacco, char l
 
 void LogPlayerLeavePackage(int *fdLog, int gameId, char player[], int pacco, char loc[]){
 
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -173,7 +173,7 @@ void LogPlayerLeavePackage(int *fdLog, int gameId, char player[], int pacco, cha
 
 void LogPlayerMakeAPoint(int *fdLog, int gameId, char player[]){
 
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[100];
 
@@ -191,9 +191,9 @@ void LogPlayerMakeAPoint(int *fdLog, int gameId, char player[]){
 }
 
 void LogPlayerWin(int* fdLog, int gameId, char * player){
-  char ora[26];
+  char ora[80];
   int n_b_w;
-  char buf[10];
+  char buf[100];
 
   oraEsatta(ora);
   sprintf(buf, LOG_PLAYER_WINS, player,gameId);
@@ -210,7 +210,7 @@ void LogPlayerWin(int* fdLog, int gameId, char * player){
 }
 
 void LogNewUser(int* fdLog, char* player) {
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[64];
 
@@ -228,7 +228,7 @@ void LogNewUser(int* fdLog, char* player) {
 }
 
 void LogUserSignIn(int* fdLog, char* player){
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[64];
 
@@ -246,7 +246,7 @@ void LogUserSignIn(int* fdLog, char* player){
 }
 
 void LogUserSignOut(int* fdLog, char* player){
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[64];
 
@@ -264,7 +264,7 @@ void LogUserSignOut(int* fdLog, char* player){
 }
 
 void LogErrorMessage(int* fdLog, char* err){
-  char ora[26];
+  char ora[80];
   int n_b_w;
   char buf[1000];
 
@@ -282,7 +282,7 @@ void LogErrorMessage(int* fdLog, char* err){
 
 void LogUnkownClientDisconnection (int*fdLog){
 
-  char ora[26];
+  char ora[80];
   int n_b_w;
 
   oraEsatta(ora);

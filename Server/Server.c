@@ -180,16 +180,6 @@ void * run(void *arg){
 
 void handleSignal(int Sig){
   switch (Sig) {
-    case SIGSEGV:
-      if(g!= NULL){
-        free(g);
-        g=NULL;
-      }
-      initializaLoggedUser(&loggati);
-      printf("%d\n",errno);
-      printf("%s\n","dovrebbe essere sigsegv ma invece no" );
-      exit(1);
-    break;
     case SIGINT:
       pthread_mutex_lock(&serverLog.sem);
       LogServerClose(&serverLog.fd);
@@ -197,6 +187,7 @@ void handleSignal(int Sig){
       exit(1);
     break;
     case SIGALRM:
+      alarm(0);
       pthread_mutex_lock(&g->sem);
       g->timeOver = 1;
       gameEnded = 1;

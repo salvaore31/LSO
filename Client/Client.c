@@ -6,7 +6,7 @@ int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
   clear();
   int n_b_r;
-  char msg[500],input[10],c;
+  char msg[500],input[100],c;
   if(argc!=3){
     printf("Passa indirizzo e porta\n");
     return(0);
@@ -54,7 +54,7 @@ void handleSignal(int sig){
 
 int comunication(int sockfd){
   int n_b_r;
-  char msg[250],input[50];
+  char msg[250],input[100],c;
   while(1){
     leggi();
     if(goOn(msg)){
@@ -63,7 +63,8 @@ int comunication(int sockfd){
       if( (strcmp(msg, "-1")==0) ){
         return -1;
       }else{
-        scanf("%s",input);
+        scanf("%50s",input);
+        while ((c = fgetc(stdin)) != '\n' && c != EOF); /* Flush stdin */
         write(sockfd,input,strlen(input));
         clear();
       }
@@ -75,7 +76,7 @@ int comunicationGame(int sockfd){
   int n_b_r;
   struct termios orig;
   clear();
-  char msg[4000],input[50];
+  char msg[4000],input[100];
   struct termios raw;
   tcgetattr(STDIN_FILENO, &raw);
   orig = raw;
