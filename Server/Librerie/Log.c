@@ -280,17 +280,17 @@ void LogErrorMessage(int* fdLog, char* err){
   return;
 }
 
-void LogUnkownClientDisconnection (int*fdLog){
+void LogUnknownClientDisconnection (int*fdLog,char addr[]){
 
-  char ora[80];
+  char ora[80],buf[1000];
   int n_b_w;
 
   oraEsatta(ora);
-
-  if((n_b_w = write(*fdLog,ora,strlen(ora))< strlen(ora))){
+  sprintf(buf,LOG_UNKNOWN_CLIENT_DISCONNECTION,addr);
+  if((n_b_w = write(*fdLog,ora,strlen(ora)))< strlen(ora)){
       /*Gesire mancata scrittura su LOG*/
   } else {
-    if((n_b_w = write(*fdLog,LOG_UNKNOWN_CLIENT_DISCONNECTION,sizeof(LOG_UNKNOWN_CLIENT_DISCONNECTION)-1)) < sizeof(LOG_UNKNOWN_CLIENT_DISCONNECTION)-1){
+    if((n_b_w = write(*fdLog,buf,strlen(buf))) < strlen(buf)){
       /*Gesire mancata scrittura su LOG*/
     }
   }

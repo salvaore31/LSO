@@ -83,7 +83,7 @@
 #define LOG_SIGN_IN                         ": l'utente %s si è connesso al Server.\n"
 #define LOG_SIGN_OUT                        ": l'utente %s si è disconesso dal Server.\n"
 #define LOG_ERROR                           ": ERRORE(%s).\n"
-#define LOG_UNKNOWN_CLIENT_DISCONNECTION    ": un Client non identificato si è disconesso dal Server.\n"
+#define LOG_UNKNOWN_CLIENT_DISCONNECTION    ": un Client non identificato con indirizzo ip %s si è disconesso dal Server.\n"
 #define LOG_PLAYER_TAKE                     ": in partita con ID %d l'utente %s ha raccolto il pacco N %d da posizione %s.\n"
 #define LOG_PLAYER_DELIVER                  ": in partita con ID %d l'utente %s ha lasciato il pacco N %d in posizione %s.\n"
 #define LOG_PLAYER_MAKE_POINT               ": in partita con ID %d l'utente %s ha fatto un punto.\n"
