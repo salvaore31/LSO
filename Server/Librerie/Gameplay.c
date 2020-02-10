@@ -61,14 +61,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   }
   return 0;
 }
-/*
-  La funzione si occupa di determinare l'azione del giocatore all'interno di una partita.
-   - game, di tipo puntatore a Game(struct definita in costanti.h) determina la partita;
-   - giocatore, è un intero rappresentante l'id del giocatore specifico;
-   - action, è un carattere rappresentante l'identificativo dell'azione;
-   - gameId, è un intero rappresentante l'id della partita;
-   - fdLog, rappresenta il file descriptore del file di Log.
-*/
+
 int azioneGiocatore(Game *game, int giocatore, char action, int gameId, int * fdLog){
 
   srand(time(NULL));
