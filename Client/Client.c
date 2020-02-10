@@ -1,7 +1,6 @@
 #include "Client.h"
 
-int sockfd,ingame=0,logged=0;
-
+int sockfd,ingame=0,logged=0, connected=0;
 int main(int argc, char* argv[]){
   signal(SIGINT, handleSignal);
   clear();
@@ -21,6 +20,7 @@ int main(int argc, char* argv[]){
     if(connect(sockfd,(struct sockaddr *)&server_addr,sizeof(server_addr))<0){
       printf("Errore connessione socket %d\n", errno);
     }else{
+      connected=1;
       logged=comunication(sockfd);
       if (logged<0) {
         clear();
@@ -42,9 +42,8 @@ void handleSignal(int sig){
     fflush(STDIN_FILENO);
     if(logged==1)
       write(sockfd,USER_LOG_OUT,strlen(USER_LOG_OUT));
-    else
+    else if(connected==1)
       write(sockfd,CLIENT_GONE,strlen(CLIENT_GONE));
-    sleep(1);
     close(sockfd);
     system("reset");
     printf("Arrivederci.\n");

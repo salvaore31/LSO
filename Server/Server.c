@@ -7,6 +7,7 @@ int gameId=-1;
 loggedUser loggati;
 pthread_t clientsId[MAX_PLAYER_N];
 int gameEnded = 0;
+struct sockaddr_in client_addr;
 
 int main(int argc, char* argv[]){
 
@@ -17,6 +18,7 @@ int main(int argc, char* argv[]){
   i = 0;
 
   clear();
+  system("/sbin/ifconfig");
   //seed per la generazione di numeri casuali;
   srand(time(NULL));
   //signal handler set;
@@ -35,7 +37,6 @@ int main(int argc, char* argv[]){
   int *thread_sd, sock, sockfd,porta =atoi(argv[1]), pid;
   pthread_t tid;
 
-  struct sockaddr_in client_addr;
   socklen_t client_len;
 
   pthread_mutex_lock(&serverLog.sem);
@@ -69,14 +70,13 @@ int main(int argc, char* argv[]){
         while(1){
           while(!gameEnded){
             client_len = sizeof(client_addr);
-            if((sockfd = accept(sock, NULL, NULL))<0){
+            if((sockfd = accept(sock,(struct sockaddr *) &client_addr, &client_len))<0){
               printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
               pthread_mutex_lock(&serverLog.sem);
               LogErrorMessage(&serverLog.fd, ACCEPT_SOCKET_ERR_MESSAGE);
               pthread_mutex_unlock(&serverLog.sem);
               exit(-1);
             }
-
             int* thread_sd;
             thread_sd = (int*) malloc(sizeof(int));
             thread_sd = &sockfd;
@@ -121,14 +121,14 @@ void * run(void *arg){
     if(n_b_r==1){
       switch (msg[0]) {
         case 'l': case 'L':
-          result = logInUserMenu(sockfd,user,&serverLog,&loggati);
+          result = logInUserMenu(sockfd,user,&serverLog,&loggati,inet_ntoa(client_addr.sin_addr));
           if(result == ERR_NO_USER_FILE || result == ERR_INPUT_OUTPUT){
             clear();
             write(sockfd,"-1", strlen("-1"));
             n_b_r = read(sockfd, msg, 50);
             if(strcmp(msg, USER_LOG_OUT)){
               pthread_mutex_lock(&serverLog.sem);
-              LogUnkownClientDisconnection(&serverLog.fd);
+              LogUnknownClientDisconnection(&serverLog.fd,inet_ntoa(client_addr.sin_addr));
               pthread_mutex_unlock(&serverLog.sem);
             }
             pthread_exit((int*)1);
@@ -137,14 +137,14 @@ void * run(void *arg){
           done = 1;
           break;
         case 'r': case 'R':
-          result = signInUserMenu(sockfd,user,&serverLog,&loggati);
+          result = signInUserMenu(sockfd,user,&serverLog,&loggati,inet_ntoa(client_addr.sin_addr));
           if(result == ERR_NO_USER_FILE || result == ERR_INPUT_OUTPUT){
             clear();
             write(sockfd,"-1", strlen("-1"));
             n_b_r = read(sockfd, msg, 50);
             if(strcmp(msg, USER_LOG_OUT)){
               pthread_mutex_lock(&serverLog.sem);
-              LogUnkownClientDisconnection(&serverLog.fd);
+              LogUnknownClientDisconnection(&serverLog.fd,inet_ntoa(client_addr.sin_addr));
               pthread_mutex_unlock(&serverLog.sem);
             }
             pthread_exit((int*)1);
@@ -158,7 +158,7 @@ void * run(void *arg){
           n_b_r = read(sockfd, msg, 50);
           if(strcmp(msg, USER_LOG_OUT)){
             pthread_mutex_lock(&serverLog.sem);
-            LogUnkownClientDisconnection(&serverLog.fd);
+            LogUnknownClientDisconnection(&serverLog.fd,inet_ntoa(client_addr.sin_addr));
             pthread_mutex_unlock(&serverLog.sem);
           }
           pthread_exit((int*)1);

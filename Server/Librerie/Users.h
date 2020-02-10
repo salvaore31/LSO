@@ -13,10 +13,10 @@ int checkUsername(char* username, loggedUser*);
 int logInUser(char* user, char* passw, loggedUser*);
 
 //Contiene la gestione del menu di Login
-int logInUserMenu(int, char[], LogFile*, loggedUser*);
+int logInUserMenu(int, char[], LogFile*, loggedUser*, char []);
 
 //Contiene la gestione del menu di Registrazione
-int signInUserMenu(int, char[], LogFile*, loggedUser*);
+int signInUserMenu(int, char[], LogFile*, loggedUser*,char []);
 
 int isLogged(char [], loggedUser*);
 
