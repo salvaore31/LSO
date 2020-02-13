@@ -72,13 +72,62 @@ int createGameGrid(Game *g);
 */
 int isGameEmpty(Game* game);
 
-int didIWin(Game*, int);
+/*
+  La funzion controlla se il giocatore specificato abbia vinto la partita, controllando se il
+  suo id corrisponde al valore massimo presente all'interno dell'array Punteggio contenuto in game.
+  Parametri:
+    Game * game, il puntatore alla partita corrente;
+    int idGiocatore, l'id del giocatore corrente.
+  Valori di ritorno:
+    1, se il giocatore corrente ha vinto;
+    0, altrimenti.
+*/
+int didIWin(Game* g, int idGiocatore);
 
+/*La funzione alloca una partita e inizializza il semaforo contenuto in Game.
+  Valori di Ritorno:
+    un punatore ad una struttura game se l'allocazione è andata a buon fine;
+    NULL altriment.
+*/
 Game * createGame();
-
+/*
+  La funzione playGame consente al giocatore di giocare alla partita corrente. Preso un giocatore ed una partita
+  si mette in ascolto dei messaggi del Client e richiama la funzione azioneGiocatore su quel giocatore per calcolare
+  il risultato della mossa indicata dal client. Dopo di ché invia la matrice aggiornata al Client. Esegue inoltre i controlli
+  necessari a verificare la fine della partita. Se avviene il fine partita PlayGame si occupa anche di inviare ai vari client
+  giocanti i messaggi di vittoria e sconfitta.
+  Parametri:
+    Game* game, il puntatore alla partita corrente;
+    int idGiocatore, l'id del giocatore corrente;
+    int gameId, l'id del giocatore corrente;
+    int sockfd, il fd della socket di comunicazione;
+    LogFile* serverLog, il puntatore alla struttura che contiene il fd del Log e il relativo mutex.
+  Valori di Ritono:
+    PLAYER_EXITS, un valore costante associato all'evente 'giocatore esce dalla partita';
+    GAME_END_FOR_TIME, un valore costante rappresentante l'evento 'fine tempo massimo di gioco'.
+*/
 int playGame(Game * game, int idGiocatore, int gameId,int sockfd, LogFile* serverLog);
 
-void spawnNewPlayer(Game ** , char* username, int , LogFile* ,loggedUser*);
+/*
+  La funzione spawnNewPlayer si occupa di gestire l'evento giocatore si unisce a partita in corso.
+  Inserisce un giocatore all'interno della matrice di gioco e gli assegna un id. Dopodichè popola
+  la corrispettiva cella dell'array di player in game. Dopo aver fatto ciò richiama la funzione PlayGame per
+  quella partita e quel giocatore.
+  Se la funzione playGame ritorna PLAYER_EXITS il server logga l'evento d'uscita
+  giocatore ed elimina il giocatore dalla struttura che gestisce i giocatori logGame * game, il puntatore alla partita corrente;
+    int idGiocatore, l'id del giocatore corrente.gati. Dopo aver chiuso la socket
+  controlla se la partita contiene ancora almeno un giocatore, se ciò non avviene lancia un segnale di SIGALRM.
+  In entrambi casi a quel punto l'esecuzione del thread viene terminata.
+  Se playGame ritorna GAME_END_FOR_TIME allora si logga l'evento d'uscita, si cancella l'utente dall'elenco di giocatori loggati,
+  si chiude la socket e si termina l'esecuzione del thread.
+  Parametri:
+    Game ** game, un puntatore a puntatore alla partita corrente;
+    char* username, una stringa contenente il nickname dell'utente;
+    int sockfd, il fd della socket di comunicazione;
+    LogFile* serverLog, il puntatore alla struttura che contiene il fd del Log e il relativo mutex,
+    loggedUSer* loggati, il puntatore alla struttura che contiene i giocatori correntemente loggati.
+*/
+void spawnNewPlayer(Game ** game , char* username, int sockfd, LogFile* serverLog, loggedUser* loggati);
 
 void deleteGrid(GameGrid **g);
 
