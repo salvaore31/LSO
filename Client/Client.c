@@ -24,7 +24,8 @@ int main(int argc, char* argv[]){
       logged=comunication(sockfd);
       if (logged<0) {
         clear();
-        printf("Al momento risulta impossibile eseguire operazione di Log-In e Sign-In.\nRiprova tra poco.\n");
+        if(logged!=-5)
+          printf("Al momento risulta impossibile eseguire operazione di Log-In e Sign-In.\nRiprova tra poco.\n");
       }else{
         clear();
         ingame=comunicationGame(sockfd);
@@ -52,8 +53,8 @@ void handleSignal(int sig){
 }
 
 int comunication(int sockfd){
-  int n_b_r;
-  char msg[250],input[100],c;
+  int n_b_r,c;
+  char msg[250],input[1000];
   while(1){
     leggi();
     if(goOn(msg)){
@@ -62,8 +63,15 @@ int comunication(int sockfd){
       if( (strcmp(msg, "-1")==0) ){
         return -1;
       }else{
-        scanf("%50s",input);
-        while ((c = fgetc(stdin)) != '\n' && c != EOF); /* Flush stdin */
+        if (strcmp(msg,WELCOME_MESSAGE)==0) {
+          scanf("%1s",input);
+          if ( (strcmp(input,"e")==0) || (strcmp(input,"E")==0) ) {
+            raise(SIGINT);
+          }
+        }else{
+          scanf("%20s",input);
+        }
+        while((c = getchar()) != '\n' && c != EOF);
         write(sockfd,input,strlen(input));
         clear();
       }

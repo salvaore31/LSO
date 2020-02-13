@@ -164,11 +164,17 @@ void * run(void *arg){
           pthread_exit((int*)1);
           break;
         default:
-          n_b_r=sendMsgNoReply(sockfd,WELCOME_MESSAGE);
+          n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
+          if(n_b_r<0){
+            pthread_exit((int*)-1);
+          }
           break;
       }
     }else{
-          n_b_r=sendMsgNoReply(sockfd,WELCOME_MESSAGE);
+          n_b_r=sendMsg(sockfd,WELCOME_MESSAGE,msg);
+          if(n_b_r<0){
+            pthread_exit((int*)-1);
+          }
     }
   }
   if(g==NULL){

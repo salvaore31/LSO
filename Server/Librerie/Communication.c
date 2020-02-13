@@ -80,7 +80,7 @@ int sendMsgNoReply(int sockfd,char toSend[]){
 int sendMsg(int sockfd,char toSend[],char received[]){
 
   int n_b_r, n_b_w;
-  char msg[150];
+  char msg[250];
 
   clear();
   sprintf(msg,"%d",strlen(toSend));
