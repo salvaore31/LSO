@@ -21,15 +21,6 @@
 #include "Librerie/Users.c"
 #include "Librerie/Communication.c"
 
-/*
-  VARIABILI GLOBALI:
-  LogFile serverLog, una struttura dati contenente il file di Log della specifica sesssione server e il mutex che ne regola l'accesso;
-  Game *g, un puntatore alla partita in corso, inizialmente non allocata (definizione di Game in costanti.h);
-  int gameId=-1, l'id della partita che verrà assegnato al momento dell'allocazione della stessa;
-  loggedUser loggati, una struttura dati cotenente i giocatori correntemente loggati e il mutex che ne regola l'accesso;
-  pthread_t clientsId[MAX_PLAYER_N], un array contentene il tid dei thread giocanti utilizzato per gestire il fine partita;
-  int gameEnded = 0, un valore utilizzato per indicare al Server quando si trova all'interno di una partita;
-  */
 
 
 /*

@@ -4,6 +4,8 @@
 #include "Communication.h"
 #include "Users.h"
 
+/*La libreria contiene tutte le funzioni utili a gestire una partita.*/
+
 /*
   La funzione modifica la griglia di gioco in accordo con le mosse del giocatore.
   Parametri:
@@ -50,7 +52,6 @@ void setPermessiToAll(int x, int y, GameGrid ** grid);
 */
 int gameHasToEnd(Game *game, int idGiocatore);
 
-
 /*
   Crea la matrice di gioco associata ad una partita.
   Parametri:
@@ -84,12 +85,14 @@ int isGameEmpty(Game* game);
 */
 int didIWin(Game* g, int idGiocatore);
 
-/*La funzione alloca una partita e inizializza il semaforo contenuto in Game.
+/*
+  La funzione alloca una partita e inizializza il semaforo contenuto in Game.
   Valori di Ritorno:
     un punatore ad una struttura game se l'allocazione è andata a buon fine;
     NULL altriment.
 */
 Game * createGame();
+
 /*
   La funzione playGame consente al giocatore di giocare alla partita corrente. Preso un giocatore ed una partita
   si mette in ascolto dei messaggi del Client e richiama la funzione azioneGiocatore su quel giocatore per calcolare
@@ -129,6 +132,23 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd, LogFile* serve
 */
 void spawnNewPlayer(Game ** game , char* username, int sockfd, LogFile* serverLog, loggedUser* loggati);
 
+/*
+  La funzione dealloca la matrice di gioco associata alla partita.
+  Parametri:
+    GameGrid ** g, un puntatore a puntatore alla matrice associata alla partita.
+*/
 void deleteGrid(GameGrid **g);
 
-void initializaNewGame(Game**,int sockfd, char user[],LogFile*,loggedUser*);
+/*
+  La funzione crea una nuova partita. Sfrutta la funzione createGame.
+  Dopo aver creato la partita e il giocatore che, essendo il primo, riceve id 0 chiama la funzione playGame.
+  Il suo compartamento di gestione dei valori di ritorno di playGame (PLAYER_EXITS e GAME_END_FOR_TIME) è perfettamente
+  uguale a quello della funzione spawnNewPlayer descritto sopra.
+  Parametri:
+    Game ** game, un puntatore a puntatore alla partita corrente;
+    char user[], una stringa contenente il nickname dell'utente;
+    int sockfd, il fd della socket di comunicazione;
+    LogFile* toLog, il puntatore alla struttura che contiene il fd del Log e il relativo mutex,
+    loggedUSer* loggati, il puntatore alla struttura che contiene i giocatori correntemente loggati.
+*/
+void initializaNewGame(Game** game,int sockfd, char user[],LogFile* toLog,loggedUser* loggati);
