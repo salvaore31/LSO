@@ -24,17 +24,6 @@
        #define USER_ALREADY_PRESENT_SIM       "Il nome utente non è valido.\nScegli un altro nome, di lunghezza massima 15, con cui farti chiamare:\n"
        #define SUCCESS_MESSAGE_SIM            "Benvenuto!\nStai per essere reindirizzato ad un partita.\n"
 
-#define GAME_SELECTION_MENU   "Cosa vuoi fare?\nPremi 'n' per iniziare una nuova partita.\nPremi 'j' per unirti ad una partita in corso.\nPremi 'e' per uscire.\n"
-#define NO_SUCH_GAMES_MESSAGE        "Non ci sono partite disponibili in corso.\nPremi un tasto per continuare.\n"
-
-//E' follia, follia dico però il messaggio non lo cancello perché l'ho scritto e mi scoccio troppo assai di cancellarlo
-#define CURRENT_GAMES_PLAYED  "Partita %i.\nGiocatori: [...]\n"
-#define SELECT_FROM_CURRENT   "Inserisci il numero della partita a cui vuoi aggiungerti.\n"
-#define SELECT_DIRECTION      "Inserisci:\n\t'w' per muoverti verso NORD;\n\t'a' per muoverti verso OVEST;\n\t's' per muoverti verso SUD\n\t'd' per muoverti verso EST"
-
-/*
- * Messaggi relativi al gioco.
- */
 #define VICTORY_MESSAGE       "\033[34;47m\t\t\tComplimenti hai vinto!\t\t\t\033[0m\n"
 #define LOSS_MESSAGE          "\033[91;107m\t\t\tSei stato sconfitto.\t\t\t\033[0m\n"
 #define COLLISION_MESSAGE     "Vedi che è occupata.\n"
