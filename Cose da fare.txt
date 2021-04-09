@@ -5,3 +5,4 @@ pulizia generale(sopratutto costanti e messaggi)
 tutte le prove che riusciamo a pensare
 Invio e-mail a finzi
 Per sino fare scritto
+Archiviare la repo una volta completato l'esame
