@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
 }
 
 void handleSignal(int sig){
-  if(sig==SIGINT || sig==SIGHUP || sig==SIGQUIT || sig==SIGTERM){
+  if(sig==SIGINT || sig==SIGHUP || sig==SIGQUIT || sig==SIGTERM || sig==SIGSTOP){
     clear();
     fflush(STDIN_FILENO);
     if(logged==1)
