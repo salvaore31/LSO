@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
   signal(SIGTERM, handleSignal);
   signal(SIGALRM, handleSignal);
   signal(SIGSEGV, handleSignal);
-  signal(SIGPIPE, SIG_IGN);
+  signal(SIGPIPE, handleSignal);
 
   if (argc!=2) {
     printf("Passa il numero della porta.\n");
