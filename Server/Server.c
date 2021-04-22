@@ -188,7 +188,7 @@ void * run(void *arg){
           }
     }
   }
-  if (write(pipe, msg, strlen(msg)) == -1) {
+  if (write(sockfd, msg, strlen(msg)) == -1) {
     if (errno == EPIPE) {
         deleteLoggedUser(user, &loggati);
     }

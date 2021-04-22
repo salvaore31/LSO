@@ -23,7 +23,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     return PLAYER_EXITS;
   }
   while(!(game->timeOver)){
-    if (write(pipe, msg, strlen(msg)) == -1) {
+    if (write(sockfd, msg, strlen(msg)) == -1) {
       if (errno == EPIPE) {
           return PLAYER_EXITS;
       }
