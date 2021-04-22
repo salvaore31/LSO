@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
   signal(SIGTERM, handleSignal);
   signal(SIGALRM, handleSignal);
   signal(SIGSEGV, handleSignal);
-  signal(SIGPIPE, handleSignal);
+  signal(SIGPIPE, SIG_IGN);
 
   if (argc!=2) {
     printf("Passa il numero della porta.\n");
@@ -79,6 +79,7 @@ int main(int argc, char* argv[]){
         pthread_mutex_unlock(&serverLog.sem);
     }else{
         while(1){
+          printf("%s  %d", strerror(errno), errno);
           while(!gameEnded){
             client_len = sizeof(client_addr);
             if((sockfd = accept(sock,(struct sockaddr *) &client_addr, &client_len))<0){
@@ -129,6 +130,7 @@ void * run(void *arg){
     pthread_exit((int*)-1);
   }
   while(!done){
+
     if(n_b_r==1){
       switch (msg[0]) {
         case 'l': case 'L':
@@ -210,11 +212,10 @@ void handleSignal(int Sig){
       gameEnded = 1;
       pthread_mutex_unlock(&g->sem);
     break;
-    case SIGPIPE:
-    
-    break;
   }
 }
+
+
 
 void * endGameManagement(void * arg){
 
