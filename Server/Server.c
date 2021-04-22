@@ -210,6 +210,9 @@ void handleSignal(int Sig){
       gameEnded = 1;
       pthread_mutex_unlock(&g->sem);
     break;
+    case SIGPIPE:
+    
+    break;
   }
 }
 
