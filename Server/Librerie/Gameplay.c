@@ -17,6 +17,11 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   char msg[100], matrix[5000];
 
   GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
+  if (write(pipe, msg, strlen(msg)) == -1) {
+    if (errno == EPIPE) {
+        deleteLoggedUser(user, &loggati);
+    }
+  }
   if(sendMsg(sockfd,matrix,msg)<0){
     azioneGiocatore(game,idGiocatore,'0',game->gameId,&serverLog->fd);
     return PLAYER_EXITS;

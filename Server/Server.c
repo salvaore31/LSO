@@ -79,8 +79,7 @@ int main(int argc, char* argv[]){
         pthread_mutex_unlock(&serverLog.sem);
     }else{
         while(1){
-          printf("%s  %d", strerror(errno), errno);
-          while(!gameEnded){
+            while(!gameEnded){
             client_len = sizeof(client_addr);
             if((sockfd = accept(sock,(struct sockaddr *) &client_addr, &client_len))<0){
               printf("%s", ACCEPT_SOCKET_ERR_MESSAGE);
@@ -130,7 +129,6 @@ void * run(void *arg){
     pthread_exit((int*)-1);
   }
   while(!done){
-
     if(n_b_r==1){
       switch (msg[0]) {
         case 'l': case 'L':
@@ -188,6 +186,11 @@ void * run(void *arg){
           if(n_b_r<0){
             pthread_exit((int*)-1);
           }
+    }
+  }
+  if (write(pipe, msg, strlen(msg)) == -1) {
+    if (errno == EPIPE) {
+        deleteLoggedUser(user, &loggati);
     }
   }
   if(g==NULL){
