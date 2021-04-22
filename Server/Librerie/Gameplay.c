@@ -17,16 +17,17 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   char msg[100], matrix[5000];
 
   GameGridToText(game->grid,matrix,idGiocatore,&game->giocatori[idGiocatore]);
-  if (write(pipe, msg, strlen(msg)) == -1) {
-    if (errno == EPIPE) {
-        deleteLoggedUser(user, &loggati);
-    }
-  }
+
   if(sendMsg(sockfd,matrix,msg)<0){
     azioneGiocatore(game,idGiocatore,'0',game->gameId,&serverLog->fd);
     return PLAYER_EXITS;
   }
   while(!(game->timeOver)){
+    if (write(pipe, msg, strlen(msg)) == -1) {
+      if (errno == EPIPE) {
+          return PLAYER_EXITS;
+      }
+    }
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
     pthread_mutex_unlock(&serverLog->sem);
