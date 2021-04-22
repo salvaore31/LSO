@@ -25,6 +25,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   while(!(game->timeOver)){
     if (write(sockfd, msg, strlen(msg)) == -1) {
       if (errno == EPIPE) {
+          printf("qua ci arrivo\n", );
           return PLAYER_EXITS;
       }
     }
