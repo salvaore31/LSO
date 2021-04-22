@@ -55,7 +55,7 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
   if(didIWin(game, idGiocatore)){
     sendMsgNoReply(sockfd, VICTORY_MESSAGE);
     pthread_mutex_lock(&serverLog->sem);
-    LogPlayerWin(&serverLog->fd, gameId,&game->giocatori[idGiocatore].nome);
+    LogPlayerWin(&serverLog->fd, gameId,&(game->giocatori[idGiocatore].nome));
     pthread_mutex_unlock(&serverLog->sem);
     return GAME_END_FOR_TIME;
   }else{
