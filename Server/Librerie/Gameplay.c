@@ -23,12 +23,6 @@ int playGame(Game * game, int idGiocatore, int gameId,int sockfd,LogFile *server
     return PLAYER_EXITS;
   }
   while(!(game->timeOver)){
-    if (write(sockfd, msg, strlen(msg)) == -1) {
-      if (errno == EPIPE) {
-          printf("qua ci arrivo\n", );
-          return PLAYER_EXITS;
-      }
-    }
     pthread_mutex_lock(&serverLog->sem);
     result=azioneGiocatore(game,idGiocatore,msg[0],game->gameId,&serverLog->fd);
     pthread_mutex_unlock(&serverLog->sem);

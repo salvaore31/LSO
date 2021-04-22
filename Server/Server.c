@@ -188,11 +188,6 @@ void * run(void *arg){
           }
     }
   }
-  if (write(sockfd, msg, strlen(msg)) == -1) {
-    if (errno == EPIPE) {
-        deleteLoggedUser(user, &loggati);
-    }
-  }
   if(g==NULL){
     initializaNewGame(&g,sockfd,user,&serverLog,&loggati);
   }else{
