@@ -31,7 +31,7 @@ void LogServerStart(int *fdLog){
   strcat(fileName,".txt");
 
   if((*fdLog=open(fileName,O_CREAT | O_APPEND | O_WRONLY,S_IRWXU))<0){
-    /*Gestire cosa succede in caso di errore*/
+      printf("ERROR LOG FILE CREATION");
   } else {
     if((n_b_w = write(*fdLog,ora,strlen(ora))< strlen(ora))){
       /*Gesire mancata scrittura su LOG*/
